@@ -125,49 +125,42 @@ function hexToRgb(hex: string): {r: number, g: number, b: number} | null {
 }
 
 function addTestControls(): void {
-  // Add keyboard shortcuts for real-time testing
   document.addEventListener('keydown', (event) => {
     const layers = canvasManager.getLayers();
     const activeLayer = canvasManager.getActiveLayer();
     
+    if (!activeLayer && ['ArrowUp', 'ArrowDown', 'ArrowRight', 'ArrowLeft', 'v'].includes(event.key)) {
+      return;
+    }
+    
+    const maxPoints = canvasManager.getConfig().circlePoints;
+    
     switch (event.key) {
       case 'ArrowUp':
-        // Increase start point for active layer
-        if (activeLayer) {
-          const maxPoints = canvasManager.getConfig().circlePoints;
-          const newStartPoint = (activeLayer.startPoint + 1) % maxPoints;
-          canvasManager.updateLayer(activeLayer.id, { startPoint: newStartPoint });
-          console.log(`${activeLayer.name} start point: ${newStartPoint}`);
-        }
+        const newStartPointUp = (activeLayer!.startPoint + 1) % maxPoints;
+        canvasManager.updateLayer(activeLayer!.id, { startPoint: newStartPointUp });
+        console.log(`${activeLayer!.name} start point: ${newStartPointUp}`);
         break;
         
       case 'ArrowDown':
-        // Decrease start point for active layer
-        if (activeLayer) {
-          const maxPoints = canvasManager.getConfig().circlePoints;
-          const newStartPoint = (activeLayer.startPoint - 1 + maxPoints) % maxPoints;
-          canvasManager.updateLayer(activeLayer.id, { startPoint: newStartPoint });
-          console.log(`${activeLayer.name} start point: ${newStartPoint}`);
-        }
+        const newStartPointDown = (activeLayer!.startPoint - 1 + maxPoints) % maxPoints;
+        canvasManager.updateLayer(activeLayer!.id, { startPoint: newStartPointDown });
+        console.log(`${activeLayer!.name} start point: ${newStartPointDown}`);
         break;
         
       case 'ArrowRight':
-        // Increase step size for active layer
-        if (activeLayer) {
-          const newStepSize = activeLayer.stepSize + 1;
-          if (newStepSize < canvasManager.getConfig().circlePoints) {
-            canvasManager.updateLayer(activeLayer.id, { stepSize: newStepSize });
-          }
+        const newStepSizeUp = activeLayer!.stepSize + 1;
+        if (newStepSizeUp < maxPoints) {
+          canvasManager.updateLayer(activeLayer!.id, { stepSize: newStepSizeUp });
+          console.log(`${activeLayer!.name} step size: ${newStepSizeUp}`);
         }
         break;
         
       case 'ArrowLeft':
-        // Decrease step size for active layer
-        if (activeLayer) {
-          const newStepSize = activeLayer.stepSize - 1;
-          if (newStepSize > 0) {
-            canvasManager.updateLayer(activeLayer.id, { stepSize: newStepSize });
-          }
+        const newStepSizeDown = activeLayer!.stepSize - 1;
+        if (newStepSizeDown > 0) {
+          canvasManager.updateLayer(activeLayer!.id, { stepSize: newStepSizeDown });
+          console.log(`${activeLayer!.name} step size: ${newStepSizeDown}`);
         }
         break;
         
@@ -188,11 +181,9 @@ function addTestControls(): void {
         break;
         
       case 'v':
-        // Toggle active layer visibility
-        if (activeLayer) {
-          canvasManager.updateLayer(activeLayer.id, { visible: !activeLayer.visible });
-          console.log(`${activeLayer.name} visibility: ${!activeLayer.visible}`);
-        }
+        const newVisibility = !activeLayer!.visible;
+        canvasManager.updateLayer(activeLayer!.id, { visible: newVisibility });
+        console.log(`${activeLayer!.name} visibility: ${newVisibility}`);
         break;
         
       case 'n':
@@ -213,15 +204,14 @@ function addTestControls(): void {
         
       case 'Delete':
       case 'Backspace':
-        // Delete active layer
         if (activeLayer && layers.length > 1) {
+          const layerName = activeLayer.name;
           canvasManager.removeLayer(activeLayer.id);
-          console.log(`Deleted layer: ${activeLayer.name}`);
+          console.log(`Deleted layer: ${layerName}`);
         }
         break;
         
       case 'PageUp':
-        // Move active layer up
         if (activeLayer) {
           canvasManager.moveLayerUp(activeLayer.id);
           console.log(`Moved ${activeLayer.name} up`);
@@ -229,7 +219,6 @@ function addTestControls(): void {
         break;
         
       case 'PageDown':
-        // Move active layer down
         if (activeLayer) {
           canvasManager.moveLayerDown(activeLayer.id);
           console.log(`Moved ${activeLayer.name} down`);

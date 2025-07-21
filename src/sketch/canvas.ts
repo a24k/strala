@@ -51,6 +51,10 @@ export class CanvasManager {
     return [...this.layers];
   }
 
+  private findLayerIndex(layerId: string): number {
+    return this.layers.findIndex(layer => layer.id === layerId);
+  }
+
   public addLayer(layerData: LayerData): void {
     const layer = new Layer(layerData);
     this.layers.push(layer);
@@ -80,37 +84,33 @@ export class CanvasManager {
   }
 
   public duplicateLayer(layerId: string): Layer | null {
-    const layer = this.layers.find(l => l.id === layerId);
-    if (!layer) return null;
+    const index = this.findLayerIndex(layerId);
+    if (index === -1) return null;
     
-    const duplicatedLayer = layer.clone();
-    const insertIndex = this.layers.findIndex(l => l.id === layerId) + 1;
-    this.layers.splice(insertIndex, 0, duplicatedLayer);
+    const duplicatedLayer = this.layers[index].clone();
+    this.layers.splice(index + 1, 0, duplicatedLayer);
     this.activeLayerId = duplicatedLayer.id;
     return duplicatedLayer;
   }
 
   public updateLayer(layerId: string, updates: Partial<LayerData>): void {
-    const index = this.layers.findIndex(layer => layer.id === layerId);
-    if (index !== -1) {
-      const currentLayer = this.layers[index];
-      const updatedLayer = currentLayer.update(updates);
-      
-      if (updatedLayer.validate(this.points.length)) {
-        this.layers[index] = updatedLayer;
-      }
+    const index = this.findLayerIndex(layerId);
+    if (index === -1) return;
+    
+    const updatedLayer = this.layers[index].update(updates);
+    if (updatedLayer.validate(this.points.length)) {
+      this.layers[index] = updatedLayer;
     }
   }
 
   public removeLayer(layerId: string): void {
-    if (this.layers.length <= 1) return; // Keep at least one layer
+    if (this.layers.length <= 1) return;
     
-    const index = this.layers.findIndex(layer => layer.id === layerId);
+    const index = this.findLayerIndex(layerId);
     if (index === -1) return;
     
     this.layers.splice(index, 1);
     
-    // Update active layer if the removed layer was active
     if (this.activeLayerId === layerId) {
       this.activeLayerId = index < this.layers.length 
         ? this.layers[index].id 
@@ -119,14 +119,14 @@ export class CanvasManager {
   }
 
   public moveLayerUp(layerId: string): void {
-    const index = this.layers.findIndex(layer => layer.id === layerId);
+    const index = this.findLayerIndex(layerId);
     if (index > 0) {
       [this.layers[index], this.layers[index - 1]] = [this.layers[index - 1], this.layers[index]];
     }
   }
 
   public moveLayerDown(layerId: string): void {
-    const index = this.layers.findIndex(layer => layer.id === layerId);
+    const index = this.findLayerIndex(layerId);
     if (index >= 0 && index < this.layers.length - 1) {
       [this.layers[index], this.layers[index + 1]] = [this.layers[index + 1], this.layers[index]];
     }

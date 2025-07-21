@@ -67,21 +67,14 @@ export class Layer implements LayerData {
 
   public update(updates: Partial<LayerData>): Layer {
     return new Layer({
-      ...this.toData(),
-      ...updates
+      id: updates.id ?? this.id,
+      name: updates.name ?? this.name,
+      visible: updates.visible ?? this.visible,
+      startPoint: updates.startPoint ?? this.startPoint,
+      stepSize: updates.stepSize ?? this.stepSize,
+      color: updates.color ? { ...this.color, ...updates.color } : { ...this.color },
+      lineWidth: updates.lineWidth ?? this.lineWidth
     });
-  }
-
-  public toData(): LayerData {
-    return {
-      id: this.id,
-      name: this.name,
-      visible: this.visible,
-      startPoint: this.startPoint,
-      stepSize: this.stepSize,
-      color: { ...this.color },
-      lineWidth: this.lineWidth
-    };
   }
 
   public validate(maxPoints: number): boolean {
