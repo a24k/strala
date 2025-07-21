@@ -132,18 +132,22 @@ function addTestControls(): void {
     
     switch (event.key) {
       case 'ArrowUp':
-        // Increase circle points
-        const currentPoints = canvasManager.getConfig().circlePoints;
-        if (currentPoints < 100) {
-          canvasManager.updateConfig({ circlePoints: currentPoints + 1 });
+        // Increase start point for active layer
+        if (activeLayer) {
+          const maxPoints = canvasManager.getConfig().circlePoints;
+          const newStartPoint = (activeLayer.startPoint + 1) % maxPoints;
+          canvasManager.updateLayer(activeLayer.id, { startPoint: newStartPoint });
+          console.log(`${activeLayer.name} start point: ${newStartPoint}`);
         }
         break;
         
       case 'ArrowDown':
-        // Decrease circle points
-        const currentPointsDown = canvasManager.getConfig().circlePoints;
-        if (currentPointsDown > 8) {
-          canvasManager.updateConfig({ circlePoints: currentPointsDown - 1 });
+        // Decrease start point for active layer
+        if (activeLayer) {
+          const maxPoints = canvasManager.getConfig().circlePoints;
+          const newStartPoint = (activeLayer.startPoint - 1 + maxPoints) % maxPoints;
+          canvasManager.updateLayer(activeLayer.id, { startPoint: newStartPoint });
+          console.log(`${activeLayer.name} start point: ${newStartPoint}`);
         }
         break;
         
@@ -236,7 +240,7 @@ function addTestControls(): void {
   
   console.log('=== Layer Management Test Controls ===');
   console.log('Basic Controls:');
-  console.log('  ↑/↓: Change circle points');
+  console.log('  ↑/↓: Change start point (active layer)');
   console.log('  ←/→: Change step size (active layer)');
   console.log('  v: Toggle active layer visibility');
   console.log('');

@@ -118,7 +118,7 @@ Initial Settings:
 
 ## Current Test Controls (Development Mode)
 ### Basic Controls
-- `↑/↓`: Change circle points (8-100)
+- `↑/↓`: Change start point for active layer (0 to circle points-1)
 - `←/→`: Change step size for active layer
 - `v`: Toggle active layer visibility
 
