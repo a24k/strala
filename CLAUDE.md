@@ -24,11 +24,14 @@ Each layer contains:
 - **Step Size**: Skip number for string connections (1-50)
 - **Visual Properties**: Color, transparency, gradients
 - **Visibility**: Show/hide individual layers
-- **Ordering**: Drag & drop layer reordering
+- **Ordering**: Layer reordering (up/down buttons)
+- **Management**: Create, duplicate, delete, rename layers
+- **Active Selection**: Single active layer for editing
 
 ### Data Structure
-```javascript
-Layer {
+```typescript
+// Layer class with validation and utility methods
+export class Layer {
   id: string
   name: string          // "Layer 1", "Layer 2"...
   visible: boolean
@@ -40,7 +43,10 @@ Layer {
     secondary?: string  // for gradients
     alpha: number       // 0.0-1.0
   }
-  lineWidth: number     // 1-5px
+  lineWidth: number     // 1-10px
+
+  // Methods: clone(), update(), validate(), toData()
+  // Static: generateId(), generateName()
 }
 ```
 
@@ -102,13 +108,26 @@ Initial Settings:
 - [x] Technical stack selection (updated to Vite + TypeScript)
 - [x] UI/UX design
 - [x] Data structure design
-- [ ] Vite + TypeScript setup and p5.js integration
-- [ ] Basic circle and point rendering
-- [ ] Layer system implementation
-- [ ] String drawing algorithm
+- [x] Vite + TypeScript setup and p5.js integration
+- [x] Basic circle and point rendering
+- [x] Layer system implementation (comprehensive layer management)
+- [x] String drawing algorithm (mathematical rendering engine)
 - [ ] UI controls
 - [ ] Color and gradient system
 - [ ] Export functionality
+
+## Current Test Controls (Development Mode)
+### Basic Controls
+- `↑/↓`: Change start point for active layer (0 to circle points-1)
+- `←/→`: Change step size for active layer
+- `v`: Toggle active layer visibility
+
+### Layer Management
+- `1/2`: Set active layer
+- `n`: Create new layer
+- `d`: Duplicate active layer
+- `Delete/Backspace`: Remove active layer (minimum 1 layer)
+- `PageUp/PageDown`: Move layer up/down in rendering order
 
 ## Future Extensions
 - Complex string rules beyond skip-numbers

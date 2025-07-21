@@ -125,67 +125,122 @@ function hexToRgb(hex: string): {r: number, g: number, b: number} | null {
 }
 
 function addTestControls(): void {
-  // Add keyboard shortcuts for real-time testing
   document.addEventListener('keydown', (event) => {
     const layers = canvasManager.getLayers();
+    const activeLayer = canvasManager.getActiveLayer();
+    
+    if (!activeLayer && ['ArrowUp', 'ArrowDown', 'ArrowRight', 'ArrowLeft', 'v'].includes(event.key)) {
+      return;
+    }
+    
+    const maxPoints = canvasManager.getConfig().circlePoints;
     
     switch (event.key) {
       case 'ArrowUp':
-        // Increase circle points
-        const currentPoints = canvasManager.getConfig().circlePoints;
-        if (currentPoints < 100) {
-          canvasManager.updateConfig({ circlePoints: currentPoints + 1 });
-        }
+        const newStartPointUp = (activeLayer!.startPoint + 1) % maxPoints;
+        canvasManager.updateLayer(activeLayer!.id, { startPoint: newStartPointUp });
+        console.log(`${activeLayer!.name} start point: ${newStartPointUp}`);
         break;
         
       case 'ArrowDown':
-        // Decrease circle points
-        const currentPointsDown = canvasManager.getConfig().circlePoints;
-        if (currentPointsDown > 8) {
-          canvasManager.updateConfig({ circlePoints: currentPointsDown - 1 });
-        }
+        const newStartPointDown = (activeLayer!.startPoint - 1 + maxPoints) % maxPoints;
+        canvasManager.updateLayer(activeLayer!.id, { startPoint: newStartPointDown });
+        console.log(`${activeLayer!.name} start point: ${newStartPointDown}`);
         break;
         
       case 'ArrowRight':
-        // Increase step size for first layer
-        if (layers.length > 0) {
-          const newStepSize = layers[0].stepSize + 1;
-          if (newStepSize < canvasManager.getConfig().circlePoints) {
-            canvasManager.updateLayer(layers[0].id, { stepSize: newStepSize });
-          }
+        const newStepSizeUp = activeLayer!.stepSize + 1;
+        if (newStepSizeUp < maxPoints) {
+          canvasManager.updateLayer(activeLayer!.id, { stepSize: newStepSizeUp });
+          console.log(`${activeLayer!.name} step size: ${newStepSizeUp}`);
         }
         break;
         
       case 'ArrowLeft':
-        // Decrease step size for first layer
-        if (layers.length > 0) {
-          const newStepSize = layers[0].stepSize - 1;
-          if (newStepSize > 0) {
-            canvasManager.updateLayer(layers[0].id, { stepSize: newStepSize });
-          }
+        const newStepSizeDown = activeLayer!.stepSize - 1;
+        if (newStepSizeDown > 0) {
+          canvasManager.updateLayer(activeLayer!.id, { stepSize: newStepSizeDown });
+          console.log(`${activeLayer!.name} step size: ${newStepSizeDown}`);
         }
         break;
         
       case '1':
-        // Toggle first layer visibility
+        // Set first layer as active
         if (layers.length > 0) {
-          canvasManager.updateLayer(layers[0].id, { visible: !layers[0].visible });
+          canvasManager.setActiveLayer(layers[0].id);
+          console.log(`Active layer: ${layers[0].name}`);
         }
         break;
         
       case '2':
-        // Toggle second layer visibility
+        // Set second layer as active
         if (layers.length > 1) {
-          canvasManager.updateLayer(layers[1].id, { visible: !layers[1].visible });
+          canvasManager.setActiveLayer(layers[1].id);
+          console.log(`Active layer: ${layers[1].name}`);
+        }
+        break;
+        
+      case 'v':
+        const newVisibility = !activeLayer!.visible;
+        canvasManager.updateLayer(activeLayer!.id, { visible: newVisibility });
+        console.log(`${activeLayer!.name} visibility: ${newVisibility}`);
+        break;
+        
+      case 'n':
+        // Create new layer
+        const newLayer = canvasManager.createLayer();
+        console.log(`Created new layer: ${newLayer.name}`);
+        break;
+        
+      case 'd':
+        // Duplicate active layer
+        if (activeLayer) {
+          const duplicated = canvasManager.duplicateLayer(activeLayer.id);
+          if (duplicated) {
+            console.log(`Duplicated layer: ${duplicated.name}`);
+          }
+        }
+        break;
+        
+      case 'Delete':
+      case 'Backspace':
+        if (activeLayer && layers.length > 1) {
+          const layerName = activeLayer.name;
+          canvasManager.removeLayer(activeLayer.id);
+          console.log(`Deleted layer: ${layerName}`);
+        }
+        break;
+        
+      case 'PageUp':
+        if (activeLayer) {
+          canvasManager.moveLayerUp(activeLayer.id);
+          console.log(`Moved ${activeLayer.name} up`);
+        }
+        break;
+        
+      case 'PageDown':
+        if (activeLayer) {
+          canvasManager.moveLayerDown(activeLayer.id);
+          console.log(`Moved ${activeLayer.name} down`);
         }
         break;
     }
   });
   
-  console.log('Test controls active:');
-  console.log('↑/↓: Change circle points');
-  console.log('←/→: Change step size');
-  console.log('1/2: Toggle layer visibility');
+  console.log('=== Layer Management Test Controls ===');
+  console.log('Basic Controls:');
+  console.log('  ↑/↓: Change start point (active layer)');
+  console.log('  ←/→: Change step size (active layer)');
+  console.log('  v: Toggle active layer visibility');
+  console.log('');
+  console.log('Layer Management:');
+  console.log('  1/2: Set active layer');
+  console.log('  n: Create new layer');
+  console.log('  d: Duplicate active layer');
+  console.log('  Delete/Backspace: Remove active layer');
+  console.log('  PageUp/PageDown: Move layer up/down');
+  console.log('');
+  console.log('Active layer:', canvasManager.getActiveLayer()?.name);
 }
 
 // Export canvasManager for external control
