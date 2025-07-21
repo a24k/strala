@@ -128,6 +128,7 @@ function addTestControls(): void {
   // Add keyboard shortcuts for real-time testing
   document.addEventListener('keydown', (event) => {
     const layers = canvasManager.getLayers();
+    const activeLayer = canvasManager.getActiveLayer();
     
     switch (event.key) {
       case 'ArrowUp':
@@ -147,45 +148,106 @@ function addTestControls(): void {
         break;
         
       case 'ArrowRight':
-        // Increase step size for first layer
-        if (layers.length > 0) {
-          const newStepSize = layers[0].stepSize + 1;
+        // Increase step size for active layer
+        if (activeLayer) {
+          const newStepSize = activeLayer.stepSize + 1;
           if (newStepSize < canvasManager.getConfig().circlePoints) {
-            canvasManager.updateLayer(layers[0].id, { stepSize: newStepSize });
+            canvasManager.updateLayer(activeLayer.id, { stepSize: newStepSize });
           }
         }
         break;
         
       case 'ArrowLeft':
-        // Decrease step size for first layer
-        if (layers.length > 0) {
-          const newStepSize = layers[0].stepSize - 1;
+        // Decrease step size for active layer
+        if (activeLayer) {
+          const newStepSize = activeLayer.stepSize - 1;
           if (newStepSize > 0) {
-            canvasManager.updateLayer(layers[0].id, { stepSize: newStepSize });
+            canvasManager.updateLayer(activeLayer.id, { stepSize: newStepSize });
           }
         }
         break;
         
       case '1':
-        // Toggle first layer visibility
+        // Set first layer as active
         if (layers.length > 0) {
-          canvasManager.updateLayer(layers[0].id, { visible: !layers[0].visible });
+          canvasManager.setActiveLayer(layers[0].id);
+          console.log(`Active layer: ${layers[0].name}`);
         }
         break;
         
       case '2':
-        // Toggle second layer visibility
+        // Set second layer as active
         if (layers.length > 1) {
-          canvasManager.updateLayer(layers[1].id, { visible: !layers[1].visible });
+          canvasManager.setActiveLayer(layers[1].id);
+          console.log(`Active layer: ${layers[1].name}`);
+        }
+        break;
+        
+      case 'v':
+        // Toggle active layer visibility
+        if (activeLayer) {
+          canvasManager.updateLayer(activeLayer.id, { visible: !activeLayer.visible });
+          console.log(`${activeLayer.name} visibility: ${!activeLayer.visible}`);
+        }
+        break;
+        
+      case 'n':
+        // Create new layer
+        const newLayer = canvasManager.createLayer();
+        console.log(`Created new layer: ${newLayer.name}`);
+        break;
+        
+      case 'd':
+        // Duplicate active layer
+        if (activeLayer) {
+          const duplicated = canvasManager.duplicateLayer(activeLayer.id);
+          if (duplicated) {
+            console.log(`Duplicated layer: ${duplicated.name}`);
+          }
+        }
+        break;
+        
+      case 'Delete':
+      case 'Backspace':
+        // Delete active layer
+        if (activeLayer && layers.length > 1) {
+          canvasManager.removeLayer(activeLayer.id);
+          console.log(`Deleted layer: ${activeLayer.name}`);
+        }
+        break;
+        
+      case 'PageUp':
+        // Move active layer up
+        if (activeLayer) {
+          canvasManager.moveLayerUp(activeLayer.id);
+          console.log(`Moved ${activeLayer.name} up`);
+        }
+        break;
+        
+      case 'PageDown':
+        // Move active layer down
+        if (activeLayer) {
+          canvasManager.moveLayerDown(activeLayer.id);
+          console.log(`Moved ${activeLayer.name} down`);
         }
         break;
     }
   });
   
-  console.log('Test controls active:');
-  console.log('↑/↓: Change circle points');
-  console.log('←/→: Change step size');
-  console.log('1/2: Toggle layer visibility');
+  console.log('=== Layer Management Test Controls ===');
+  console.log('Basic Controls:');
+  console.log('  ↑/↓: Change circle points');
+  console.log('  ←/→: Change step size (active layer)');
+  console.log('  v: Toggle active layer visibility');
+  console.log('');
+  console.log('Layer Management:');
+  console.log('  1/2: Set active layer');
+  console.log('  n: Create new layer');
+  console.log('  d: Duplicate active layer');
+  console.log('  Delete/Backspace: Remove active layer');
+  console.log('  PageUp/PageDown: Move layer up/down');
+  console.log('');
+  console.log('Active layer:', canvasManager.getActiveLayer()?.name);
 }
 
 // Export canvasManager for external control
