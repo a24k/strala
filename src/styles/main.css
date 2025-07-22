@@ -85,6 +85,7 @@ body {
   overflow-y: auto;
   margin-right: -6px;
   padding-right: 6px;
+  padding-bottom: 8px;
   scrollbar-width: thin;
   scrollbar-color: #3498db #2a3f5f;
 }
@@ -319,7 +320,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
 .section-header h3 {
@@ -485,21 +486,25 @@ body {
 }
 
 .btn-secondary {
-  background-color: #6c757d;
+  background-color: rgba(108, 117, 125, 0.8);
   color: white;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .btn-secondary:hover {
-  background-color: #5a6268;
+  background-color: rgba(90, 98, 104, 0.9);
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
 .btn-danger {
-  background-color: #e74c3c;
+  background-color: rgba(231, 76, 60, 0.8);
   color: white;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .btn-danger:hover {
-  background-color: #c0392b;
+  background-color: rgba(192, 57, 43, 0.9);
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
 .btn:disabled {
@@ -516,41 +521,33 @@ body {
 .layer-item {
   background-color: rgba(255, 255, 255, 0.05);
   border-radius: 8px;
-  padding: 16px;
-  margin-bottom: 16px;
-  border: 2px solid transparent;
+  padding: 14px;
+  margin-bottom: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   transition: all 0.2s ease;
   position: relative;
   cursor: pointer;
 }
 
+.layer-item:last-child {
+  margin-bottom: 0;
+}
+
 .layer-item:hover {
   background-color: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.15);
 }
 
 .layer-item.active {
-  border-color: #3498db;
-  background-color: rgba(52, 152, 219, 0.15);
-  box-shadow: 0 0 0 1px rgba(52, 152, 219, 0.3);
-}
-
-.layer-item.active::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 4px;
-  background: #3498db;
-  border-radius: 0 4px 4px 0;
+  border-color: var(--active-border-color, #3498db);
+  background-color: var(--active-bg-color, rgba(52, 152, 219, 0.12));
 }
 
 .layer-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
 }
 
 .layer-name {
@@ -565,22 +562,39 @@ body {
 
 .layer-actions {
   display: flex;
-  gap: 3px;
+  gap: 4px;
+  align-items: center;
 }
 
 .btn-mini {
-  padding: 3px 6px;
-  font-size: 10px;
-  min-width: auto;
-  height: 22px;
-  border-radius: 4px;
+  padding: 6px 8px;
+  font-size: 12px;
+  font-weight: 600;
+  min-width: 28px;
+  height: 28px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.btn-mini:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.btn-mini:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 /* Layer Info Display */
 .layer-info {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   color: #a8b7c7;
   font-size: 12px;
 }
@@ -596,27 +610,38 @@ body {
 
 
 .visibility-toggle {
-  background: none;
-  border: none;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   color: #a8b7c7;
   cursor: pointer;
-  padding: 3px 6px;
-  border-radius: 4px;
+  padding: 6px 8px;
+  border-radius: 5px;
   transition: all 0.2s ease;
-  font-size: 12px;
-  height: 22px;
+  font-size: 14px;
+  height: 28px;
+  min-width: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .visibility-toggle:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
 .visibility-toggle.visible {
-  color: #3498db;
-  background-color: rgba(52, 152, 219, 0.1);
+  color: #ffffff;
+  background-color: rgba(52, 152, 219, 0.2);
+  border-color: rgba(52, 152, 219, 0.3);
+}
+
+.visibility-toggle.visible:hover {
+  background-color: rgba(52, 152, 219, 0.3);
+  border-color: rgba(52, 152, 219, 0.5);
 }
 
 
@@ -644,7 +669,7 @@ body {
   
   .layer-item {
     padding: 12px;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
   }
 }
 

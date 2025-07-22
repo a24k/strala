@@ -132,18 +132,30 @@ export class UIControls {
   private createLayerElement(layer: Layer, isActive: boolean): HTMLElement {
     const layerDiv = document.createElement('div');
     layerDiv.className = `layer-item ${isActive ? 'active' : ''}`;
+    
+    // Set the active layer colors to match the layer's color
+    if (isActive) {
+      layerDiv.style.setProperty('--active-border-color', layer.color.primary);
+      
+      // Convert hex to rgba for background with low opacity
+      const hex = layer.color.primary.replace('#', '');
+      const r = parseInt(hex.substring(0, 2), 16);
+      const g = parseInt(hex.substring(2, 4), 16);
+      const b = parseInt(hex.substring(4, 6), 16);
+      layerDiv.style.setProperty('--active-bg-color', `rgba(${r}, ${g}, ${b}, 0.12)`);
+    }
 
     layerDiv.innerHTML = `
       <div class="layer-header">
         <span class="layer-name">${layer.name}</span>
         <div class="layer-actions">
           <button class="visibility-toggle ${layer.visible ? 'visible' : ''}" data-layer-id="${layer.id}" title="${layer.visible ? 'Hide layer' : 'Show layer'}">
-            ${layer.visible ? '👁️' : '🙈'}
+            ${layer.visible ? '◉' : '○'}
           </button>
-          <button class="btn btn-secondary btn-mini" data-action="duplicate" data-layer-id="${layer.id}" title="Duplicate layer">⧁</button>
-          <button class="btn btn-secondary btn-mini" data-action="move-up" data-layer-id="${layer.id}" title="Move layer up">↑</button>
-          <button class="btn btn-secondary btn-mini" data-action="move-down" data-layer-id="${layer.id}" title="Move layer down">↓</button>
-          <button class="btn btn-danger btn-mini" data-action="delete" data-layer-id="${layer.id}" title="Delete layer">🗑️</button>
+          <button class="btn btn-secondary btn-mini" data-action="duplicate" data-layer-id="${layer.id}" title="Duplicate layer">⧉</button>
+          <button class="btn btn-secondary btn-mini" data-action="move-up" data-layer-id="${layer.id}" title="Move layer up">△</button>
+          <button class="btn btn-secondary btn-mini" data-action="move-down" data-layer-id="${layer.id}" title="Move layer down">▽</button>
+          <button class="btn btn-secondary btn-mini" data-action="delete" data-layer-id="${layer.id}" title="Delete layer">✕</button>
         </div>
       </div>
       
