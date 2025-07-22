@@ -44,7 +44,8 @@ export class UIControls {
       if (this.validateCirclePoints(value)) {
         this.canvasManager.updateConfig({ circlePoints: value });
         (this.elements.circlePointsInput as HTMLInputElement).value = value.toString();
-        this.updateLayerList(); // Update layer controls with new ranges
+        this.updateLayerList();
+        this.updateActiveLayerControls(); // Update active layer control ranges
       }
     });
 
@@ -53,7 +54,8 @@ export class UIControls {
       if (this.validateCirclePoints(value)) {
         this.canvasManager.updateConfig({ circlePoints: value });
         (this.elements.circlePoints as HTMLInputElement).value = value.toString();
-        this.updateLayerList(); // Update layer controls with new ranges
+        this.updateLayerList();
+        this.updateActiveLayerControls(); // Update active layer control ranges
       }
     });
 
