@@ -95,8 +95,9 @@ function drawCircleAndPoints(p: p5): void {
   p.noFill();
   p.ellipse(centerX, centerY, radius * 2);
   
-  // Draw string connections for each visible layer
-  layers.forEach(layer => {
+  // Draw string connections for each visible layer (reverse order for proper layering)
+  // UI top layers appear on top in rendering by drawing them last
+  layers.slice().reverse().forEach(layer => {
     if (!layer.visible) return;
     
     const connections = canvasManager.calculateStringConnections(layer);
