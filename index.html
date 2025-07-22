@@ -13,8 +13,86 @@
           <div id="sketch-container"></div>
         </div>
         <div class="control-panel">
-          <h1>Strala</h1>
-          <p>String Art Mandala Simulation</p>
+          <header class="panel-header">
+            <h1>Strala</h1>
+            <p>String Art Mandala Simulation</p>
+          </header>
+
+          <section class="control-section">
+            <h3>Global Settings</h3>
+            <div class="control-group">
+              <label for="circle-points">Circle Points</label>
+              <div class="slider-container">
+                <input type="range" id="circle-points" min="8" max="100" value="24" class="slider">
+                <input type="number" id="circle-points-input" min="8" max="100" value="24" class="number-input">
+              </div>
+            </div>
+            
+            <div class="control-group">
+              <label for="background-color">Background Color</label>
+              <div class="color-input-container">
+                <input type="color" id="background-color" value="#1a1a2e" class="color-picker-small">
+                <input type="text" id="background-color-text" value="#1a1a2e" class="color-text-input" placeholder="#000000">
+              </div>
+            </div>
+          </section>
+
+          <section class="control-section">
+            <div class="section-header">
+              <h3>Layers</h3>
+              <button id="add-layer" class="btn btn-primary btn-mini" title="Add new layer">+</button>
+            </div>
+            
+            <div id="layer-list" class="layer-list">
+            </div>
+          </section>
+
+          <section class="control-section" id="active-layer-controls">
+            <h3>Active Layer Settings</h3>
+            <div id="active-layer-name" class="active-layer-name"></div>
+            
+            <div class="control-group">
+              <label for="start-point">Start Point</label>
+              <div class="slider-container">
+                <input type="range" id="start-point" min="0" max="23" value="0" class="slider">
+                <input type="number" id="start-point-input" min="0" max="23" value="0" class="number-input">
+              </div>
+            </div>
+
+            <div class="control-group">
+              <label for="step-size">Step Size</label>
+              <div class="slider-container">
+                <input type="range" id="step-size" min="1" max="50" value="7" class="slider">
+                <input type="number" id="step-size-input" min="1" max="50" value="7" class="number-input">
+              </div>
+            </div>
+
+            <div class="control-group">
+              <label for="layer-color">Color</label>
+              <div class="color-input-container">
+                <input type="color" id="layer-color" value="#3498db" class="color-picker-small">
+                <input type="text" id="layer-color-text" value="#3498db" class="color-text-input" placeholder="#000000">
+              </div>
+            </div>
+
+            <div class="control-group">
+              <label for="layer-alpha">Transparency</label>
+              <div class="slider-container">
+                <input type="range" id="layer-alpha" min="0" max="100" value="60" class="slider">
+                <input type="number" id="layer-alpha-input" min="0" max="100" value="60" class="number-input">
+                <span class="slider-unit">%</span>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <label for="line-width">Line Width</label>
+              <div class="slider-container">
+                <input type="range" id="line-width" min="1" max="10" value="1" class="slider">
+                <input type="number" id="line-width-input" min="1" max="10" value="1" class="number-input">
+                <span class="slider-unit">px</span>
+              </div>
+            </div>
+          </section>
         </div>
       </div>
     </div>
