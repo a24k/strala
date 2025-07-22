@@ -39,8 +39,9 @@ body {
   width: 320px;
   background-color: #16213e;
   border-left: 1px solid #2a3f5f;
-  padding: 20px;
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  position: relative;
 }
 
 /* Panel Header */
@@ -56,6 +57,238 @@ body {
   font-size: 14px;
 }
 
+/* Control Panel Layout */
+.control-panel-fixed-top {
+  border-bottom: 1px solid #2a3f5f;
+  background-color: #16213e;
+  padding: 20px;
+  flex-shrink: 0;
+}
+
+.control-panel-scrollable {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 20px 20px 8px 20px;
+}
+
+/* Layers header - fixed at top */
+.layers-header-fixed {
+  flex-shrink: 0;
+  margin-bottom: 8px;
+}
+
+/* Layers content - scrollable */
+.layers-content-scrollable {
+  flex: 1;
+  overflow-y: auto;
+  margin-right: -6px;
+  padding-right: 6px;
+  scrollbar-width: thin;
+  scrollbar-color: #3498db #2a3f5f;
+}
+
+.layers-content-scrollable::-webkit-scrollbar {
+  width: 6px;
+}
+
+.layers-content-scrollable::-webkit-scrollbar-track {
+  background: #2a3f5f;
+  border-radius: 3px;
+}
+
+.layers-content-scrollable::-webkit-scrollbar-thumb {
+  background: #3498db;
+  border-radius: 3px;
+}
+
+.control-panel-fixed {
+  border-top: 1px solid #2a3f5f;
+  background-color: #16213e;
+  padding: 16px 20px;
+  flex-shrink: 0;
+}
+
+/* Active Layer Controls - Fixed Bottom Section */
+.active-layer-name {
+  color: #e8f4fd;
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 16px;
+  padding: 8px 12px;
+  background-color: rgba(52, 152, 219, 0.1);
+  border-radius: 6px;
+  border-left: 3px solid #3498db;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/* Compact control groups for fixed section */
+.control-panel-fixed .control-group {
+  margin-bottom: 10px;
+}
+
+.control-panel-fixed .control-section h3 {
+  font-size: 16px;
+  margin-bottom: 12px;
+}
+
+.control-section.compact {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+/* Inline control group - optimized for 280px width */
+.control-group.inline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.control-group.inline label {
+  min-width: 75px;
+  margin-bottom: 0;
+  font-size: 13px;
+  flex-shrink: 0;
+  color: #c8d6e5;
+  font-weight: 500;
+}
+
+.control-group.inline .slider-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.control-group.inline .slider-container .slider {
+  flex: 1;
+}
+
+.control-group.inline .slider-container .number-input {
+  flex-shrink: 0;
+  width: 55px;
+}
+
+.control-group.inline .color-input-container {
+  flex: 1;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* Fixed sections have tighter spacing */
+.control-panel-fixed .control-group.inline,
+.control-panel-fixed-top .control-group.inline {
+  margin-bottom: 8px;
+}
+
+/* Global settings section styling */
+.control-panel-fixed-top .control-section h3 {
+  font-size: 16px;
+  margin-bottom: 12px;
+}
+
+/* Compact slider styles */
+.compact-slider .slider {
+  height: 4px;
+}
+
+.compact-slider .slider::-webkit-slider-thumb {
+  width: 14px;
+  height: 14px;
+  border: 1px solid #ffffff;
+}
+
+.compact-slider .slider::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border: 1px solid #ffffff;
+}
+
+.number-input {
+  height: 28px;
+  padding: 0 8px;
+  border: 1px solid #2a3f5f;
+  border-radius: 4px;
+  background-color: rgba(255, 255, 255, 0.05);
+  color: #e8f4fd;
+  font-size: 12px;
+  text-align: center;
+  outline: none;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.number-input:focus {
+  border-color: #3498db;
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.compact-slider .number-input {
+  height: 28px;
+  font-size: 12px;
+}
+
+
+/* Color controls - match layer list style */
+.control-group.inline .color-picker-small {
+  width: 28px;
+  height: 28px;
+  border-radius: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  overflow: hidden;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  flex-shrink: 0;
+}
+
+.control-group.inline .color-picker-small::-webkit-color-swatch-wrapper {
+  padding: 0;
+  border: none;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.control-group.inline .color-picker-small::-webkit-color-swatch {
+  border: none;
+  border-radius: 3px;
+}
+
+.control-group.inline .color-picker-small::-moz-color-swatch {
+  border: none;
+  border-radius: 3px;
+}
+
+.control-group.inline .color-text-input {
+  height: 28px;
+  padding: 0 6px;
+  font-size: 11px;
+  width: 70px;
+  flex: none;
+  border: 1px solid #2a3f5f;
+  border-radius: 4px;
+  background-color: rgba(255, 255, 255, 0.05);
+  color: #e8f4fd;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.control-group.inline .color-text-input:focus {
+  border-color: #3498db;
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.control-group.inline .color-text-input::placeholder {
+  color: #a8b7c7;
+}
+
 /* Control Sections */
 .control-section {
   margin-bottom: 32px;
@@ -67,6 +300,13 @@ body {
   border-bottom: none;
   margin-bottom: 0;
 }
+
+.control-section.compact {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
 
 .control-section h3 {
   font-size: 18px;
@@ -149,25 +389,6 @@ body {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
-.number-input {
-  width: 60px;
-  height: 32px;
-  padding: 0 8px;
-  border: 1px solid #2a3f5f;
-  border-radius: 4px;
-  background-color: rgba(255, 255, 255, 0.05);
-  color: #e8f4fd;
-  font-size: 13px;
-  text-align: center;
-  outline: none;
-  transition: all 0.2s ease;
-  flex-shrink: 0;
-}
-
-.number-input:focus {
-  border-color: #3498db;
-  background-color: rgba(255, 255, 255, 0.08);
-}
 
 .slider-unit {
   min-width: 30px;
@@ -194,6 +415,29 @@ body {
   outline: none;
   background: none;
   flex-shrink: 0;
+  overflow: hidden;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+/* Color picker swatch styling for Webkit browsers */
+.color-picker-small::-webkit-color-swatch-wrapper {
+  padding: 0;
+  border: none;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.color-picker-small::-webkit-color-swatch {
+  border: none;
+  border-radius: 6px;
+}
+
+/* Color picker swatch styling for Firefox */
+.color-picker-small::-moz-color-swatch {
+  border: none;
+  border-radius: 6px;
 }
 
 .color-text-input {
@@ -266,24 +510,7 @@ body {
 
 /* Layer List */
 .layer-list {
-  max-height: 450px;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: #3498db #2a3f5f;
-}
-
-.layer-list::-webkit-scrollbar {
-  width: 6px;
-}
-
-.layer-list::-webkit-scrollbar-track {
-  background: #2a3f5f;
-  border-radius: 3px;
-}
-
-.layer-list::-webkit-scrollbar-thumb {
-  background: #3498db;
-  border-radius: 3px;
+  /* No independent scrolling - uses parent scroll */
 }
 
 .layer-item {
@@ -366,17 +593,7 @@ body {
   flex-shrink: 0;
 }
 
-/* Active Layer Controls */
-.active-layer-name {
-  color: #e8f4fd;
-  font-weight: 600;
-  font-size: 16px;
-  margin-bottom: 20px;
-  padding: 12px;
-  background-color: rgba(52, 152, 219, 0.1);
-  border-radius: 6px;
-  border-left: 4px solid #3498db;
-}
+
 
 .visibility-toggle {
   background: none;
