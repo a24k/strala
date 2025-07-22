@@ -38,58 +38,25 @@ export class UIControls {
   }
 
   private setupEventListeners(): void {
-    // Global controls
-    this.elements.circlePoints.addEventListener('input', (e) => {
-      const value = parseInt((e.target as HTMLInputElement).value);
-      if (this.validateCirclePoints(value)) {
+    // Global controls - using helper methods for consistency
+    this.setupDualControl(
+      'circlePoints', 
+      'circlePointsInput', 
+      this.validateCirclePoints.bind(this),
+      (value) => {
         this.canvasManager.updateConfig({ circlePoints: value });
-        (this.elements.circlePointsInput as HTMLInputElement).value = value.toString();
         this.updateLayerList();
-        this.updateActiveLayerControls(); // Update active layer control ranges
-      }
-    });
+        this.updateActiveLayerControls();
+      },
+      () => this.canvasManager.getConfig().circlePoints
+    );
 
-    this.elements.circlePointsInput.addEventListener('input', (e) => {
-      const value = parseInt((e.target as HTMLInputElement).value);
-      if (this.validateCirclePoints(value)) {
-        this.canvasManager.updateConfig({ circlePoints: value });
-        (this.elements.circlePoints as HTMLInputElement).value = value.toString();
-        this.updateLayerList();
-        this.updateActiveLayerControls(); // Update active layer control ranges
-      }
-    });
-
-    this.elements.circlePointsInput.addEventListener('blur', (e) => {
-      const value = parseInt((e.target as HTMLInputElement).value);
-      if (!this.validateCirclePoints(value)) {
-        const config = this.canvasManager.getConfig();
-        (e.target as HTMLInputElement).value = config.circlePoints.toString();
-      }
-    });
-
-    this.elements.backgroundColor.addEventListener('input', (e) => {
-      const value = (e.target as HTMLInputElement).value;
-      if (this.validateColor(value)) {
-        this.canvasManager.updateConfig({ backgroundColor: value });
-        (this.elements.backgroundColorText as HTMLInputElement).value = value;
-      }
-    });
-
-    this.elements.backgroundColorText.addEventListener('input', (e) => {
-      const value = (e.target as HTMLInputElement).value;
-      if (this.validateColor(value)) {
-        this.canvasManager.updateConfig({ backgroundColor: value });
-        (this.elements.backgroundColor as HTMLInputElement).value = value;
-      }
-    });
-
-    this.elements.backgroundColorText.addEventListener('blur', (e) => {
-      const value = (e.target as HTMLInputElement).value;
-      if (!this.validateColor(value)) {
-        const config = this.canvasManager.getConfig();
-        (e.target as HTMLInputElement).value = config.backgroundColor;
-      }
-    });
+    this.setupColorControl(
+      'backgroundColor',
+      'backgroundColorText',
+      (value) => this.canvasManager.updateConfig({ backgroundColor: value }),
+      () => this.canvasManager.getConfig().backgroundColor
+    );
 
     // Layer management
     this.elements.addLayer.addEventListener('click', () => {
@@ -97,7 +64,6 @@ export class UIControls {
       this.updateLayerList();
       this.updateActiveLayerControls();
     });
-
 
     // Active layer controls
     this.setupActiveLayerControls();
@@ -180,185 +146,53 @@ export class UIControls {
       this.updateActiveLayerControls();
     });
 
-    // Add event listeners for layer actions
-    const visibilityToggle = layerDiv.querySelector('.visibility-toggle') as HTMLElement;
-    visibilityToggle.onclick = (e) => {
-      e.stopPropagation();
-      this.canvasManager.updateLayer(layer.id, { visible: !layer.visible });
-      this.updateLayerList();
-    };
-
-    const duplicateBtn = layerDiv.querySelector('[data-action="duplicate"]') as HTMLElement;
-    duplicateBtn.onclick = (e) => {
-      e.stopPropagation();
-      this.canvasManager.duplicateLayer(layer.id);
-      this.updateLayerList();
-      this.updateActiveLayerControls();
-    };
-
-    const moveUpBtn = layerDiv.querySelector('[data-action="move-up"]') as HTMLElement;
-    moveUpBtn.onclick = (e) => {
-      e.stopPropagation();
-      this.canvasManager.moveLayerUp(layer.id);
-      this.updateLayerList();
-    };
-
-    const moveDownBtn = layerDiv.querySelector('[data-action="move-down"]') as HTMLElement;
-    moveDownBtn.onclick = (e) => {
-      e.stopPropagation();
-      this.canvasManager.moveLayerDown(layer.id);
-      this.updateLayerList();
-    };
-
-    const deleteBtn = layerDiv.querySelector('[data-action="delete"]') as HTMLElement;
-    deleteBtn.onclick = (e) => {
-      e.stopPropagation();
-      if (this.canvasManager.getLayers().length > 1) {
-        this.canvasManager.removeLayer(layer.id);
-        this.updateLayerList();
-        this.updateActiveLayerControls();
-      }
-    };
+    // Add event listeners for layer actions using helper method
+    this.setupLayerActionHandlers(layerDiv, layer);
 
     return layerDiv;
   }
 
   private setupActiveLayerControls(): void {
-    // Start point controls
-    this.elements.startPoint.addEventListener('input', (e) => {
-      const value = parseInt((e.target as HTMLInputElement).value);
-      if (this.validateStartPoint(value)) {
-        this.updateActiveLayerProperty('startPoint', value);
-        (this.elements.startPointInput as HTMLInputElement).value = value.toString();
-      }
-    });
+    // Set up dual controls (slider + number input pairs) using helper method
+    this.setupDualControl(
+      'startPoint',
+      'startPointInput', 
+      this.validateStartPoint.bind(this),
+      (value) => this.updateActiveLayerProperty('startPoint', value),
+      () => this.canvasManager.getActiveLayer()?.startPoint ?? 0
+    );
 
-    this.elements.startPointInput.addEventListener('input', (e) => {
-      const value = parseInt((e.target as HTMLInputElement).value);
-      if (this.validateStartPoint(value)) {
-        this.updateActiveLayerProperty('startPoint', value);
-        (this.elements.startPoint as HTMLInputElement).value = value.toString();
-      }
-    });
+    this.setupDualControl(
+      'stepSize',
+      'stepSizeInput',
+      this.validateStepSize.bind(this), 
+      (value) => this.updateActiveLayerProperty('stepSize', value),
+      () => this.canvasManager.getActiveLayer()?.stepSize ?? 1
+    );
 
-    this.elements.startPointInput.addEventListener('blur', (e) => {
-      const value = parseInt((e.target as HTMLInputElement).value);
-      if (!this.validateStartPoint(value)) {
-        const activeLayer = this.canvasManager.getActiveLayer();
-        if (activeLayer) {
-          (e.target as HTMLInputElement).value = activeLayer.startPoint.toString();
-        }
-      }
-    });
+    this.setupDualControl(
+      'layerAlpha',
+      'layerAlphaInput',
+      (value) => this.validateAlpha(value / 100),
+      (value) => this.updateActiveLayerAlpha(value / 100),
+      () => Math.round((this.canvasManager.getActiveLayer()?.color.alpha ?? 0.6) * 100)
+    );
 
-    // Step size controls
-    this.elements.stepSize.addEventListener('input', (e) => {
-      const value = parseInt((e.target as HTMLInputElement).value);
-      if (this.validateStepSize(value)) {
-        this.updateActiveLayerProperty('stepSize', value);
-        (this.elements.stepSizeInput as HTMLInputElement).value = value.toString();
-      }
-    });
+    this.setupDualControl(
+      'lineWidth',
+      'lineWidthInput',
+      this.validateLineWidth.bind(this),
+      (value) => this.updateActiveLayerProperty('lineWidth', value),
+      () => this.canvasManager.getActiveLayer()?.lineWidth ?? 1
+    );
 
-    this.elements.stepSizeInput.addEventListener('input', (e) => {
-      const value = parseInt((e.target as HTMLInputElement).value);
-      if (this.validateStepSize(value)) {
-        this.updateActiveLayerProperty('stepSize', value);
-        (this.elements.stepSize as HTMLInputElement).value = value.toString();
-      }
-    });
-
-    this.elements.stepSizeInput.addEventListener('blur', (e) => {
-      const value = parseInt((e.target as HTMLInputElement).value);
-      if (!this.validateStepSize(value)) {
-        const activeLayer = this.canvasManager.getActiveLayer();
-        if (activeLayer) {
-          (e.target as HTMLInputElement).value = activeLayer.stepSize.toString();
-        }
-      }
-    });
-
-    // Color controls
-    this.elements.layerColor.addEventListener('input', (e) => {
-      const value = (e.target as HTMLInputElement).value;
-      if (this.validateColor(value)) {
-        this.updateActiveLayerColor(value);
-        (this.elements.layerColorText as HTMLInputElement).value = value;
-      }
-    });
-
-    this.elements.layerColorText.addEventListener('input', (e) => {
-      const value = (e.target as HTMLInputElement).value;
-      if (this.validateColor(value)) {
-        this.updateActiveLayerColor(value);
-        (this.elements.layerColor as HTMLInputElement).value = value;
-      }
-    });
-
-    this.elements.layerColorText.addEventListener('blur', (e) => {
-      const value = (e.target as HTMLInputElement).value;
-      if (!this.validateColor(value)) {
-        const activeLayer = this.canvasManager.getActiveLayer();
-        if (activeLayer) {
-          (e.target as HTMLInputElement).value = activeLayer.color.primary;
-        }
-      }
-    });
-
-    // Alpha controls
-    this.elements.layerAlpha.addEventListener('input', (e) => {
-      const value = parseInt((e.target as HTMLInputElement).value);
-      if (this.validateAlpha(value / 100)) {
-        this.updateActiveLayerAlpha(value / 100);
-        (this.elements.layerAlphaInput as HTMLInputElement).value = value.toString();
-      }
-    });
-
-    this.elements.layerAlphaInput.addEventListener('input', (e) => {
-      const value = parseInt((e.target as HTMLInputElement).value);
-      if (this.validateAlpha(value / 100)) {
-        this.updateActiveLayerAlpha(value / 100);
-        (this.elements.layerAlpha as HTMLInputElement).value = value.toString();
-      }
-    });
-
-    this.elements.layerAlphaInput.addEventListener('blur', (e) => {
-      const value = parseInt((e.target as HTMLInputElement).value);
-      if (!this.validateAlpha(value / 100)) {
-        const activeLayer = this.canvasManager.getActiveLayer();
-        if (activeLayer) {
-          const alphaPercent = Math.round(activeLayer.color.alpha * 100);
-          (e.target as HTMLInputElement).value = alphaPercent.toString();
-        }
-      }
-    });
-
-    // Line width controls
-    this.elements.lineWidth.addEventListener('input', (e) => {
-      const value = parseInt((e.target as HTMLInputElement).value);
-      if (this.validateLineWidth(value)) {
-        this.updateActiveLayerProperty('lineWidth', value);
-        (this.elements.lineWidthInput as HTMLInputElement).value = value.toString();
-      }
-    });
-
-    this.elements.lineWidthInput.addEventListener('input', (e) => {
-      const value = parseInt((e.target as HTMLInputElement).value);
-      if (this.validateLineWidth(value)) {
-        this.updateActiveLayerProperty('lineWidth', value);
-        (this.elements.lineWidth as HTMLInputElement).value = value.toString();
-      }
-    });
-
-    this.elements.lineWidthInput.addEventListener('blur', (e) => {
-      const value = parseInt((e.target as HTMLInputElement).value);
-      if (!this.validateLineWidth(value)) {
-        const activeLayer = this.canvasManager.getActiveLayer();
-        if (activeLayer) {
-          (e.target as HTMLInputElement).value = activeLayer.lineWidth.toString();
-        }
-      }
-    });
+    // Set up color control using helper method
+    this.setupColorControl(
+      'layerColor',
+      'layerColorText',
+      (value) => this.updateActiveLayerColor(value),
+      () => this.canvasManager.getActiveLayer()?.color.primary ?? '#3498db'
+    );
   }
 
   private updateActiveLayerProperty(property: string, value: any): void {
@@ -457,5 +291,123 @@ export class UIControls {
 
   private validateLineWidth(value: number): boolean {
     return !isNaN(value) && value >= 1 && value <= 10;
+  }
+
+  // Helper methods to reduce code duplication
+  private setupDualControl(
+    sliderId: string,
+    inputId: string, 
+    validator: (value: number) => boolean,
+    onUpdate: (value: number) => void,
+    getCurrentValue: () => number
+  ): void {
+    const slider = this.elements[sliderId] as HTMLInputElement;
+    const input = this.elements[inputId] as HTMLInputElement;
+
+    // Slider input handler
+    slider.addEventListener('input', (e) => {
+      const value = parseInt((e.target as HTMLInputElement).value);
+      if (validator(value)) {
+        onUpdate(value);
+        input.value = value.toString();
+      }
+    });
+
+    // Number input handler
+    input.addEventListener('input', (e) => {
+      const value = parseInt((e.target as HTMLInputElement).value);
+      if (validator(value)) {
+        onUpdate(value);
+        slider.value = value.toString();
+      }
+    });
+
+    // Blur handler to reset invalid values
+    input.addEventListener('blur', (e) => {
+      const value = parseInt((e.target as HTMLInputElement).value);
+      if (!validator(value)) {
+        const currentValue = getCurrentValue();
+        (e.target as HTMLInputElement).value = currentValue.toString();
+      }
+    });
+  }
+
+  private setupColorControl(
+    pickerId: string,
+    textId: string,
+    onUpdate: (value: string) => void,
+    getCurrentValue: () => string
+  ): void {
+    const picker = this.elements[pickerId] as HTMLInputElement;
+    const text = this.elements[textId] as HTMLInputElement;
+
+    // Color picker handler
+    picker.addEventListener('input', (e) => {
+      const value = (e.target as HTMLInputElement).value;
+      if (this.validateColor(value)) {
+        onUpdate(value);
+        text.value = value;
+      }
+    });
+
+    // Text input handler
+    text.addEventListener('input', (e) => {
+      const value = (e.target as HTMLInputElement).value;
+      if (this.validateColor(value)) {
+        onUpdate(value);
+        picker.value = value;
+      }
+    });
+
+    // Blur handler to reset invalid values
+    text.addEventListener('blur', (e) => {
+      const value = (e.target as HTMLInputElement).value;
+      if (!this.validateColor(value)) {
+        const currentValue = getCurrentValue();
+        (e.target as HTMLInputElement).value = currentValue;
+      }
+    });
+  }
+
+  private setupLayerActionHandlers(layerDiv: HTMLElement, layer: Layer): void {
+    const visibilityToggle = layerDiv.querySelector('.visibility-toggle') as HTMLElement;
+    const duplicateBtn = layerDiv.querySelector('[data-action="duplicate"]') as HTMLElement;
+    const moveUpBtn = layerDiv.querySelector('[data-action="move-up"]') as HTMLElement;
+    const moveDownBtn = layerDiv.querySelector('[data-action="move-down"]') as HTMLElement;
+    const deleteBtn = layerDiv.querySelector('[data-action="delete"]') as HTMLElement;
+
+    const stopPropagationHandler = (handler: () => void) => (e: Event) => {
+      e.stopPropagation();
+      handler();
+    };
+
+    visibilityToggle.onclick = stopPropagationHandler(() => {
+      this.canvasManager.updateLayer(layer.id, { visible: !layer.visible });
+      this.updateLayerList();
+    });
+
+    duplicateBtn.onclick = stopPropagationHandler(() => {
+      this.canvasManager.duplicateLayer(layer.id);
+      this.updateLayerList();
+      this.updateActiveLayerControls();
+    });
+
+    moveUpBtn.onclick = stopPropagationHandler(() => {
+      this.canvasManager.moveLayerUp(layer.id);
+      this.updateLayerList();
+    });
+
+    moveDownBtn.onclick = stopPropagationHandler(() => {
+      this.canvasManager.moveLayerDown(layer.id);
+      this.updateLayerList();
+    });
+
+    deleteBtn.onclick = stopPropagationHandler(() => {
+      if (this.canvasManager.getLayers().length > 1) {
+        this.canvasManager.removeLayer(layer.id);
+        this.updateLayerList();
+        this.updateActiveLayerControls();
+      }
+    });
   }
 }

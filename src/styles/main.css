@@ -211,28 +211,31 @@ body {
   border: 1px solid #ffffff;
 }
 
-.number-input {
-  height: 28px;
-  padding: 0 8px;
+/* Base input field styles - shared by number and text inputs */
+.number-input,
+.control-group.inline .color-text-input,
+.color-text-input {
   border: 1px solid #2a3f5f;
-  border-radius: 4px;
   background-color: rgba(255, 255, 255, 0.05);
   color: #e8f4fd;
-  font-size: 12px;
-  text-align: center;
   outline: none;
   transition: all 0.2s ease;
-  flex-shrink: 0;
 }
 
-.number-input:focus {
+.number-input:focus,
+.control-group.inline .color-text-input:focus,
+.color-text-input:focus {
   border-color: #3498db;
   background-color: rgba(255, 255, 255, 0.08);
 }
 
-.compact-slider .number-input {
+.number-input {
   height: 28px;
+  padding: 0 8px;
+  border-radius: 4px;
   font-size: 12px;
+  text-align: center;
+  flex-shrink: 0;
 }
 
 
@@ -249,41 +252,15 @@ body {
   flex-shrink: 0;
 }
 
-.control-group.inline .color-picker-small::-webkit-color-swatch-wrapper {
-  padding: 0;
-  border: none;
-  border-radius: 3px;
-  overflow: hidden;
-}
-
-.control-group.inline .color-picker-small::-webkit-color-swatch {
-  border: none;
-  border-radius: 3px;
-}
-
-.control-group.inline .color-picker-small::-moz-color-swatch {
-  border: none;
-  border-radius: 3px;
-}
 
 .control-group.inline .color-text-input {
   height: 28px;
   padding: 0 6px;
+  border-radius: 4px;
   font-size: 11px;
   width: 70px;
   flex: none;
-  border: 1px solid #2a3f5f;
-  border-radius: 4px;
-  background-color: rgba(255, 255, 255, 0.05);
-  color: #e8f4fd;
   font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-  outline: none;
-  transition: all 0.2s ease;
-}
-
-.control-group.inline .color-text-input:focus {
-  border-color: #3498db;
-  background-color: rgba(255, 255, 255, 0.08);
 }
 
 .control-group.inline .color-text-input::placeholder {
@@ -422,42 +399,44 @@ body {
   appearance: none;
 }
 
-/* Color picker swatch styling for Webkit browsers */
-.color-picker-small::-webkit-color-swatch-wrapper {
+/* Base color picker swatch styles */
+.color-picker-small::-webkit-color-swatch-wrapper,
+.control-group.inline .color-picker-small::-webkit-color-swatch-wrapper {
   padding: 0;
   border: none;
-  border-radius: 6px;
   overflow: hidden;
 }
 
-.color-picker-small::-webkit-color-swatch {
+.color-picker-small::-webkit-color-swatch,
+.control-group.inline .color-picker-small::-webkit-color-swatch {
   border: none;
+}
+
+.color-picker-small::-moz-color-swatch,
+.control-group.inline .color-picker-small::-moz-color-swatch {
+  border: none;
+}
+
+/* Size-specific border-radius */
+.color-picker-small::-webkit-color-swatch-wrapper,
+.color-picker-small::-webkit-color-swatch,
+.color-picker-small::-moz-color-swatch {
   border-radius: 6px;
 }
 
-/* Color picker swatch styling for Firefox */
-.color-picker-small::-moz-color-swatch {
-  border: none;
-  border-radius: 6px;
+.control-group.inline .color-picker-small::-webkit-color-swatch-wrapper,
+.control-group.inline .color-picker-small::-webkit-color-swatch,
+.control-group.inline .color-picker-small::-moz-color-swatch {
+  border-radius: 3px;
 }
 
 .color-text-input {
   flex: 1;
   height: 40px;
   padding: 0 12px;
-  border: 1px solid #2a3f5f;
   border-radius: 6px;
-  background-color: rgba(255, 255, 255, 0.05);
-  color: #e8f4fd;
   font-size: 14px;
   font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-  outline: none;
-  transition: all 0.2s ease;
-}
-
-.color-text-input:focus {
-  border-color: #3498db;
-  background-color: rgba(255, 255, 255, 0.08);
 }
 
 .color-text-input::placeholder {
@@ -567,16 +546,22 @@ body {
 }
 
 .btn-mini {
+  /* Inherit base button styles */
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  /* Mini-specific styles */
   padding: 6px 8px;
   font-size: 12px;
   font-weight: 600;
   min-width: 28px;
   height: 28px;
   border-radius: 5px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
