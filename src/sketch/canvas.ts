@@ -73,7 +73,7 @@ export class CanvasManager {
       color: {
         type: 'solid',
         primary: '#ffffff',
-        alpha: 0.8
+        alpha: 0.7
       },
       lineWidth: 1
     });
@@ -160,7 +160,7 @@ export class CanvasManager {
       color: {
         type: 'solid',
         primary: '#3498db',
-        alpha: 0.6
+        alpha: 0.7
       },
       lineWidth: 1
     });
@@ -172,9 +172,10 @@ export class CanvasManager {
       startPoint: 12,
       stepSize: 11,
       color: {
-        type: 'solid',
+        type: 'gradient',
         primary: '#e74c3c',
-        alpha: 0.4
+        secondary: '#f39c12',
+        alpha: 0.7
       },
       lineWidth: 1
     });

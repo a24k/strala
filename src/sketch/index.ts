@@ -1,6 +1,6 @@
 import p5 from 'p5';
 import { CanvasManager } from './canvas';
-import { AppConfig } from '../types';
+import { AppConfig, ColorUtils } from '../types';
 import { UIControls } from '../ui/controls';
 
 let canvasManager: CanvasManager;
@@ -42,7 +42,7 @@ export function initializeSketch(): void {
 
     p.draw = () => {
       const config = canvasManager.getConfig();
-      const bgColor = hexToRgb(config.backgroundColor);
+      const bgColor = ColorUtils.hexToRgb(config.backgroundColor);
       if (bgColor) {
         p.background(bgColor.r, bgColor.g, bgColor.b);
       } else {
@@ -102,19 +102,13 @@ function drawCircleAndPoints(p: p5): void {
     
     const connections = canvasManager.calculateStringConnections(layer);
     
-    // Parse color and apply alpha
-    const color = hexToRgb(layer.color.primary);
-    if (!color) return;
-    
-    p.stroke(color.r, color.g, color.b, layer.color.alpha * 255);
-    p.strokeWeight(layer.lineWidth);
-    
-    connections.forEach(connection => {
-      p.line(
-        connection.from.x, connection.from.y,
-        connection.to.x, connection.to.y
-      );
-    });
+    if (layer.color.type === 'gradient' && layer.color.secondary) {
+      // Draw gradient lines
+      drawGradientConnections(p, connections, layer);
+    } else {
+      // Draw solid color lines
+      drawSolidConnections(p, connections, layer);
+    }
   });
   
   // Draw points on top
@@ -125,13 +119,60 @@ function drawCircleAndPoints(p: p5): void {
   });
 }
 
-function hexToRgb(hex: string): {r: number, g: number, b: number} | null {
-  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return result ? {
-    r: parseInt(result[1], 16),
-    g: parseInt(result[2], 16),
-    b: parseInt(result[3], 16)
-  } : null;
+
+// Draw solid color connections
+function drawSolidConnections(p: p5, connections: Array<{from: any, to: any}>, layer: any): void {
+  const color = ColorUtils.hexToRgb(layer.color.primary);
+  if (!color) return;
+  
+  // Set stroke cap to round for solid lines (default behavior)
+  p.strokeCap(p.ROUND);
+  p.stroke(color.r, color.g, color.b, layer.color.alpha * 255);
+  p.strokeWeight(layer.lineWidth);
+  
+  connections.forEach(connection => {
+    p.line(
+      connection.from.x, connection.from.y,
+      connection.to.x, connection.to.y
+    );
+  });
+}
+
+// Draw gradient connections
+function drawGradientConnections(p: p5, connections: Array<{from: any, to: any}>, layer: any): void {
+  const segments = 20; // Number of segments for gradient interpolation
+  
+  // Set stroke cap to square to avoid visible dots between segments
+  p.strokeCap(p.SQUARE);
+  
+  connections.forEach(connection => {
+    const dx = connection.to.x - connection.from.x;
+    const dy = connection.to.y - connection.from.y;
+    
+    for (let i = 0; i < segments; i++) {
+      const t1 = i / segments;
+      const t2 = (i + 1) / segments;
+      
+      const x1 = connection.from.x + dx * t1;
+      const y1 = connection.from.y + dy * t1;
+      const x2 = connection.from.x + dx * t2;
+      const y2 = connection.from.y + dy * t2;
+      
+      // Interpolate color
+      const interpolatedColor = ColorUtils.interpolateColor(
+        layer.color.primary,
+        layer.color.secondary!,
+        t1
+      );
+      
+      const rgb = ColorUtils.hexToRgb(interpolatedColor);
+      if (!rgb) continue;
+      
+      p.stroke(rgb.r, rgb.g, rgb.b, layer.color.alpha * 255);
+      p.strokeWeight(layer.lineWidth);
+      p.line(x1, y1, x2, y2);
+    }
+  });
 }
 
 function addTestControls(): void {

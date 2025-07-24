@@ -1,5 +1,5 @@
 import { CanvasManager } from '../sketch/canvas';
-import { Layer } from '../types';
+import { Layer, ColorUtils, PALETTE_CATEGORIES, ColorPalette } from '../types';
 
 export class UIControls {
   private canvasManager: CanvasManager;
@@ -29,12 +29,23 @@ export class UIControls {
     this.elements.startPointInput = document.getElementById('start-point-input')!;
     this.elements.stepSize = document.getElementById('step-size')!;
     this.elements.stepSizeInput = document.getElementById('step-size-input')!;
+    
+    // Color controls
+    this.elements.colorType = document.getElementById('color-type')!;
     this.elements.layerColor = document.getElementById('layer-color')!;
     this.elements.layerColorText = document.getElementById('layer-color-text')!;
+    this.elements.colorHarmony = document.getElementById('color-harmony')!;
+    this.elements.secondaryColorGroup = document.getElementById('secondary-color-group')!;
+    this.elements.secondaryColor = document.getElementById('secondary-color')!;
+    this.elements.secondaryColorText = document.getElementById('secondary-color-text')!;
+    
     this.elements.layerAlpha = document.getElementById('layer-alpha')!;
     this.elements.layerAlphaInput = document.getElementById('layer-alpha-input')!;
     this.elements.lineWidth = document.getElementById('line-width')!;
     this.elements.lineWidthInput = document.getElementById('line-width-input')!;
+    this.elements.paletteCategories = document.getElementById('palette-categories')!;
+    this.elements.presetsDropdownBtn = document.getElementById('presets-dropdown-btn')!;
+    this.elements.presetsDropdownPopup = document.getElementById('presets-dropdown-popup')!;
   }
 
   private setupEventListeners(): void {
@@ -67,6 +78,12 @@ export class UIControls {
 
     // Active layer controls
     this.setupActiveLayerControls();
+    
+    // Initialize palette categories
+    this.initializePaletteCategories();
+    
+    // Setup presets dropdown
+    this.setupPresetsDropdown();
   }
 
   private updateUI(): void {
@@ -128,10 +145,13 @@ export class UIControls {
       </div>
       
       <div class="layer-info">
-        <div class="layer-color-preview" style="background-color: ${layer.color.primary}"></div>
+        <div class="layer-color-preview ${layer.color.type === 'gradient' ? 'gradient' : ''}" 
+             style="${layer.color.type === 'gradient' && layer.color.secondary 
+                     ? `--primary-color: ${layer.color.primary}; --secondary-color: ${layer.color.secondary}; background: linear-gradient(45deg, ${layer.color.primary} 0%, ${layer.color.secondary} 100%);`
+                     : `background-color: ${layer.color.primary};`}"></div>
         <span>Start: ${layer.startPoint}</span>
         <span>Step: ${layer.stepSize}</span>
-        <span>Alpha: ${Math.round(layer.color.alpha * 100)}%</span>
+        <span>Opacity: ${Math.round(layer.color.alpha * 100)}%</span>
       </div>
     `;
 
@@ -186,13 +206,32 @@ export class UIControls {
       () => this.canvasManager.getActiveLayer()?.lineWidth ?? 1
     );
 
-    // Set up color control using helper method
+    // Set up color controls
     this.setupColorControl(
       'layerColor',
       'layerColorText',
       (value) => this.updateActiveLayerColor(value),
       () => this.canvasManager.getActiveLayer()?.color.primary ?? '#3498db'
     );
+
+    this.setupColorControl(
+      'secondaryColor',
+      'secondaryColorText',
+      (value) => this.updateActiveLayerSecondaryColor(value),
+      () => this.canvasManager.getActiveLayer()?.color.secondary ?? '#f39c12'
+    );
+
+    // Color type selector
+    (this.elements.colorType as HTMLSelectElement).addEventListener('change', (e) => {
+      const colorType = (e.target as HTMLSelectElement).value as 'solid' | 'gradient';
+      this.updateActiveLayerColorType(colorType);
+      this.toggleSecondaryColorVisibility(colorType === 'gradient');
+    });
+
+    // Color harmony button
+    this.elements.colorHarmony.addEventListener('click', () => {
+      this.generateColorHarmony();
+    });
   }
 
   private updateActiveLayerProperty(property: string, value: any): void {
@@ -247,9 +286,19 @@ export class UIControls {
     (this.elements.stepSize as HTMLInputElement).value = activeLayer.stepSize.toString();
     (this.elements.stepSizeInput as HTMLInputElement).value = activeLayer.stepSize.toString();
 
+    // Update color type
+    (this.elements.colorType as HTMLSelectElement).value = activeLayer.color.type;
+    this.toggleSecondaryColorVisibility(activeLayer.color.type === 'gradient');
+
     // Update color controls
     (this.elements.layerColor as HTMLInputElement).value = activeLayer.color.primary;
     (this.elements.layerColorText as HTMLInputElement).value = activeLayer.color.primary;
+    
+    // Update secondary color controls
+    if (activeLayer.color.secondary) {
+      (this.elements.secondaryColor as HTMLInputElement).value = activeLayer.color.secondary;
+      (this.elements.secondaryColorText as HTMLInputElement).value = activeLayer.color.secondary;
+    }
 
     // Update alpha controls
     const alphaPercent = Math.round(activeLayer.color.alpha * 100);
@@ -409,5 +458,195 @@ export class UIControls {
         this.updateActiveLayerControls();
       }
     });
+  }
+
+  private updateActiveLayerSecondaryColor(color: string): void {
+    const activeLayer = this.canvasManager.getActiveLayer();
+    if (!activeLayer) return;
+
+    this.canvasManager.updateLayer(activeLayer.id, {
+      color: { ...activeLayer.color, secondary: color }
+    });
+    this.updateLayerList();
+  }
+
+  private updateActiveLayerColorType(type: 'solid' | 'gradient'): void {
+    const activeLayer = this.canvasManager.getActiveLayer();
+    if (!activeLayer) return;
+
+    const updatedColor = { ...activeLayer.color, type };
+    if (type === 'gradient' && !activeLayer.color.secondary) {
+      updatedColor.secondary = '#f39c12';
+    }
+
+    this.canvasManager.updateLayer(activeLayer.id, { color: updatedColor });
+    this.updateLayerList();
+  }
+
+  private toggleSecondaryColorVisibility(visible: boolean): void {
+    this.elements.secondaryColorGroup.style.display = visible ? 'flex' : 'none';
+  }
+
+  private generateColorHarmony(): void {
+    const activeLayer = this.canvasManager.getActiveLayer();
+    if (!activeLayer) return;
+
+    // Generate complementary colors as default harmony
+    const harmonyColors = ColorUtils.generateColorHarmony(
+      activeLayer.color.primary,
+      'complementary'
+    );
+
+    if (harmonyColors.length > 1) {
+      this.updateActiveLayerSecondaryColor(harmonyColors[1]);
+      (this.elements.secondaryColor as HTMLInputElement).value = harmonyColors[1];
+      (this.elements.secondaryColorText as HTMLInputElement).value = harmonyColors[1];
+
+      // Switch to gradient mode if not already
+      if (activeLayer.color.type !== 'gradient') {
+        (this.elements.colorType as HTMLSelectElement).value = 'gradient';
+        this.updateActiveLayerColorType('gradient');
+        this.toggleSecondaryColorVisibility(true);
+      }
+    }
+  }
+
+  private initializePaletteCategories(): void {
+    this.elements.paletteCategories.innerHTML = '';
+
+    // Create tabs for categories
+    const tabContainer = document.createElement('div');
+    tabContainer.className = 'palette-tabs';
+
+    // Create content container
+    const contentContainer = document.createElement('div');
+    contentContainer.className = 'palette-content';
+
+    PALETTE_CATEGORIES.forEach((category, index) => {
+      // Create tab button
+      const tabButton = document.createElement('button');
+      tabButton.className = `palette-tab ${index === 0 ? 'active' : ''}`;
+      tabButton.textContent = category.name;
+      tabButton.setAttribute('data-category-id', category.id);
+      
+      // Create content panel
+      const contentPanel = document.createElement('div');
+      contentPanel.className = `palette-panel ${index === 0 ? 'active' : ''}`;
+      contentPanel.setAttribute('data-category-id', category.id);
+
+      // Add palettes to panel
+      category.palettes.forEach(palette => {
+        const paletteButton = document.createElement('button');
+        paletteButton.className = 'preset-palette-btn';
+        paletteButton.title = `${palette.name}: ${palette.description}`;
+        paletteButton.setAttribute('data-palette-id', palette.id);
+
+        // Create color preview (show only the 2 colors that will be used)
+        const colorPreview = document.createElement('div');
+        colorPreview.className = 'palette-preview';
+        palette.colors.slice(0, 2).forEach(color => {
+          const colorSwatch = document.createElement('div');
+          colorSwatch.className = 'palette-swatch';
+          colorSwatch.style.backgroundColor = color;
+          colorPreview.appendChild(colorSwatch);
+        });
+
+        const nameLabel = document.createElement('div');
+        nameLabel.className = 'palette-name';
+        nameLabel.textContent = palette.name;
+
+        paletteButton.appendChild(colorPreview);
+        paletteButton.appendChild(nameLabel);
+        paletteButton.addEventListener('click', () => {
+          this.applyPresetPalette(palette);
+          this.closePresetsDropdown();
+        });
+
+        contentPanel.appendChild(paletteButton);
+      });
+
+      // Tab click handler
+      tabButton.addEventListener('click', () => {
+        // Remove active class from all tabs and panels
+        tabContainer.querySelectorAll('.palette-tab').forEach(t => t.classList.remove('active'));
+        contentContainer.querySelectorAll('.palette-panel').forEach(p => p.classList.remove('active'));
+        
+        // Add active class to clicked tab and corresponding panel
+        tabButton.classList.add('active');
+        contentPanel.classList.add('active');
+      });
+
+      tabContainer.appendChild(tabButton);
+      contentContainer.appendChild(contentPanel);
+    });
+
+    this.elements.paletteCategories.appendChild(tabContainer);
+    this.elements.paletteCategories.appendChild(contentContainer);
+  }
+
+  private applyPresetPalette(palette: ColorPalette): void {
+    const activeLayer = this.canvasManager.getActiveLayer();
+    if (!activeLayer || palette.colors.length < 2) return;
+
+    // Apply primary and secondary colors
+    const primaryColor = palette.colors[0];
+    const secondaryColor = palette.colors[1];
+
+    this.canvasManager.updateLayer(activeLayer.id, {
+      color: {
+        type: 'gradient',
+        primary: primaryColor,
+        secondary: secondaryColor,
+        alpha: activeLayer.color.alpha
+      }
+    });
+
+    // Update UI controls
+    (this.elements.colorType as HTMLSelectElement).value = 'gradient';
+    (this.elements.layerColor as HTMLInputElement).value = primaryColor;
+    (this.elements.layerColorText as HTMLInputElement).value = primaryColor;
+    (this.elements.secondaryColor as HTMLInputElement).value = secondaryColor;
+    (this.elements.secondaryColorText as HTMLInputElement).value = secondaryColor;
+    
+    this.toggleSecondaryColorVisibility(true);
+    this.updateLayerList();
+  }
+
+  private setupPresetsDropdown(): void {
+    // Toggle dropdown on button click
+    this.elements.presetsDropdownBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.togglePresetsDropdown();
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!this.elements.presetsDropdownPopup.contains(e.target as Node) && 
+          !this.elements.presetsDropdownBtn.contains(e.target as Node)) {
+        this.closePresetsDropdown();
+      }
+    });
+
+    // Prevent dropdown from closing when clicking inside
+    this.elements.presetsDropdownPopup.addEventListener('click', (e) => {
+      e.stopPropagation();
+    });
+  }
+
+  private togglePresetsDropdown(): void {
+    const popup = this.elements.presetsDropdownPopup;
+    if (popup.classList.contains('show')) {
+      this.closePresetsDropdown();
+    } else {
+      this.openPresetsDropdown();
+    }
+  }
+
+  private openPresetsDropdown(): void {
+    this.elements.presetsDropdownPopup.classList.add('show');
+  }
+
+  private closePresetsDropdown(): void {
+    this.elements.presetsDropdownPopup.classList.remove('show');
   }
 }

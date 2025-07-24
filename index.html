@@ -75,19 +75,11 @@
                 </div>
               </div>
 
-              <div class="control-group inline">
-                <label for="layer-color">Color</label>
-                <div class="color-input-container">
-                  <input type="color" id="layer-color" value="#3498db" class="color-picker-small">
-                  <input type="text" id="layer-color-text" value="#3498db" class="color-text-input" placeholder="#000000">
-                </div>
-              </div>
-
               <div class="control-group compact-slider inline">
                 <label for="layer-alpha">Opacity (%)</label>
                 <div class="slider-container">
-                  <input type="range" id="layer-alpha" min="0" max="100" value="60" class="slider">
-                  <input type="number" id="layer-alpha-input" min="0" max="100" value="60" class="number-input">
+                  <input type="range" id="layer-alpha" min="0" max="100" value="70" class="slider">
+                  <input type="number" id="layer-alpha-input" min="0" max="100" value="70" class="number-input">
                 </div>
               </div>
 
@@ -96,6 +88,45 @@
                 <div class="slider-container">
                   <input type="range" id="line-width" min="1" max="10" value="1" class="slider">
                   <input type="number" id="line-width-input" min="1" max="10" value="1" class="number-input">
+                </div>
+              </div>
+
+              <div class="control-group inline">
+                <label for="color-type">Type</label>
+                <select id="color-type" class="select-input">
+                  <option value="solid">Solid</option>
+                  <option value="gradient">Gradient</option>
+                </select>
+              </div>
+
+              <div class="control-group inline">
+                <label for="layer-color">Color</label>
+                <div class="color-input-container">
+                  <input type="color" id="layer-color" value="#3498db" class="color-picker-small">
+                  <input type="text" id="layer-color-text" value="#3498db" class="color-text-input" placeholder="#000000">
+                  <button id="color-harmony" class="btn btn-secondary btn-mini" title="Generate color harmony">⚸</button>
+                </div>
+              </div>
+
+              <div class="control-group inline" id="secondary-color-group" style="display: none;">
+                <label for="secondary-color">Color 2</label>
+                <div class="color-input-container">
+                  <input type="color" id="secondary-color" value="#f39c12" class="color-picker-small">
+                  <input type="text" id="secondary-color-text" value="#f39c12" class="color-text-input" placeholder="#000000">
+                </div>
+              </div>
+
+              <div class="control-group inline">
+                <label for="presets-dropdown">Presets</label>
+                <div class="presets-dropdown-container">
+                  <button id="presets-dropdown-btn" class="btn btn-secondary" title="Choose color preset">
+                    Choose Palette...
+                  </button>
+                  <div class="presets-dropdown-popup" id="presets-dropdown-popup">
+                    <div class="palette-categories" id="palette-categories">
+                      <!-- Palette category tabs and buttons will be generated here -->
+                    </div>
+                  </div>
                 </div>
               </div>
             </section>
