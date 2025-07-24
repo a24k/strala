@@ -661,13 +661,13 @@ body {
 /* Select Input */
 .select-input {
   flex: 1;
-  height: 40px;
-  padding: 0 12px;
-  background-color: #2a3f5f;
-  color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 6px;
-  font-size: 14px;
+  height: 28px;
+  padding: 0 8px;
+  background-color: rgba(255, 255, 255, 0.05);
+  color: #e8f4fd;
+  border: 1px solid #2a3f5f;
+  border-radius: 4px;
+  font-size: 12px;
   cursor: pointer;
   transition: all 0.2s ease;
   outline: none;
@@ -675,12 +675,12 @@ body {
 
 .select-input:hover {
   border-color: rgba(255, 255, 255, 0.2);
-  background-color: #34495e;
+  background-color: rgba(255, 255, 255, 0.08);
 }
 
 .select-input:focus {
   border-color: #3498db;
-  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+  background-color: rgba(255, 255, 255, 0.08);
 }
 
 .select-input option {
@@ -734,9 +734,9 @@ body {
   width: 100%;
   text-align: left;
   justify-content: flex-start;
-  font-size: 13px;
-  padding: 8px 12px;
-  height: 40px;
+  font-size: 12px;
+  padding: 0 8px;
+  height: 28px;
   background: transparent;
   border: 1px solid rgba(255, 255, 255, 0.1);
   color: #3498db;
