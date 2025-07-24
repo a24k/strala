@@ -125,6 +125,8 @@ function drawSolidConnections(p: p5, connections: Array<{from: any, to: any}>, l
   const color = ColorUtils.hexToRgb(layer.color.primary);
   if (!color) return;
   
+  // Set stroke cap to round for solid lines (default behavior)
+  p.strokeCap(p.ROUND);
   p.stroke(color.r, color.g, color.b, layer.color.alpha * 255);
   p.strokeWeight(layer.lineWidth);
   
@@ -139,6 +141,9 @@ function drawSolidConnections(p: p5, connections: Array<{from: any, to: any}>, l
 // Draw gradient connections
 function drawGradientConnections(p: p5, connections: Array<{from: any, to: any}>, layer: any): void {
   const segments = 20; // Number of segments for gradient interpolation
+  
+  // Set stroke cap to square to avoid visible dots between segments
+  p.strokeCap(p.SQUARE);
   
   connections.forEach(connection => {
     const dx = connection.to.x - connection.from.x;
