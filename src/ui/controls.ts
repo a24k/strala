@@ -44,6 +44,8 @@ export class UIControls {
     this.elements.lineWidth = document.getElementById('line-width')!;
     this.elements.lineWidthInput = document.getElementById('line-width-input')!;
     this.elements.paletteCategories = document.getElementById('palette-categories')!;
+    this.elements.presetsDropdownBtn = document.getElementById('presets-dropdown-btn')!;
+    this.elements.presetsDropdownPopup = document.getElementById('presets-dropdown-popup')!;
   }
 
   private setupEventListeners(): void {
@@ -79,6 +81,9 @@ export class UIControls {
     
     // Initialize palette categories
     this.initializePaletteCategories();
+    
+    // Setup presets dropdown
+    this.setupPresetsDropdown();
   }
 
   private updateUI(): void {
@@ -554,6 +559,7 @@ export class UIControls {
         paletteButton.appendChild(nameLabel);
         paletteButton.addEventListener('click', () => {
           this.applyPresetPalette(palette);
+          this.closePresetsDropdown();
         });
 
         contentPanel.appendChild(paletteButton);
@@ -604,5 +610,43 @@ export class UIControls {
     
     this.toggleSecondaryColorVisibility(true);
     this.updateLayerList();
+  }
+
+  private setupPresetsDropdown(): void {
+    // Toggle dropdown on button click
+    this.elements.presetsDropdownBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.togglePresetsDropdown();
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!this.elements.presetsDropdownPopup.contains(e.target as Node) && 
+          !this.elements.presetsDropdownBtn.contains(e.target as Node)) {
+        this.closePresetsDropdown();
+      }
+    });
+
+    // Prevent dropdown from closing when clicking inside
+    this.elements.presetsDropdownPopup.addEventListener('click', (e) => {
+      e.stopPropagation();
+    });
+  }
+
+  private togglePresetsDropdown(): void {
+    const popup = this.elements.presetsDropdownPopup;
+    if (popup.classList.contains('show')) {
+      this.closePresetsDropdown();
+    } else {
+      this.openPresetsDropdown();
+    }
+  }
+
+  private openPresetsDropdown(): void {
+    this.elements.presetsDropdownPopup.classList.add('show');
+  }
+
+  private closePresetsDropdown(): void {
+    this.elements.presetsDropdownPopup.classList.remove('show');
   }
 }
