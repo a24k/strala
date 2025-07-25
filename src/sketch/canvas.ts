@@ -1,4 +1,4 @@
-import { AppConfig, Point, Layer, LayerData } from '../types';
+import { AppConfig, Point, Layer, LayerData, TwoPointLayerData, calculatePointBPosition } from '../types';
 
 export class CanvasManager {
   private config: AppConfig;
@@ -226,6 +226,100 @@ export class CanvasManager {
     }
     
     return connections;
+  }
+
+  public calculateTwoPointConnections(layer: TwoPointLayerData): Array<{from: Point, to: Point}> {
+    const connections: Array<{from: Point, to: Point}> = [];
+    const pointCount = this.points.length;
+    
+    // Edge case handling
+    if (pointCount === 0 || 
+        layer.pointA.stepSize <= 0 || layer.pointA.stepSize >= pointCount ||
+        layer.pointB.stepSize <= 0 || layer.pointB.stepSize >= pointCount) {
+      return connections;
+    }
+
+    // Calculate complete pattern period
+    const patternPeriod = this.calculateTwoPointPeriod(
+      layer.pointA.stepSize, 
+      layer.pointB.stepSize, 
+      pointCount
+    );
+    
+    // Total connections in a complete pattern (2 connections per iteration)
+    const totalConnections = patternPeriod * 2;
+    
+    // Determine actual connections: use maxIterations if specified, otherwise full pattern
+    const actualConnections = layer.maxIterations !== undefined 
+      ? Math.min(layer.maxIterations, totalConnections)
+      : totalConnections;
+    
+    
+    // Generate the continuous A-B, B-A', A'-B' pattern, one connection at a time
+    for (let connectionIndex = 0; connectionIndex < actualConnections; connectionIndex++) {
+      const iterationIndex = Math.floor(connectionIndex / 2);
+      const isAtoB = connectionIndex % 2 === 0; // Even indices: A→B, Odd indices: B→A'
+      
+      if (isAtoB) {
+        // A → B connection
+        const posA = (layer.pointA.initialPosition + layer.pointA.stepSize * iterationIndex) % pointCount;
+        const initialPosB = calculatePointBPosition(layer.pointA.initialPosition, layer.pointB.relativeOffset, pointCount);
+        const posB = (initialPosB + layer.pointB.stepSize * iterationIndex) % pointCount;
+        
+        connections.push({
+          from: this.points[posA],
+          to: this.points[posB]
+        });
+      } else {
+        // B → A' connection (continuous string path)
+        const initialPosB = calculatePointBPosition(layer.pointA.initialPosition, layer.pointB.relativeOffset, pointCount);
+        const posB = (initialPosB + layer.pointB.stepSize * iterationIndex) % pointCount;
+        const nextPosA = (layer.pointA.initialPosition + layer.pointA.stepSize * (iterationIndex + 1)) % pointCount;
+        
+        connections.push({
+          from: this.points[posB],
+          to: this.points[nextPosA]
+        });
+      }
+    }
+    
+    
+    return connections;
+  }
+
+  private calculateTwoPointPeriod(stepA: number, stepB: number, pointCount: number): number {
+    // For two-point pattern, we need to find when both points return to initial state
+    // This is when both (stepA * n) % pointCount == 0 and (stepB * n) % pointCount == 0
+    // Which is equivalent to finding LCM(pointCount/gcd(stepA, pointCount), pointCount/gcd(stepB, pointCount))
+    
+    const periodA = pointCount / this.gcd(stepA, pointCount);
+    const periodB = pointCount / this.gcd(stepB, pointCount);
+    
+    // The actual period is when both points complete their cycles
+    const totalPeriod = this.lcm(periodA, periodB);
+    
+    return totalPeriod;
+  }
+
+
+  private lcm(a: number, b: number): number {
+    return Math.abs(a * b) / this.gcd(a, b);
+  }
+
+  private gcd(a: number, b: number): number {
+    return b === 0 ? a : this.gcd(b, a % b);
+  }
+
+  // Generic method to calculate connections for any layer type
+  public calculateLayerConnections(layer: Layer): Array<{from: Point, to: Point}> {
+    // Check if layer has two-point connection type
+    if (layer.connectionType === 'two-point') {
+      // Convert layer to TwoPointLayerData for calculation
+      const twoPointData = layer as any as TwoPointLayerData;
+      return this.calculateTwoPointConnections(twoPointData);
+    } else {
+      return this.calculateStringConnections(layer);
+    }
   }
 
 }
