@@ -100,7 +100,7 @@ function drawCircleAndPoints(p: p5): void {
   layers.slice().reverse().forEach(layer => {
     if (!layer.visible) return;
     
-    const connections = canvasManager.calculateStringConnections(layer);
+    const connections = canvasManager.calculateLayerConnections(layer);
     
     if (layer.color.type === 'gradient' && layer.color.secondary) {
       // Draw gradient lines
@@ -188,34 +188,72 @@ function addTestControls(): void {
     
     switch (event.key) {
       case 'ArrowUp':
-        const newStartPointUp = (activeLayer!.startPoint + 1) % maxPoints;
-        canvasManager.updateLayer(activeLayer!.id, { startPoint: newStartPointUp });
-        console.log(`${activeLayer!.name} start point: ${newStartPointUp}`);
+        if (activeLayer!.connectionType === 'two-point' && activeLayer!.pointA) {
+          const newPosition = (activeLayer!.pointA.initialPosition + 1) % maxPoints;
+          canvasManager.updateLayer(activeLayer!.id, { 
+            pointA: { ...activeLayer!.pointA, initialPosition: newPosition } 
+          } as any);
+          console.log(`${activeLayer!.name} point A position: ${newPosition}`);
+        } else {
+          const newStartPointUp = (activeLayer!.startPoint + 1) % maxPoints;
+          canvasManager.updateLayer(activeLayer!.id, { startPoint: newStartPointUp });
+          console.log(`${activeLayer!.name} start point: ${newStartPointUp}`);
+        }
         uiControls?.refresh();
         break;
         
       case 'ArrowDown':
-        const newStartPointDown = (activeLayer!.startPoint - 1 + maxPoints) % maxPoints;
-        canvasManager.updateLayer(activeLayer!.id, { startPoint: newStartPointDown });
-        console.log(`${activeLayer!.name} start point: ${newStartPointDown}`);
+        if (activeLayer!.connectionType === 'two-point' && activeLayer!.pointA) {
+          const newPosition = (activeLayer!.pointA.initialPosition - 1 + maxPoints) % maxPoints;
+          canvasManager.updateLayer(activeLayer!.id, { 
+            pointA: { ...activeLayer!.pointA, initialPosition: newPosition } 
+          } as any);
+          console.log(`${activeLayer!.name} point A position: ${newPosition}`);
+        } else {
+          const newStartPointDown = (activeLayer!.startPoint - 1 + maxPoints) % maxPoints;
+          canvasManager.updateLayer(activeLayer!.id, { startPoint: newStartPointDown });
+          console.log(`${activeLayer!.name} start point: ${newStartPointDown}`);
+        }
         uiControls?.refresh();
         break;
         
       case 'ArrowRight':
-        const newStepSizeUp = activeLayer!.stepSize + 1;
-        if (newStepSizeUp < maxPoints) {
-          canvasManager.updateLayer(activeLayer!.id, { stepSize: newStepSizeUp });
-          console.log(`${activeLayer!.name} step size: ${newStepSizeUp}`);
-          uiControls?.refresh();
+        if (activeLayer!.connectionType === 'two-point' && activeLayer!.pointA) {
+          const newStepSize = activeLayer!.pointA.stepSize + 1;
+          if (newStepSize < maxPoints) {
+            canvasManager.updateLayer(activeLayer!.id, { 
+              pointA: { ...activeLayer!.pointA, stepSize: newStepSize } 
+            } as any);
+            console.log(`${activeLayer!.name} point A step size: ${newStepSize}`);
+            uiControls?.refresh();
+          }
+        } else {
+          const newStepSizeUp = activeLayer!.stepSize + 1;
+          if (newStepSizeUp < maxPoints) {
+            canvasManager.updateLayer(activeLayer!.id, { stepSize: newStepSizeUp });
+            console.log(`${activeLayer!.name} step size: ${newStepSizeUp}`);
+            uiControls?.refresh();
+          }
         }
         break;
         
       case 'ArrowLeft':
-        const newStepSizeDown = activeLayer!.stepSize - 1;
-        if (newStepSizeDown > 0) {
-          canvasManager.updateLayer(activeLayer!.id, { stepSize: newStepSizeDown });
-          console.log(`${activeLayer!.name} step size: ${newStepSizeDown}`);
-          uiControls?.refresh();
+        if (activeLayer!.connectionType === 'two-point' && activeLayer!.pointA) {
+          const newStepSize = activeLayer!.pointA.stepSize - 1;
+          if (newStepSize > 0) {
+            canvasManager.updateLayer(activeLayer!.id, { 
+              pointA: { ...activeLayer!.pointA, stepSize: newStepSize } 
+            } as any);
+            console.log(`${activeLayer!.name} point A step size: ${newStepSize}`);
+            uiControls?.refresh();
+          }
+        } else {
+          const newStepSizeDown = activeLayer!.stepSize - 1;
+          if (newStepSizeDown > 0) {
+            canvasManager.updateLayer(activeLayer!.id, { stepSize: newStepSizeDown });
+            console.log(`${activeLayer!.name} step size: ${newStepSizeDown}`);
+            uiControls?.refresh();
+          }
         }
         break;
         
@@ -290,7 +328,7 @@ function addTestControls(): void {
     }
   });
   
-  console.log('=== Layer Management Test Controls ===');
+  console.log('=== Layer Management Controls ===');
   console.log('Basic Controls:');
   console.log('  ↑/↓: Change start point (active layer)');
   console.log('  ←/→: Change step size (active layer)');

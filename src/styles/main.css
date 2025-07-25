@@ -935,3 +935,19 @@ body {
   background: linear-gradient(45deg, var(--primary-color, #3498db) 0%, var(--secondary-color, #f39c12) 100%);
 }
 
+/* Two-point control group headers */
+.control-group-header {
+  font-size: 13px;
+  font-weight: 600;
+  color: #e8f4fd;
+  margin: 16px 0 8px 0;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #2a3f5f;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.control-group-header:first-child {
+  margin-top: 8px;
+}
+

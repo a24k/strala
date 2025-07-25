@@ -1,7 +1,11 @@
+// Connection type for string patterns
+export type StringConnectionType = 'single-point' | 'two-point';
+
 export interface LayerData {
   id: string;
   name: string;
   visible: boolean;
+  connectionType?: StringConnectionType; // Optional for backward compatibility
   startPoint: number;
   stepSize: number;
   color: {
@@ -13,12 +17,69 @@ export interface LayerData {
   lineWidth: number;
 }
 
+// Two-point layer data structure
+export interface TwoPointLayerData extends Omit<LayerData, 'startPoint' | 'stepSize' | 'connectionType'> {
+  connectionType: 'two-point';
+  pointA: {
+    initialPosition: number;  // 0 to circlePoints-1
+    stepSize: number;        // 1 to 50
+  };
+  pointB: {
+    relativeOffset: number;  // Relative offset from pointA (-circlePoints+1 to circlePoints-1)
+    stepSize: number;        // 1 to 50
+  };
+  maxIterations?: number;    // Optional: limit pattern iterations for partial designs
+}
+
+// Extended layer data union type
+export type ExtendedLayerData = LayerData | TwoPointLayerData;
+
+// Type guard functions
+export function isTwoPointLayer(layer: ExtendedLayerData): layer is TwoPointLayerData {
+  return layer.connectionType === 'two-point';
+}
+
+// Helper function to calculate actual position of pointB from relative offset
+export function calculatePointBPosition(pointAPosition: number, relativeOffset: number, circlePoints: number): number {
+  return (pointAPosition + relativeOffset + circlePoints) % circlePoints;
+}
+
+export function convertSingleToTwoPoint(layer: LayerData): TwoPointLayerData {
+  return {
+    id: layer.id,
+    name: layer.name,
+    visible: layer.visible,
+    connectionType: 'two-point',
+    pointA: {
+      initialPosition: layer.startPoint,
+      stepSize: layer.stepSize
+    },
+    pointB: {
+      relativeOffset: 1, // Default: point B at position A+1
+      stepSize: 2
+    },
+    color: { ...layer.color },
+    lineWidth: layer.lineWidth
+  };
+}
+
 export class Layer implements LayerData {
   public id: string;
   public name: string;
   public visible: boolean;
+  public connectionType?: StringConnectionType;
   public startPoint: number;
   public stepSize: number;
+  // Two-point properties (optional, only used when connectionType is 'two-point')
+  public pointA?: {
+    initialPosition: number;
+    stepSize: number;
+  };
+  public pointB?: {
+    relativeOffset: number;
+    stepSize: number;
+  };
+  public maxIterations?: number;  // Optional: limit pattern iterations for partial designs
   public color: {
     type: 'solid' | 'gradient';
     primary: string;
@@ -27,12 +88,26 @@ export class Layer implements LayerData {
   };
   public lineWidth: number;
 
-  constructor(data: LayerData) {
+  constructor(data: LayerData | TwoPointLayerData) {
     this.id = data.id;
     this.name = data.name;
     this.visible = data.visible;
-    this.startPoint = data.startPoint;
-    this.stepSize = data.stepSize;
+    this.connectionType = data.connectionType ?? 'single-point';
+    
+    if (this.connectionType === 'two-point') {
+      const twoPointData = data as TwoPointLayerData;
+      this.pointA = { ...twoPointData.pointA };
+      this.pointB = { ...twoPointData.pointB };
+      this.maxIterations = twoPointData.maxIterations;
+      // Set default single-point values for backward compatibility
+      this.startPoint = twoPointData.pointA.initialPosition;
+      this.stepSize = twoPointData.pointA.stepSize;
+    } else {
+      const singlePointData = data as LayerData;
+      this.startPoint = singlePointData.startPoint;
+      this.stepSize = singlePointData.stepSize;
+    }
+    
     this.color = { ...data.color };
     this.lineWidth = data.lineWidth;
   }
@@ -54,37 +129,109 @@ export class Layer implements LayerData {
   }
 
   public clone(): Layer {
-    return new Layer({
-      id: Layer.generateId(),
-      name: this.name + ' Copy',
-      visible: this.visible,
-      startPoint: this.startPoint,
-      stepSize: this.stepSize,
-      color: { ...this.color },
-      lineWidth: this.lineWidth
-    });
+    if (this.connectionType === 'two-point') {
+      return new Layer({
+        id: Layer.generateId(),
+        name: this.name + ' Copy',
+        visible: this.visible,
+        connectionType: 'two-point',
+        pointA: this.pointA ? { ...this.pointA } : { initialPosition: 0, stepSize: 1 },
+        pointB: this.pointB ? { ...this.pointB } : { relativeOffset: 1, stepSize: 2 },
+        maxIterations: this.maxIterations,
+        color: { ...this.color },
+        lineWidth: this.lineWidth
+      } as TwoPointLayerData);
+    } else {
+      return new Layer({
+        id: Layer.generateId(),
+        name: this.name + ' Copy',
+        visible: this.visible,
+        connectionType: this.connectionType,
+        startPoint: this.startPoint,
+        stepSize: this.stepSize,
+        color: { ...this.color },
+        lineWidth: this.lineWidth
+      });
+    }
   }
 
-  public update(updates: Partial<LayerData>): Layer {
-    return new Layer({
-      id: updates.id ?? this.id,
-      name: updates.name ?? this.name,
-      visible: updates.visible ?? this.visible,
-      startPoint: updates.startPoint ?? this.startPoint,
-      stepSize: updates.stepSize ?? this.stepSize,
-      color: updates.color ? { ...this.color, ...updates.color } : { ...this.color },
-      lineWidth: updates.lineWidth ?? this.lineWidth
-    });
+  public update(updates: Partial<LayerData | TwoPointLayerData>): Layer {
+    // Check if we're updating TO two-point or staying in two-point
+    const isUpdatingToTwoPoint = updates.connectionType === 'two-point';
+    const isUpdatingToSinglePoint = updates.connectionType === 'single-point';
+    const isCurrentlyTwoPoint = this.connectionType === 'two-point';
+    
+    // If explicitly converting to single-point, use single-point logic
+    if (isUpdatingToSinglePoint) {
+      const singlePointUpdates = updates as Partial<LayerData>;
+      return new Layer({
+        id: updates.id ?? this.id,
+        name: updates.name ?? this.name,
+        visible: updates.visible ?? this.visible,
+        connectionType: 'single-point',
+        startPoint: singlePointUpdates.startPoint ?? this.startPoint,
+        stepSize: singlePointUpdates.stepSize ?? this.stepSize,
+        color: updates.color ? { ...this.color, ...updates.color } : { ...this.color },
+        lineWidth: updates.lineWidth ?? this.lineWidth
+      });
+    }
+    // If updating to two-point or currently two-point and not explicitly converting
+    else if (isUpdatingToTwoPoint || (isCurrentlyTwoPoint && !isUpdatingToSinglePoint)) {
+      const twoPointUpdates = updates as Partial<TwoPointLayerData>;
+      // If converting from single-point to two-point, use current values as defaults
+      const defaultPointA = this.pointA ?? { 
+        initialPosition: this.startPoint ?? 0, 
+        stepSize: 1 
+      };
+      const defaultPointB = this.pointB ?? { 
+        relativeOffset: 1, 
+        stepSize: 2 
+      };
+      
+      return new Layer({
+        id: updates.id ?? this.id,
+        name: updates.name ?? this.name,
+        visible: updates.visible ?? this.visible,
+        connectionType: 'two-point',
+        pointA: twoPointUpdates.pointA ? { ...defaultPointA, ...twoPointUpdates.pointA } : defaultPointA,
+        pointB: twoPointUpdates.pointB ? { ...defaultPointB, ...twoPointUpdates.pointB } : defaultPointB,
+        maxIterations: twoPointUpdates.maxIterations !== undefined ? twoPointUpdates.maxIterations : this.maxIterations,
+        color: updates.color ? { ...this.color, ...updates.color } : { ...this.color },
+        lineWidth: updates.lineWidth ?? this.lineWidth
+      } as TwoPointLayerData);
+    } else {
+      const singlePointUpdates = updates as Partial<LayerData>;
+      return new Layer({
+        id: updates.id ?? this.id,
+        name: updates.name ?? this.name,
+        visible: updates.visible ?? this.visible,
+        connectionType: updates.connectionType ?? this.connectionType,
+        startPoint: singlePointUpdates.startPoint ?? this.startPoint,
+        stepSize: singlePointUpdates.stepSize ?? this.stepSize,
+        color: updates.color ? { ...this.color, ...updates.color } : { ...this.color },
+        lineWidth: updates.lineWidth ?? this.lineWidth
+      });
+    }
   }
 
   public validate(maxPoints: number): boolean {
-    if (this.startPoint < 0 || this.startPoint >= maxPoints) return false;
-    if (this.stepSize <= 0 || this.stepSize >= maxPoints) return false;
+    if (this.connectionType === 'two-point') {
+      if (!this.pointA || !this.pointB) return false;
+      if (this.pointA.initialPosition < 0 || this.pointA.initialPosition >= maxPoints) return false;
+      if (this.pointB.relativeOffset < -(maxPoints - 1) || this.pointB.relativeOffset > (maxPoints - 1)) return false;
+      if (this.pointA.stepSize <= 0 || this.pointA.stepSize >= maxPoints) return false;
+      if (this.pointB.stepSize <= 0 || this.pointB.stepSize >= maxPoints) return false;
+    } else {
+      if (this.startPoint < 0 || this.startPoint >= maxPoints) return false;
+      if (this.stepSize <= 0 || this.stepSize >= maxPoints) return false;
+    }
+    
     if (this.lineWidth <= 0 || this.lineWidth > 10) return false;
     if (this.color.alpha < 0 || this.color.alpha > 1) return false;
     return true;
   }
 }
+
 
 
 export interface AppConfig {

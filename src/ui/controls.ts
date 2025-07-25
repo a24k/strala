@@ -25,10 +25,27 @@ export class UIControls {
 
     // Active layer controls
     this.elements.activeLayerName = document.getElementById('active-layer-name')!;
+    this.elements.connectionType = document.getElementById('connection-type')!;
+    
+    // Single-point controls
+    this.elements.singlePointControls = document.getElementById('single-point-controls')!;
     this.elements.startPoint = document.getElementById('start-point')!;
     this.elements.startPointInput = document.getElementById('start-point-input')!;
     this.elements.stepSize = document.getElementById('step-size')!;
     this.elements.stepSizeInput = document.getElementById('step-size-input')!;
+    
+    // Two-point controls
+    this.elements.twoPointControls = document.getElementById('two-point-controls')!;
+    this.elements.pointAPosition = document.getElementById('point-a-position')!;
+    this.elements.pointAPositionInput = document.getElementById('point-a-position-input')!;
+    this.elements.pointAStep = document.getElementById('point-a-step')!;
+    this.elements.pointAStepInput = document.getElementById('point-a-step-input')!;
+    this.elements.pointBPosition = document.getElementById('point-b-position')!;
+    this.elements.pointBPositionInput = document.getElementById('point-b-position-input')!;
+    this.elements.pointBStep = document.getElementById('point-b-step')!;
+    this.elements.pointBStepInput = document.getElementById('point-b-step-input')!;
+    this.elements.maxIterations = document.getElementById('max-iterations')!;
+    this.elements.maxIterationsInput = document.getElementById('max-iterations-input')!;
     
     // Color controls
     this.elements.colorType = document.getElementById('color-type')!;
@@ -74,6 +91,13 @@ export class UIControls {
       this.canvasManager.createLayer();
       this.updateLayerList();
       this.updateActiveLayerControls();
+    });
+
+    // Connection type selector
+    (this.elements.connectionType as HTMLSelectElement).addEventListener('change', (e) => {
+      const connectionType = (e.target as HTMLSelectElement).value as 'single-point' | 'two-point';
+      this.updateActiveLayerConnectionType(connectionType);
+      this.toggleConnectionTypeControls(connectionType);
     });
 
     // Active layer controls
@@ -149,8 +173,11 @@ export class UIControls {
              style="${layer.color.type === 'gradient' && layer.color.secondary 
                      ? `--primary-color: ${layer.color.primary}; --secondary-color: ${layer.color.secondary}; background: linear-gradient(45deg, ${layer.color.primary} 0%, ${layer.color.secondary} 100%);`
                      : `background-color: ${layer.color.primary};`}"></div>
-        <span>Start: ${layer.startPoint}</span>
-        <span>Step: ${layer.stepSize}</span>
+        ${layer.connectionType === 'two-point' 
+          ? `<span>Start: ${layer.pointA?.initialPosition ?? 0},${layer.pointB?.relativeOffset !== undefined ? `${layer.pointB.relativeOffset >= 0 ? '+' : ''}${layer.pointB.relativeOffset}` : 'N/A'}</span>
+             <span>Steps: ${layer.pointA?.stepSize ?? 1},${layer.pointB?.stepSize ?? 2}</span>`
+          : `<span>Start: ${layer.startPoint}</span>
+             <span>Step: ${layer.stepSize}</span>`}
         <span>Opacity: ${Math.round(layer.color.alpha * 100)}%</span>
       </div>
     `;
@@ -232,6 +259,47 @@ export class UIControls {
     this.elements.colorHarmony.addEventListener('click', () => {
       this.generateColorHarmony();
     });
+
+    // Two-point controls
+    this.setupDualControl(
+      'pointAPosition',
+      'pointAPositionInput',
+      this.validateStartPoint.bind(this),
+      (value) => this.updateActiveLayerTwoPointProperty('pointA', 'initialPosition', value),
+      () => this.canvasManager.getActiveLayer()?.pointA?.initialPosition ?? 0
+    );
+
+    this.setupDualControl(
+      'pointAStep',
+      'pointAStepInput',
+      this.validateStepSize.bind(this),
+      (value) => this.updateActiveLayerTwoPointProperty('pointA', 'stepSize', value),
+      () => this.canvasManager.getActiveLayer()?.pointA?.stepSize ?? 1
+    );
+
+    this.setupDualControl(
+      'pointBPosition',
+      'pointBPositionInput',
+      this.validateRelativeOffset.bind(this),
+      (value) => this.updateActiveLayerTwoPointProperty('pointB', 'relativeOffset', value),
+      () => this.canvasManager.getActiveLayer()?.pointB?.relativeOffset ?? 1
+    );
+
+    this.setupDualControl(
+      'pointBStep',
+      'pointBStepInput',
+      this.validateStepSize.bind(this),
+      (value) => this.updateActiveLayerTwoPointProperty('pointB', 'stepSize', value),
+      () => this.canvasManager.getActiveLayer()?.pointB?.stepSize ?? 2
+    );
+
+    this.setupDualControl(
+      'maxIterations',
+      'maxIterationsInput',
+      this.validateMaxIterations.bind(this),
+      (value) => this.updateActiveLayerMaxIterations(value),
+      () => this.getActiveLayerMaxIterations()
+    );
   }
 
   private updateActiveLayerProperty(property: string, value: any): void {
@@ -262,6 +330,100 @@ export class UIControls {
     this.updateLayerList();
   }
 
+  private updateActiveLayerConnectionType(connectionType: 'single-point' | 'two-point'): void {
+    const activeLayer = this.canvasManager.getActiveLayer();
+    if (!activeLayer) return;
+
+    if (connectionType === 'two-point') {
+      // Convert single-point to two-point
+      const twoPointData = {
+        id: activeLayer.id,
+        name: activeLayer.name,
+        visible: activeLayer.visible,
+        connectionType: 'two-point' as const,
+        pointA: {
+          initialPosition: activeLayer.startPoint,
+          stepSize: activeLayer.stepSize
+        },
+        pointB: {
+          relativeOffset: 1,
+          stepSize: 2
+        },
+        color: { ...activeLayer.color },
+        lineWidth: activeLayer.lineWidth
+      };
+      
+      this.canvasManager.updateLayer(activeLayer.id, twoPointData as any);
+    } else {
+      // Convert two-point to single-point (use pointA values)
+      this.canvasManager.updateLayer(activeLayer.id, {
+        connectionType: 'single-point',
+        startPoint: activeLayer.pointA?.initialPosition ?? 0,
+        stepSize: activeLayer.pointA?.stepSize ?? 1
+      });
+    }
+    
+    this.updateLayerList();
+    this.updateActiveLayerControls();
+  }
+
+  private updateActiveLayerTwoPointProperty(point: 'pointA' | 'pointB', property: 'initialPosition' | 'stepSize' | 'relativeOffset', value: number): void {
+    const activeLayer = this.canvasManager.getActiveLayer();
+    if (!activeLayer || activeLayer.connectionType !== 'two-point') return;
+
+    const pointData = activeLayer[point];
+    if (!pointData) return;
+
+    const updatedPoint = { ...pointData, [property]: value };
+    this.canvasManager.updateLayer(activeLayer.id, {
+      [point]: updatedPoint
+    } as any);
+    
+    this.updateLayerList();
+  }
+
+  private updateActiveLayerMaxIterations(value: number): void {
+    const activeLayer = this.canvasManager.getActiveLayer();
+    if (!activeLayer || activeLayer.connectionType !== 'two-point') return;
+
+    // Ensure value is treated as a number
+    const numericValue = Number(value);
+    
+    // If value equals calculated total connections, set to undefined for "complete pattern"
+    const totalConnections = this.calculateDisplayPeriod(
+      activeLayer.pointA?.stepSize ?? 1,
+      activeLayer.pointB?.stepSize ?? 2,
+      this.canvasManager.getConfig().circlePoints
+    );
+    
+    // If value equals or exceeds total connections, set to undefined for complete pattern
+    const maxIterations = numericValue >= totalConnections ? undefined : numericValue;
+    
+    this.canvasManager.updateLayer(activeLayer.id, { maxIterations } as any);
+    this.updateLayerList();
+  }
+
+  private getActiveLayerMaxIterations(): number {
+    const activeLayer = this.canvasManager.getActiveLayer();
+    if (!activeLayer || activeLayer.connectionType !== 'two-point') return 24;
+
+    // If maxIterations is undefined, return the full pattern total connections
+    if (activeLayer.maxIterations === undefined) {
+      return this.calculateDisplayPeriod(
+        activeLayer.pointA?.stepSize ?? 1,
+        activeLayer.pointB?.stepSize ?? 2,
+        this.canvasManager.getConfig().circlePoints
+      );
+    }
+    
+    return activeLayer.maxIterations;
+  }
+
+  private toggleConnectionTypeControls(connectionType: 'single-point' | 'two-point'): void {
+    this.elements.singlePointControls.style.display = connectionType === 'single-point' ? 'block' : 'none';
+    this.elements.twoPointControls.style.display = connectionType === 'two-point' ? 'block' : 'none';
+  }
+
   private updateActiveLayerControls(): void {
     const activeLayer = this.canvasManager.getActiveLayer();
     const config = this.canvasManager.getConfig();
@@ -274,17 +436,62 @@ export class UIControls {
     // Update layer name display
     (this.elements.activeLayerName as HTMLElement).textContent = activeLayer.name;
 
-    // Update start point controls with new max value
-    (this.elements.startPoint as HTMLInputElement).max = (config.circlePoints - 1).toString();
-    (this.elements.startPointInput as HTMLInputElement).max = (config.circlePoints - 1).toString();
-    (this.elements.startPoint as HTMLInputElement).value = activeLayer.startPoint.toString();
-    (this.elements.startPointInput as HTMLInputElement).value = activeLayer.startPoint.toString();
+    // Update connection type selector
+    (this.elements.connectionType as HTMLSelectElement).value = activeLayer.connectionType ?? 'single-point';
+    this.toggleConnectionTypeControls(activeLayer.connectionType === 'two-point' ? 'two-point' : 'single-point');
 
-    // Update step size controls with new max value
-    (this.elements.stepSize as HTMLInputElement).max = (config.circlePoints - 1).toString();
-    (this.elements.stepSizeInput as HTMLInputElement).max = (config.circlePoints - 1).toString();
-    (this.elements.stepSize as HTMLInputElement).value = activeLayer.stepSize.toString();
-    (this.elements.stepSizeInput as HTMLInputElement).value = activeLayer.stepSize.toString();
+    if (activeLayer.connectionType === 'two-point') {
+      // Update two-point controls
+      const maxPoints = config.circlePoints - 1;
+      
+      // Point A controls
+      (this.elements.pointAPosition as HTMLInputElement).max = maxPoints.toString();
+      (this.elements.pointAPositionInput as HTMLInputElement).max = maxPoints.toString();
+      (this.elements.pointAPosition as HTMLInputElement).value = (activeLayer.pointA?.initialPosition ?? 0).toString();
+      (this.elements.pointAPositionInput as HTMLInputElement).value = (activeLayer.pointA?.initialPosition ?? 0).toString();
+      
+      (this.elements.pointAStep as HTMLInputElement).max = maxPoints.toString();
+      (this.elements.pointAStepInput as HTMLInputElement).max = maxPoints.toString();
+      (this.elements.pointAStep as HTMLInputElement).value = (activeLayer.pointA?.stepSize ?? 1).toString();
+      (this.elements.pointAStepInput as HTMLInputElement).value = (activeLayer.pointA?.stepSize ?? 1).toString();
+      
+      // Point B controls (relative offset)
+      (this.elements.pointBPosition as HTMLInputElement).min = (-(config.circlePoints - 1)).toString();
+      (this.elements.pointBPosition as HTMLInputElement).max = (config.circlePoints - 1).toString();
+      (this.elements.pointBPositionInput as HTMLInputElement).min = (-(config.circlePoints - 1)).toString();
+      (this.elements.pointBPositionInput as HTMLInputElement).max = (config.circlePoints - 1).toString();
+      (this.elements.pointBPosition as HTMLInputElement).value = (activeLayer.pointB?.relativeOffset ?? 1).toString();
+      (this.elements.pointBPositionInput as HTMLInputElement).value = (activeLayer.pointB?.relativeOffset ?? 1).toString();
+      
+      (this.elements.pointBStep as HTMLInputElement).max = maxPoints.toString();
+      (this.elements.pointBStepInput as HTMLInputElement).max = maxPoints.toString();
+      (this.elements.pointBStep as HTMLInputElement).value = (activeLayer.pointB?.stepSize ?? 2).toString();
+      (this.elements.pointBStepInput as HTMLInputElement).value = (activeLayer.pointB?.stepSize ?? 2).toString();
+      
+      // Update maxIterations controls
+      const totalConnections = this.calculateDisplayPeriod(
+        activeLayer.pointA?.stepSize ?? 1,
+        activeLayer.pointB?.stepSize ?? 2,
+        config.circlePoints
+      );
+      (this.elements.maxIterations as HTMLInputElement).max = totalConnections.toString();
+      (this.elements.maxIterationsInput as HTMLInputElement).max = totalConnections.toString();
+      
+      const currentMaxIterations = this.getActiveLayerMaxIterations();
+      (this.elements.maxIterations as HTMLInputElement).value = currentMaxIterations.toString();
+      (this.elements.maxIterationsInput as HTMLInputElement).value = currentMaxIterations.toString();
+    } else {
+      // Update single-point controls
+      (this.elements.startPoint as HTMLInputElement).max = (config.circlePoints - 1).toString();
+      (this.elements.startPointInput as HTMLInputElement).max = (config.circlePoints - 1).toString();
+      (this.elements.startPoint as HTMLInputElement).value = activeLayer.startPoint.toString();
+      (this.elements.startPointInput as HTMLInputElement).value = activeLayer.startPoint.toString();
+
+      (this.elements.stepSize as HTMLInputElement).max = (config.circlePoints - 1).toString();
+      (this.elements.stepSizeInput as HTMLInputElement).max = (config.circlePoints - 1).toString();
+      (this.elements.stepSize as HTMLInputElement).value = activeLayer.stepSize.toString();
+      (this.elements.stepSizeInput as HTMLInputElement).value = activeLayer.stepSize.toString();
+    }
 
     // Update color type
     (this.elements.colorType as HTMLSelectElement).value = activeLayer.color.type;
@@ -315,6 +522,7 @@ export class UIControls {
     this.updateUI();
   }
 
+
   // Validation methods
   private validateCirclePoints(value: number): boolean {
     return !isNaN(value) && value >= 8 && value <= 100;
@@ -340,6 +548,15 @@ export class UIControls {
 
   private validateLineWidth(value: number): boolean {
     return !isNaN(value) && value >= 1 && value <= 10;
+  }
+
+  private validateMaxIterations(value: number): boolean {
+    return !isNaN(value) && value >= 1 && value <= 1000;
+  }
+
+  private validateRelativeOffset(value: number): boolean {
+    const config = this.canvasManager.getConfig();
+    return !isNaN(value) && value >= -(config.circlePoints - 1) && value <= (config.circlePoints - 1);
   }
 
   // Helper methods to reduce code duplication
@@ -649,4 +866,22 @@ export class UIControls {
   private closePresetsDropdown(): void {
     this.elements.presetsDropdownPopup.classList.remove('show');
   }
+
+
+  private calculateDisplayPeriod(stepA: number, stepB: number, pointCount: number): number {
+    const gcd = (a: number, b: number): number => b === 0 ? a : gcd(b, a % b);
+    const lcm = (a: number, b: number): number => Math.abs(a * b) / gcd(a, b);
+    
+    // Calculate period for each point independently
+    const periodA = pointCount / gcd(stepA, pointCount);
+    const periodB = pointCount / gcd(stepB, pointCount);
+    
+    // Total period is LCM of both periods
+    const patternPeriod = lcm(periodA, periodB);
+    const totalConnections = patternPeriod * 2;
+    
+    // Return total connections (2 connections per period iteration)
+    return totalConnections;
+  }
+
 }
