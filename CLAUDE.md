@@ -20,8 +20,10 @@ Strala is a web-based tool for creating and simulating string art mandalas (ç³¸æ
 
 ### Layer System
 Each layer contains:
+- **Connection Type**: Single-point or two-point connection mode
 - **Start Point**: Configurable starting position (0-99)
 - **Step Size**: Skip number for string connections (1-50)
+- **Two-Point Support**: Point A position/step, Point B relative offset/step, max iterations
 - **Visual Properties**: Color, transparency, gradients
 - **Visibility**: Show/hide individual layers
 - **Ordering**: Layer reordering (up/down buttons)
@@ -112,9 +114,30 @@ Initial Settings:
 - [x] Basic circle and point rendering
 - [x] Layer system implementation (comprehensive layer management)
 - [x] String drawing algorithm (mathematical rendering engine)
-- [ ] UI controls
-- [ ] Color and gradient system
+- [x] UI controls (single-point and two-point connection modes)
+- [x] Color and gradient system (advanced palette and harmony system)
+- [x] Two-point connection system (Issues #13, #14 completed)
 - [ ] Export functionality
+
+## UI Features
+### Connection Modes
+- **Single-Point Mode**: Traditional string art with start point and step size
+- **Two-Point Mode**: Advanced patterns using two synchronized points
+  - Point A: Position and step size
+  - Point B: Relative offset and independent step size
+  - Max iterations control for pattern complexity
+
+### Layer Management
+- Create, duplicate, delete layers
+- Show/hide individual layers
+- Reorder layers (rendering order)
+- Active layer selection with visual feedback
+
+### Color & Visual System
+- Solid colors and gradient support
+- Advanced color palette categories
+- Color harmony generation
+- Opacity and line width controls
 
 ## Current Test Controls (Development Mode)
 ### Basic Controls
