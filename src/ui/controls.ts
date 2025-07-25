@@ -174,9 +174,10 @@ export class UIControls {
                      ? `--primary-color: ${layer.color.primary}; --secondary-color: ${layer.color.secondary}; background: linear-gradient(45deg, ${layer.color.primary} 0%, ${layer.color.secondary} 100%);`
                      : `background-color: ${layer.color.primary};`}"></div>
         ${layer.connectionType === 'two-point' 
-          ? `<span>A: ${layer.pointA?.initialPosition ?? 0}, B: ${layer.pointB?.relativeOffset ? `${layer.pointA?.initialPosition ?? 0}${layer.pointB.relativeOffset >= 0 ? '+' : ''}${layer.pointB.relativeOffset}` : 'N/A'}</span>`
-          : `<span>Start: ${layer.startPoint}</span>`}
-        <span>Step: ${layer.stepSize}</span>
+          ? `<span>Start: ${layer.pointA?.initialPosition ?? 0},${layer.pointB?.relativeOffset !== undefined ? `${layer.pointB.relativeOffset >= 0 ? '+' : ''}${layer.pointB.relativeOffset}` : 'N/A'}</span>
+             <span>Steps: ${layer.pointA?.stepSize ?? 1},${layer.pointB?.stepSize ?? 2}</span>`
+          : `<span>Start: ${layer.startPoint}</span>
+             <span>Step: ${layer.stepSize}</span>`}
         <span>Opacity: ${Math.round(layer.color.alpha * 100)}%</span>
       </div>
     `;
