@@ -1,0 +1,68 @@
+@import "tailwindcss/theme" theme(reference);
+@import "tailwindcss/utilities";
+
+@theme {
+  --color-strala-navy: #1a1a2e;
+  --color-strala-dark-blue: #16213e;
+  --color-strala-accent: #3498db;
+  --color-strala-text-primary: #e8f4fd;
+  --color-strala-text-secondary: #a8b7c7;
+  --color-strala-border: #2a3f5f;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #1a1a2e;
+  color: #e8f4fd;
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Range Slider Custom Styling - Required for cross-browser compatibility */
+input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  background: #3498db;
+  border-radius: 50%;
+  border: 2px solid white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: -6px;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  background: #2980b9;
+  transform: scale(1.1);
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  background: #3498db;
+  border-radius: 50%;
+  border: 2px solid white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+
+input[type="range"]::-moz-range-thumb:hover {
+  background: #2980b9;
+  transform: scale(1.1);
+}
+
+/* Custom canvas shadow with all-around dark visibility and wider blur */
+.canvas-shadow {
+  box-shadow: 
+    0 -6px 16px -2px rgba(0, 0, 0, 0.25),   /* Top shadow (wider blur) */
+    0 6px 20px -2px rgba(0, 0, 0, 0.35),    /* Bottom shadow (wider blur, darker) */
+    -6px 0 16px -2px rgba(0, 0, 0, 0.25),   /* Left shadow (wider blur) */
+    6px 0 16px -2px rgba(0, 0, 0, 0.25);    /* Right shadow (wider blur) */
+}

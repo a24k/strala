@@ -6,7 +6,10 @@ Strala is a web-based tool for creating and simulating string art mandalas (糸�
 ## Technical Stack
 - **Build Tool**: Vite (for fast development and optimized builds)
 - **Language**: TypeScript (for type safety and better development experience)
-- **Framework**: p5.js (chosen for mathematical visualization capabilities)
+- **Frontend Framework**: React 18 (for component-based UI architecture)
+- **Styling**: Tailwind CSS (for modern, responsive design system)
+- **Canvas Rendering**: p5.js (for mathematical visualization and graphics)
+- **State Management**: Zustand (for simple, lightweight state management)
 - **Target**: Web browsers (modern browsers support)
 - **Purpose**: Art creation and educational tool
 
@@ -69,13 +72,28 @@ export class Layer {
                                └─ Gradient
 ```
 
-### Default Preset
+### Default Preset - "Luminous Mandala"
 ```
 Initial Settings:
-- Circle Points: 24
-- Layer 1: Start 0, Step 7, Semi-transparent Blue (#3498db, 60%)
-- Layer 2: Start 12, Step 11, Semi-transparent Red (#e74c3c, 40%)
-- Background: Deep Navy (#1a1a2e)
+- Circle Points: 56 (high resolution for complex patterns)
+- Background: Deep Cosmic Black (#0a0a18)
+
+Layer 1 "Radiance" (Top Layer):
+- Type: Single-point connection
+- Start: 3, Step: 13 (prime creates intricate top overlay)
+- Color: Blue→Cyan Gradient (#3b82f6→#06b6d4, 80% opacity)
+
+Layer 2 "Harmony" (Middle Layer):
+- Type: Two-point connection
+- Point A: Position 14, Step 1 (quarter position for optimal flow)
+- Point B: Offset 22, Step 2 (creates dynamic spiral motion)
+- Max Iterations: 84
+- Color: Amber→Coral Gradient (#f59e0b→#ef4444, 70% opacity)
+
+Layer 3 "Mystique" (Foundation Layer):
+- Type: Single-point connection
+- Start: 7, Step: 17 (high-frequency foundational texture)
+- Color: Violet→Magenta Gradient (#8b5cf6→#ec4899, 60% opacity)
 ```
 
 ## Development Guidelines
@@ -105,19 +123,70 @@ Initial Settings:
 - `npm run preview` - Preview production build locally
 - `npm run type-check` - Run TypeScript type checking
 
+## Development Server Management
+**Important Workflow Notes:**
+- After starting `npm run dev` (especially with `&` for background), immediately check server readiness
+- Use `curl -s http://localhost:PORT > /dev/null && echo "Ready"` to verify before browser access
+- Don't leave server startup hanging without immediate follow-up action
+- Always have clear next steps after server operations
+
+## Data Persistence & Storage
+
+### Schema-Based Versioning System
+- **Current schema**: v3 (React + Tailwind migration planned)
+- **Versioning**: Integer-based schema versions (1, 2, 3...)
+- **Automatic migration**: Sequential migration chain with backwards compatibility
+- **Cache key management**: Versioned localStorage keys (`strala-v3-*`)
+
+### Auto-Save System
+```typescript
+// Debounced writes (500ms) to localStorage
+const migrations = {
+  1: migrateLegacyToV1,    // Legacy → v1
+  2: migrateV1ToV2,        // v1 → v2 
+  3: migrateV2ToV3         // v2 → v3 (React migration)
+};
+```
+
+### Storage Architecture
+- **Persistent stores**: Config, layers, and active layer state
+- **Auto-save**: Debounced writes (500ms) to localStorage
+- **Data validation**: Schema validation before loading
+- **Backwards compatibility**: Automatic migration from older versions
+- **Storage cleanup**: Auto-removal of old version data
+
+### Development Tools
+Available in browser console as `window.StralaDebug`:
+```javascript
+StralaDebug.currentSchema        // Current schema version
+StralaDebug.clearCache()         // Clear current version data  
+StralaDebug.clearAllVersions()   // Clear all Strala data
+StralaDebug.forceSchemaUpdate()  // Force schema refresh
+StralaDebug.inspectStorage()     // Inspect localStorage contents
+StralaDebug.exportState()        // Export current state
+StralaDebug.importState(data)    // Import state data
+```
+
 ## Implementation Status
 - [x] Requirements gathering
-- [x] Technical stack selection (updated to Vite + TypeScript)
-- [x] UI/UX design
-- [x] Data structure design
+- [x] Technical stack selection (Vite + TypeScript + React + Tailwind)
+- [x] UI/UX design and implementation
+- [x] Data structure design and implementation
 - [x] Vite + TypeScript setup and p5.js integration
+- [x] React 18 component architecture
+- [x] Tailwind CSS styling system
 - [x] Basic circle and point rendering
 - [x] Layer system implementation (comprehensive layer management)
 - [x] String drawing algorithm (mathematical rendering engine)
-- [x] UI controls (single-point and two-point connection modes)
+- [x] Modern UI controls (single-point and two-point connection modes)
 - [x] Color and gradient system (advanced palette and harmony system)
 - [x] Two-point connection system (Issues #13, #14 completed)
+- [x] React + Tailwind migration (Issue #19 completed)
+- [x] Responsive design implementation
+- [x] Modern component library (ModernSlider, ModernColorInput, etc.)
 - [ ] Export functionality
+- [ ] Color harmony generation
+- [ ] Advanced pattern presets
 
 ## UI Features
 ### Connection Modes
@@ -128,33 +197,55 @@ Initial Settings:
   - Max iterations control for pattern complexity
 
 ### Layer Management
-- Create, duplicate, delete layers
-- Show/hide individual layers
-- Reorder layers (rendering order)
-- Active layer selection with visual feedback
+- Create, duplicate, delete layers with modern UI
+- Show/hide individual layers with visual indicators
+- Reorder layers (rendering order) with drag-like interface
+- Active layer selection with modern card-based design
+- Real-time layer preview with color indicators
 
 ### Color & Visual System
+- Modern color picker with live preview
 - Solid colors and gradient support
-- Advanced color palette categories
-- Color harmony generation
-- Opacity and line width controls
+- Advanced color input with hex code editing
+- Color harmony generation button (UI ready)
+- Opacity and line width controls with live sliders
+- Glass morphism design with backdrop blur effects
 
-## Current Test Controls (Development Mode)
-### Basic Controls
-- `↑/↓`: Change start point for active layer (0 to circle points-1)
+## UI Architecture
+
+### Modern React Components
+- **ModernSlider**: Range slider with live input and gradient styling
+- **ModernColorInput**: Advanced color picker with harmony generation
+- **ModernSelect**: Styled dropdown with gradient indicators
+- **ModernLayerCard**: Interactive layer cards with hover animations
+- **WorkingStralaCanvas**: p5.js integration within React
+
+### Design System
+- **Glass Morphism**: Backdrop blur effects and transparency
+- **Gradient Accents**: Blue → Purple → Pink color scheme
+- **Micro-interactions**: Hover animations, scale effects, shadows
+- **Responsive Layout**: Desktop and mobile optimized
+- **Modern Typography**: Consistent spacing and hierarchy
+
+### Legacy Keyboard Controls (Still Available)
+*Note: These are primarily for development/power users*
+- `↑/↓`: Change start point for active layer
 - `←/→`: Change step size for active layer
 - `v`: Toggle active layer visibility
-
-### Layer Management
 - `1/2`: Set active layer
 - `n`: Create new layer
 - `d`: Duplicate active layer
-- `Delete/Backspace`: Remove active layer (minimum 1 layer)
+- `Delete/Backspace`: Remove active layer
 - `PageUp/PageDown`: Move layer up/down in rendering order
 
 ## Future Extensions
-- Complex string rules beyond skip-numbers
-- Animation sequences
-- 3D visualization
-- Pattern sharing/gallery
-- Mathematical analysis tools
+- **Export Functionality**: PNG, SVG, PDF export with high resolution
+- **Color Harmony**: Automatic color palette generation (UI ready)
+- **Advanced Patterns**: More preset configurations beyond "Luminous Mandala"
+- **Animation System**: Timeline-based parameter animations
+- **3D Visualization**: WebGL-based 3D string art rendering
+- **Pattern Sharing**: Cloud-based gallery and community features
+- **Mathematical Analysis**: Pattern complexity metrics and analysis tools
+- **Touch Gestures**: Enhanced mobile interaction patterns
+- **Undo/Redo System**: State history management
+- **Custom Themes**: User-defined color schemes and UI themes
