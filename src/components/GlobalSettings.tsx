@@ -4,22 +4,22 @@ export function GlobalSettings() {
   const { config, updateConfig } = useCanvasStoreSimple();
 
   return (
-    <div className="flex-shrink-0 px-4 py-6 border-b border-strala-border bg-strala-dark-blue">
+    <div className="flex-shrink-0 px-4 py-3 border-b border-strala-border bg-strala-dark-blue">
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2 text-strala-text-primary">
+      <div className="mb-4">
+        <h1 className="text-3xl font-bold mb-0 mt-0 text-strala-text-primary">
           Strala
         </h1>
-        <p className="text-sm text-gray-300">
-          String Art Mandala Simulation
+        <p className="text-sm text-gray-300 mt-0 mb-0">
+          String Art Mandala Simulator
         </p>
       </div>
 
       {/* Global Settings */}
       <div>
-        <h3 className="text-lg font-semibold mb-4 text-gray-100">
+        <h2 className="text-lg font-semibold mb-4 mt-0 text-gray-100">
           Global Settings
-        </h3>
+        </h2>
         
         {/* Points Control */}
         <div className="flex items-center gap-2 mb-4">

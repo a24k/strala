@@ -9,14 +9,14 @@ export function ActiveLayerControls() {
   if (!activeLayer) return null;
 
   return (
-    <div className="flex-shrink-0 px-4 py-6 border-t border-gray-600 bg-slate-800">
-      <h3 className="text-lg font-semibold mb-4 text-gray-100">
-        Active Layer Setting
-      </h3>
+    <div className="flex-shrink-0 px-4 py-3 border-t border-gray-600 bg-slate-800">
+      <h2 className="text-lg font-semibold mb-4 mt-0 text-gray-100">
+        Selected Layer Settings
+      </h2>
       
       {/* Active Layer Name */}
       <div 
-        className="mb-6 p-3 rounded-md bg-blue-500/10 border border-blue-500/20"
+        className="mb-4 p-3 rounded-md bg-blue-500/10 border border-blue-500/20"
       >
         <div className="flex items-center gap-3">
           <div 
