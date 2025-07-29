@@ -5,14 +5,14 @@ interface SelectOption {
   label: string;
 }
 
-interface ModernSelectProps {
+interface StyledSelectProps {
   label: string;
   value: string;
   options: SelectOption[];
   onChange: (value: string) => void;
 }
 
-export const ModernSelect: React.FC<ModernSelectProps> = ({
+export const StyledSelect: React.FC<StyledSelectProps> = ({
   label,
   value,
   options,

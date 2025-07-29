@@ -1,6 +1,6 @@
 import React from 'react';
 
-interface ModernLayerCardProps {
+interface LayerCardProps {
   name: string;
   visible: boolean;
   isActive: boolean;
@@ -16,7 +16,7 @@ interface ModernLayerCardProps {
   onMoveDown: () => void;
 }
 
-export const ModernLayerCard: React.FC<ModernLayerCardProps> = ({
+export const LayerCard: React.FC<LayerCardProps> = ({
   name,
   visible,
   isActive,
@@ -33,7 +33,7 @@ export const ModernLayerCard: React.FC<ModernLayerCardProps> = ({
 }) => {
   return (
     <div
-      className={`p-3 rounded-lg border cursor-pointer transition-colors mb-2 ${
+      className={`p-3 rounded-lg border cursor-pointer transition-colors ${
         isActive
           ? 'border-blue-500 bg-blue-500/10'
           : 'border-slate-700/50 bg-slate-800/30 hover:bg-slate-800/50'
@@ -43,7 +43,7 @@ export const ModernLayerCard: React.FC<ModernLayerCardProps> = ({
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-3">
           <div 
-            className="w-3 h-3 rounded border border-slate-600/50"
+            className="w-4 h-4 rounded border border-slate-600/50"
             style={{ backgroundColor: primaryColor }}
           />
           <span className="font-medium text-slate-100 text-sm">
@@ -56,7 +56,7 @@ export const ModernLayerCard: React.FC<ModernLayerCardProps> = ({
               e.stopPropagation();
               onMoveUp();
             }}
-            className={`text-sm transition-colors ${
+            className={`w-6 h-6 flex items-center justify-center text-sm transition-colors ${
               canMoveUp 
                 ? 'text-slate-400 hover:text-slate-100' 
                 : 'text-slate-600 cursor-not-allowed'
@@ -71,7 +71,7 @@ export const ModernLayerCard: React.FC<ModernLayerCardProps> = ({
               e.stopPropagation();
               onMoveDown();
             }}
-            className={`text-sm transition-colors ${
+            className={`w-6 h-6 flex items-center justify-center text-sm transition-colors ${
               canMoveDown 
                 ? 'text-slate-400 hover:text-slate-100' 
                 : 'text-slate-600 cursor-not-allowed'
@@ -86,7 +86,7 @@ export const ModernLayerCard: React.FC<ModernLayerCardProps> = ({
               e.stopPropagation();
               onToggleVisibility();
             }}
-            className="text-lg text-slate-400 hover:text-slate-100 transition-colors"
+            className="w-6 h-6 flex items-center justify-center text-lg text-slate-400 hover:text-slate-100 transition-colors"
             title={visible ? 'Hide layer' : 'Show layer'}
           >
             {visible ? '◉' : '○'}

@@ -1,6 +1,6 @@
 import React from 'react';
 
-interface ModernSliderProps {
+interface RangeSliderProps {
   label: string;
   value: number;
   min: number;
@@ -9,7 +9,7 @@ interface ModernSliderProps {
   onChange: (value: number) => void;
 }
 
-export const ModernSlider: React.FC<ModernSliderProps> = ({
+export const RangeSlider: React.FC<RangeSliderProps> = ({
   label,
   value,
   min,

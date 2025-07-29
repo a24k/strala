@@ -1,5 +1,5 @@
 import { useLayersStoreSimple } from '../stores/layersStoreSimple';
-import { ModernLayerCard } from './ui/ModernLayerCard';
+import { LayerCard } from './ui/LayerCard';
 
 export function LayersList() {
   const { 
@@ -13,15 +13,15 @@ export function LayersList() {
   } = useLayersStoreSimple();
 
   return (
-    <div className="flex-1 flex flex-col overflow-hidden px-4 py-5">
+    <div className="flex-1 flex flex-col overflow-hidden px-4 py-6">
       {/* Layers Header */}
-      <div className="flex items-center justify-between mb-3 flex-shrink-0">
+      <div className="flex items-center justify-between mb-4 flex-shrink-0">
         <h3 className="text-lg font-semibold text-gray-100">
           Layers
         </h3>
         <button 
           onClick={addLayer}
-          className="w-7 h-7 rounded-md flex items-center justify-center text-white font-bold transition-all bg-blue-500 hover:bg-blue-600"
+          className="w-8 h-8 rounded-md flex items-center justify-center text-white font-bold transition-all bg-blue-500 hover:bg-blue-600"
           title="Add new layer"
         >
           +
@@ -31,7 +31,7 @@ export function LayersList() {
       {/* Layers List - Scrollable */}
       <div className="flex-1 overflow-y-auto space-y-3">
         {layers.map((layer, index) => (
-          <ModernLayerCard
+          <LayerCard
             key={layer.id}
             name={layer.name}
             visible={layer.visible}

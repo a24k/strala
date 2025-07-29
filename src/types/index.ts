@@ -594,8 +594,8 @@ export const PALETTE_CATEGORIES: PaletteCategory[] = [
     ]
   },
   {
-    id: 'modern',
-    name: 'Modern',
+    id: 'contemporary',
+    name: 'Contemporary',
     palettes: [
       {
         id: 'neon-nights',

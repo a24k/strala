@@ -1,6 +1,6 @@
 import React from 'react';
 
-interface ModernColorInputProps {
+interface ColorPickerProps {
   label: string;
   value: string;
   onChange: (value: string) => void;
@@ -8,7 +8,7 @@ interface ModernColorInputProps {
   onHarmonyClick?: () => void;
 }
 
-export const ModernColorInput: React.FC<ModernColorInputProps> = ({
+export const ColorPicker: React.FC<ColorPickerProps> = ({
   label,
   value,
   onChange,

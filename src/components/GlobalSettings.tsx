@@ -4,9 +4,9 @@ export function GlobalSettings() {
   const { config, updateConfig } = useCanvasStoreSimple();
 
   return (
-    <div className="flex-shrink-0 px-4 py-5 border-b border-strala-border bg-strala-dark-blue">
+    <div className="flex-shrink-0 px-4 py-6 border-b border-strala-border bg-strala-dark-blue">
       {/* Header */}
-      <div className="mb-6">
+      <div className="mb-8">
         <h1 className="text-3xl font-bold mb-2 text-strala-text-primary">
           Strala
         </h1>
@@ -23,7 +23,7 @@ export function GlobalSettings() {
         
         {/* Points Control */}
         <div className="flex items-center gap-2 mb-4">
-          <label className="text-sm font-medium text-gray-100 w-12">
+          <label className="text-sm font-medium text-gray-100 w-16">
             Points
           </label>
           <div className="flex items-center gap-2 flex-1">
@@ -33,7 +33,7 @@ export function GlobalSettings() {
               max="100" 
               value={config.circlePoints}
               onChange={(e) => updateConfig({ circlePoints: parseInt(e.target.value) })}
-              className="flex-1 h-1.5 bg-strala-border rounded-sm outline-none appearance-none"
+              className="flex-1 h-2 bg-strala-border rounded-sm outline-none appearance-none"
             />
             <input 
               type="number" 
@@ -41,14 +41,14 @@ export function GlobalSettings() {
               max="100" 
               value={config.circlePoints}
               onChange={(e) => updateConfig({ circlePoints: parseInt(e.target.value) })}
-              className="w-12 h-7 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary"
+              className="w-12 h-8 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary"
             />
           </div>
         </div>
         
         {/* Background Control */}
-        <div className="flex items-center gap-2 mb-4">
-          <label className="text-sm font-medium text-gray-100 w-12">
+        <div className="flex items-center gap-2">
+          <label className="text-sm font-medium text-gray-100 w-16">
             Background
           </label>
           <div className="flex items-center gap-2 flex-1">
@@ -56,13 +56,13 @@ export function GlobalSettings() {
               type="color" 
               value={config.backgroundColor} 
               onChange={(e) => updateConfig({ backgroundColor: e.target.value })}
-              className="w-8 h-7 rounded border-0 cursor-pointer"
+              className="w-8 h-8 rounded border-0 cursor-pointer"
             />
             <input 
               type="text" 
               value={config.backgroundColor}
               onChange={(e) => updateConfig({ backgroundColor: e.target.value })}
-              className="flex-1 h-7 px-2 text-xs rounded border font-mono bg-strala-border border-strala-accent text-strala-text-primary"
+              className="flex-1 h-8 px-2 text-xs rounded border font-mono bg-strala-border border-strala-accent text-strala-text-primary"
               placeholder="#000000"
             />
           </div>

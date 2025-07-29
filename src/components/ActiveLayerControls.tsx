@@ -9,18 +9,18 @@ export function ActiveLayerControls() {
   if (!activeLayer) return null;
 
   return (
-    <div className="flex-shrink-0 px-4 py-5 border-t border-gray-600 bg-slate-800">
+    <div className="flex-shrink-0 px-4 py-6 border-t border-gray-600 bg-slate-800">
       <h3 className="text-lg font-semibold mb-4 text-gray-100">
         Active Layer Setting
       </h3>
       
       {/* Active Layer Name */}
       <div 
-        className="mb-4 p-3 rounded-md bg-blue-500/10 border border-blue-500/20"
+        className="mb-6 p-3 rounded-md bg-blue-500/10 border border-blue-500/20"
       >
         <div className="flex items-center gap-3">
           <div 
-            className="w-3 h-3 rounded-full border border-blue-500/30"
+            className="w-4 h-4 rounded-full border border-blue-500/30"
             style={{ backgroundColor: activeLayer.color.primary }}
           />
           <span className="text-sm font-medium text-gray-100">
@@ -64,7 +64,7 @@ export function ActiveLayerControls() {
                   max={config.circlePoints - 1} 
                   value={activeLayer.startPoint}
                   onChange={(e) => updateLayer(activeLayer.id, { startPoint: parseInt(e.target.value) })}
-                  className="flex-1 h-1.5 bg-strala-border rounded-sm outline-none appearance-none"
+                  className="flex-1 h-2 bg-strala-border rounded-sm outline-none appearance-none"
                 />
                 <input 
                   type="number" 
@@ -72,7 +72,7 @@ export function ActiveLayerControls() {
                   max={config.circlePoints - 1} 
                   value={activeLayer.startPoint}
                   onChange={(e) => updateLayer(activeLayer.id, { startPoint: parseInt(e.target.value) })}
-                  className="w-12 h-7 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary"
+                  className="w-12 h-8 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary"
                 />
               </div>
             </div>
@@ -89,7 +89,7 @@ export function ActiveLayerControls() {
                   max="50" 
                   value={activeLayer.stepSize}
                   onChange={(e) => updateLayer(activeLayer.id, { stepSize: parseInt(e.target.value) })}
-                  className="flex-1 h-1.5 bg-strala-border rounded-sm outline-none appearance-none"
+                  className="flex-1 h-2 bg-strala-border rounded-sm outline-none appearance-none"
                 />
                 <input 
                   type="number" 
@@ -97,7 +97,7 @@ export function ActiveLayerControls() {
                   max="50" 
                   value={activeLayer.stepSize}
                   onChange={(e) => updateLayer(activeLayer.id, { stepSize: parseInt(e.target.value) })}
-                  className="w-12 h-7 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary"
+                  className="w-12 h-8 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary"
                 />
               </div>
             </div>
@@ -121,7 +121,7 @@ export function ActiveLayerControls() {
                   onChange={(e) => updateLayer(activeLayer.id, { 
                     pointA: { ...activeLayer.pointA, initialPosition: parseInt(e.target.value) }
                   })}
-                  className="flex-1 h-1.5 bg-strala-border rounded-sm outline-none appearance-none"
+                  className="flex-1 h-2 bg-strala-border rounded-sm outline-none appearance-none"
                 />
                 <input 
                   type="number" 
@@ -131,7 +131,7 @@ export function ActiveLayerControls() {
                   onChange={(e) => updateLayer(activeLayer.id, { 
                     pointA: { ...activeLayer.pointA, initialPosition: parseInt(e.target.value) }
                   })}
-                  className="w-12 h-7 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary"
+                  className="w-12 h-8 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary"
                 />
               </div>
             </div>
@@ -150,7 +150,7 @@ export function ActiveLayerControls() {
                   onChange={(e) => updateLayer(activeLayer.id, { 
                     pointA: { ...activeLayer.pointA, stepSize: parseInt(e.target.value) }
                   })}
-                  className="flex-1 h-1.5 bg-strala-border rounded-sm outline-none appearance-none"
+                  className="flex-1 h-2 bg-strala-border rounded-sm outline-none appearance-none"
                 />
                 <input 
                   type="number" 
@@ -160,7 +160,7 @@ export function ActiveLayerControls() {
                   onChange={(e) => updateLayer(activeLayer.id, { 
                     pointA: { ...activeLayer.pointA, stepSize: parseInt(e.target.value) }
                   })}
-                  className="w-12 h-7 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary"
+                  className="w-12 h-8 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary"
                 />
               </div>
             </div>
@@ -179,7 +179,7 @@ export function ActiveLayerControls() {
                   onChange={(e) => updateLayer(activeLayer.id, { 
                     pointB: { ...activeLayer.pointB, relativeOffset: parseInt(e.target.value) }
                   })}
-                  className="flex-1 h-1.5 bg-strala-border rounded-sm outline-none appearance-none"
+                  className="flex-1 h-2 bg-strala-border rounded-sm outline-none appearance-none"
                 />
                 <input 
                   type="number" 
@@ -189,7 +189,7 @@ export function ActiveLayerControls() {
                   onChange={(e) => updateLayer(activeLayer.id, { 
                     pointB: { ...activeLayer.pointB, relativeOffset: parseInt(e.target.value) }
                   })}
-                  className="w-12 h-7 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary"
+                  className="w-12 h-8 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary"
                 />
               </div>
             </div>
@@ -208,7 +208,7 @@ export function ActiveLayerControls() {
                   onChange={(e) => updateLayer(activeLayer.id, { 
                     pointB: { ...activeLayer.pointB, stepSize: parseInt(e.target.value) }
                   })}
-                  className="flex-1 h-1.5 bg-strala-border rounded-sm outline-none appearance-none"
+                  className="flex-1 h-2 bg-strala-border rounded-sm outline-none appearance-none"
                 />
                 <input 
                   type="number" 
@@ -218,7 +218,7 @@ export function ActiveLayerControls() {
                   onChange={(e) => updateLayer(activeLayer.id, { 
                     pointB: { ...activeLayer.pointB, stepSize: parseInt(e.target.value) }
                   })}
-                  className="w-12 h-7 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary"
+                  className="w-12 h-8 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary"
                 />
               </div>
             </div>
@@ -235,7 +235,7 @@ export function ActiveLayerControls() {
                   max="100" 
                   value={activeLayer.maxIterations}
                   onChange={(e) => updateLayer(activeLayer.id, { maxIterations: parseInt(e.target.value) })}
-                  className="flex-1 h-1.5 bg-strala-border rounded-sm outline-none appearance-none"
+                  className="flex-1 h-2 bg-strala-border rounded-sm outline-none appearance-none"
                 />
                 <input 
                   type="number" 
@@ -243,7 +243,7 @@ export function ActiveLayerControls() {
                   max="100" 
                   value={activeLayer.maxIterations}
                   onChange={(e) => updateLayer(activeLayer.id, { maxIterations: parseInt(e.target.value) })}
-                  className="w-12 h-7 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary"
+                  className="w-12 h-8 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary"
                 />
               </div>
             </div>
@@ -355,11 +355,11 @@ export function ActiveLayerControls() {
               onChange={(e) => updateLayer(activeLayer.id, { 
                 color: { ...activeLayer.color, primary: e.target.value }
               })}
-              className="flex-1 h-7 px-2 text-xs rounded border font-mono bg-strala-border border-strala-accent text-strala-text-primary"
+              className="flex-1 h-8 px-2 text-xs rounded border font-mono bg-strala-border border-strala-accent text-strala-text-primary"
               placeholder="#000000"
             />
             <button 
-              className="w-7 h-7 rounded text-sm font-bold transition-all bg-blue-500 text-white hover:bg-blue-600"
+              className="w-8 h-8 rounded text-sm font-bold transition-all bg-blue-500 text-white hover:bg-blue-600"
               onClick={() => {
                 console.log('Color harmony generation');
               }}
@@ -383,7 +383,7 @@ export function ActiveLayerControls() {
                 onChange={(e) => updateLayer(activeLayer.id, { 
                   color: { ...activeLayer.color, secondary: e.target.value }
                 })}
-                className="w-8 h-7 rounded border-0 cursor-pointer"
+                className="w-8 h-8 rounded border-0 cursor-pointer"
               />
               <input 
                 type="text" 
@@ -391,7 +391,7 @@ export function ActiveLayerControls() {
                 onChange={(e) => updateLayer(activeLayer.id, { 
                   color: { ...activeLayer.color, secondary: e.target.value }
                 })}
-                className="flex-1 h-7 px-2 text-xs rounded border font-mono bg-strala-border border-strala-accent text-strala-text-primary"
+                className="flex-1 h-8 px-2 text-xs rounded border font-mono bg-strala-border border-strala-accent text-strala-text-primary"
                 placeholder="#000000"
               />
             </div>
