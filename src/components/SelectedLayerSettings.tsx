@@ -16,23 +16,22 @@ export function SelectedLayerSettings() {
         Selected Layer Settings
       </h2>
       
-      {/* Active Layer Name */}
-      <div 
-        className="mb-4 p-3 rounded-md bg-blue-500/10 border border-blue-500/20"
-      >
-        <div className="flex items-center gap-3">
-          <div 
-            className="w-4 h-4 rounded-full border border-blue-500/30"
-            style={{ backgroundColor: activeLayer.color.primary }}
-          />
-          <span className="text-sm font-medium text-gray-100">
-            {activeLayer.name}
-          </span>
-        </div>
-      </div>
-      
       {/* Controls Container */}
       <div className="space-y-2">
+        
+        {/* Layer Name */}
+        <div className="flex items-center gap-2">
+          <label className="text-sm font-medium text-gray-100 w-20">
+            Name
+          </label>
+          <input
+            type="text"
+            value={activeLayer.name}
+            onChange={(e) => updateLayer(activeLayer.id, { name: e.target.value })}
+            className="flex-1 h-8 px-2 text-sm rounded border bg-strala-border border-strala-accent text-strala-text-primary focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+            placeholder="Layer name"
+          />
+        </div>
         
         {/* Connection Type */}
         <div className="flex items-center gap-2">

@@ -43,7 +43,7 @@ export function GlobalSettings() {
               max="100" 
               value={config.circlePoints}
               onChange={(e) => updateConfig({ circlePoints: parseInt(e.target.value) })}
-              className="w-12 h-8 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary"
+              className="w-12 h-8 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary focus:outline-none focus:ring-2 focus:ring-blue-500/50"
             />
           </div>
         </div>
@@ -62,7 +62,7 @@ export function GlobalSettings() {
               type="text" 
               value={config.backgroundColor}
               onChange={(e) => updateConfig({ backgroundColor: e.target.value })}
-              className="w-20 h-8 px-2 text-xs rounded border font-mono bg-strala-border border-strala-accent text-strala-text-primary"
+              className="w-20 h-8 px-2 text-xs rounded border font-mono bg-strala-border border-strala-accent text-strala-text-primary focus:outline-none focus:ring-2 focus:ring-blue-500/50"
               placeholder="#000000"
             />
           </div>
