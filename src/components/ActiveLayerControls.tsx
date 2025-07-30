@@ -1,5 +1,6 @@
 import { useCanvasStoreSimple } from '../stores/canvasStoreSimple';
 import { useLayersStoreSimple, useActiveLayerSimple } from '../stores/layersStoreSimple';
+import { SimpleColorPicker } from './ui/ColorPicker';
 
 export function ActiveLayerControls() {
   const { config } = useCanvasStoreSimple();
@@ -30,7 +31,7 @@ export function ActiveLayerControls() {
       </div>
       
       {/* Controls Container - Scrollable */}
-      <div className="max-h-80 overflow-y-auto space-y-4">
+      <div className="max-h-80 overflow-y-auto space-y-2">
         
         {/* Connection Type */}
         <div className="flex items-center gap-2">
@@ -64,7 +65,28 @@ export function ActiveLayerControls() {
                   max={config.circlePoints - 1} 
                   value={activeLayer.startPoint}
                   onChange={(e) => updateLayer(activeLayer.id, { startPoint: parseInt(e.target.value) })}
-                  className="flex-1 h-2 bg-strala-border rounded-sm outline-none appearance-none"
+                  className="flex-1 h-2 bg-strala-border rounded-sm outline-none appearance-none
+                            [&::-webkit-slider-thumb]:appearance-none 
+                            [&::-webkit-slider-thumb]:w-[18px] 
+                            [&::-webkit-slider-thumb]:h-[18px] 
+                            [&::-webkit-slider-thumb]:bg-strala-accent 
+                            [&::-webkit-slider-thumb]:rounded-full 
+                            [&::-webkit-slider-thumb]:border-2 
+                            [&::-webkit-slider-thumb]:border-white 
+                            [&::-webkit-slider-thumb]:shadow-md 
+                            [&::-webkit-slider-thumb]:cursor-pointer
+                            [&::-webkit-slider-thumb]:transition-all
+                            [&::-webkit-slider-thumb]:hover:bg-blue-600
+                            [&::-webkit-slider-thumb]:hover:scale-110
+                            [&::-moz-range-thumb]:appearance-none
+                            [&::-moz-range-thumb]:w-[18px]
+                            [&::-moz-range-thumb]:h-[18px]
+                            [&::-moz-range-thumb]:bg-strala-accent
+                            [&::-moz-range-thumb]:rounded-full
+                            [&::-moz-range-thumb]:border-2
+                            [&::-moz-range-thumb]:border-white
+                            [&::-moz-range-thumb]:shadow-md
+                            [&::-moz-range-thumb]:cursor-pointer"
                 />
                 <input 
                   type="number" 
@@ -89,7 +111,28 @@ export function ActiveLayerControls() {
                   max="50" 
                   value={activeLayer.stepSize}
                   onChange={(e) => updateLayer(activeLayer.id, { stepSize: parseInt(e.target.value) })}
-                  className="flex-1 h-2 bg-strala-border rounded-sm outline-none appearance-none"
+                  className="flex-1 h-2 bg-strala-border rounded-sm outline-none appearance-none
+                            [&::-webkit-slider-thumb]:appearance-none 
+                            [&::-webkit-slider-thumb]:w-[18px] 
+                            [&::-webkit-slider-thumb]:h-[18px] 
+                            [&::-webkit-slider-thumb]:bg-strala-accent 
+                            [&::-webkit-slider-thumb]:rounded-full 
+                            [&::-webkit-slider-thumb]:border-2 
+                            [&::-webkit-slider-thumb]:border-white 
+                            [&::-webkit-slider-thumb]:shadow-md 
+                            [&::-webkit-slider-thumb]:cursor-pointer
+                            [&::-webkit-slider-thumb]:transition-all
+                            [&::-webkit-slider-thumb]:hover:bg-blue-600
+                            [&::-webkit-slider-thumb]:hover:scale-110
+                            [&::-moz-range-thumb]:appearance-none
+                            [&::-moz-range-thumb]:w-[18px]
+                            [&::-moz-range-thumb]:h-[18px]
+                            [&::-moz-range-thumb]:bg-strala-accent
+                            [&::-moz-range-thumb]:rounded-full
+                            [&::-moz-range-thumb]:border-2
+                            [&::-moz-range-thumb]:border-white
+                            [&::-moz-range-thumb]:shadow-md
+                            [&::-moz-range-thumb]:cursor-pointer"
                 />
                 <input 
                   type="number" 
@@ -121,7 +164,28 @@ export function ActiveLayerControls() {
                   onChange={(e) => updateLayer(activeLayer.id, { 
                     pointA: { ...activeLayer.pointA, initialPosition: parseInt(e.target.value) }
                   })}
-                  className="flex-1 h-2 bg-strala-border rounded-sm outline-none appearance-none"
+                  className="flex-1 h-2 bg-strala-border rounded-sm outline-none appearance-none
+                            [&::-webkit-slider-thumb]:appearance-none 
+                            [&::-webkit-slider-thumb]:w-[18px] 
+                            [&::-webkit-slider-thumb]:h-[18px] 
+                            [&::-webkit-slider-thumb]:bg-strala-accent 
+                            [&::-webkit-slider-thumb]:rounded-full 
+                            [&::-webkit-slider-thumb]:border-2 
+                            [&::-webkit-slider-thumb]:border-white 
+                            [&::-webkit-slider-thumb]:shadow-md 
+                            [&::-webkit-slider-thumb]:cursor-pointer
+                            [&::-webkit-slider-thumb]:transition-all
+                            [&::-webkit-slider-thumb]:hover:bg-blue-600
+                            [&::-webkit-slider-thumb]:hover:scale-110
+                            [&::-moz-range-thumb]:appearance-none
+                            [&::-moz-range-thumb]:w-[18px]
+                            [&::-moz-range-thumb]:h-[18px]
+                            [&::-moz-range-thumb]:bg-strala-accent
+                            [&::-moz-range-thumb]:rounded-full
+                            [&::-moz-range-thumb]:border-2
+                            [&::-moz-range-thumb]:border-white
+                            [&::-moz-range-thumb]:shadow-md
+                            [&::-moz-range-thumb]:cursor-pointer"
                 />
                 <input 
                   type="number" 
@@ -150,7 +214,28 @@ export function ActiveLayerControls() {
                   onChange={(e) => updateLayer(activeLayer.id, { 
                     pointA: { ...activeLayer.pointA, stepSize: parseInt(e.target.value) }
                   })}
-                  className="flex-1 h-2 bg-strala-border rounded-sm outline-none appearance-none"
+                  className="flex-1 h-2 bg-strala-border rounded-sm outline-none appearance-none
+                            [&::-webkit-slider-thumb]:appearance-none 
+                            [&::-webkit-slider-thumb]:w-[18px] 
+                            [&::-webkit-slider-thumb]:h-[18px] 
+                            [&::-webkit-slider-thumb]:bg-strala-accent 
+                            [&::-webkit-slider-thumb]:rounded-full 
+                            [&::-webkit-slider-thumb]:border-2 
+                            [&::-webkit-slider-thumb]:border-white 
+                            [&::-webkit-slider-thumb]:shadow-md 
+                            [&::-webkit-slider-thumb]:cursor-pointer
+                            [&::-webkit-slider-thumb]:transition-all
+                            [&::-webkit-slider-thumb]:hover:bg-blue-600
+                            [&::-webkit-slider-thumb]:hover:scale-110
+                            [&::-moz-range-thumb]:appearance-none
+                            [&::-moz-range-thumb]:w-[18px]
+                            [&::-moz-range-thumb]:h-[18px]
+                            [&::-moz-range-thumb]:bg-strala-accent
+                            [&::-moz-range-thumb]:rounded-full
+                            [&::-moz-range-thumb]:border-2
+                            [&::-moz-range-thumb]:border-white
+                            [&::-moz-range-thumb]:shadow-md
+                            [&::-moz-range-thumb]:cursor-pointer"
                 />
                 <input 
                   type="number" 
@@ -179,7 +264,28 @@ export function ActiveLayerControls() {
                   onChange={(e) => updateLayer(activeLayer.id, { 
                     pointB: { ...activeLayer.pointB, relativeOffset: parseInt(e.target.value) }
                   })}
-                  className="flex-1 h-2 bg-strala-border rounded-sm outline-none appearance-none"
+                  className="flex-1 h-2 bg-strala-border rounded-sm outline-none appearance-none
+                            [&::-webkit-slider-thumb]:appearance-none 
+                            [&::-webkit-slider-thumb]:w-[18px] 
+                            [&::-webkit-slider-thumb]:h-[18px] 
+                            [&::-webkit-slider-thumb]:bg-strala-accent 
+                            [&::-webkit-slider-thumb]:rounded-full 
+                            [&::-webkit-slider-thumb]:border-2 
+                            [&::-webkit-slider-thumb]:border-white 
+                            [&::-webkit-slider-thumb]:shadow-md 
+                            [&::-webkit-slider-thumb]:cursor-pointer
+                            [&::-webkit-slider-thumb]:transition-all
+                            [&::-webkit-slider-thumb]:hover:bg-blue-600
+                            [&::-webkit-slider-thumb]:hover:scale-110
+                            [&::-moz-range-thumb]:appearance-none
+                            [&::-moz-range-thumb]:w-[18px]
+                            [&::-moz-range-thumb]:h-[18px]
+                            [&::-moz-range-thumb]:bg-strala-accent
+                            [&::-moz-range-thumb]:rounded-full
+                            [&::-moz-range-thumb]:border-2
+                            [&::-moz-range-thumb]:border-white
+                            [&::-moz-range-thumb]:shadow-md
+                            [&::-moz-range-thumb]:cursor-pointer"
                 />
                 <input 
                   type="number" 
@@ -208,7 +314,28 @@ export function ActiveLayerControls() {
                   onChange={(e) => updateLayer(activeLayer.id, { 
                     pointB: { ...activeLayer.pointB, stepSize: parseInt(e.target.value) }
                   })}
-                  className="flex-1 h-2 bg-strala-border rounded-sm outline-none appearance-none"
+                  className="flex-1 h-2 bg-strala-border rounded-sm outline-none appearance-none
+                            [&::-webkit-slider-thumb]:appearance-none 
+                            [&::-webkit-slider-thumb]:w-[18px] 
+                            [&::-webkit-slider-thumb]:h-[18px] 
+                            [&::-webkit-slider-thumb]:bg-strala-accent 
+                            [&::-webkit-slider-thumb]:rounded-full 
+                            [&::-webkit-slider-thumb]:border-2 
+                            [&::-webkit-slider-thumb]:border-white 
+                            [&::-webkit-slider-thumb]:shadow-md 
+                            [&::-webkit-slider-thumb]:cursor-pointer
+                            [&::-webkit-slider-thumb]:transition-all
+                            [&::-webkit-slider-thumb]:hover:bg-blue-600
+                            [&::-webkit-slider-thumb]:hover:scale-110
+                            [&::-moz-range-thumb]:appearance-none
+                            [&::-moz-range-thumb]:w-[18px]
+                            [&::-moz-range-thumb]:h-[18px]
+                            [&::-moz-range-thumb]:bg-strala-accent
+                            [&::-moz-range-thumb]:rounded-full
+                            [&::-moz-range-thumb]:border-2
+                            [&::-moz-range-thumb]:border-white
+                            [&::-moz-range-thumb]:shadow-md
+                            [&::-moz-range-thumb]:cursor-pointer"
                 />
                 <input 
                   type="number" 
@@ -235,7 +362,28 @@ export function ActiveLayerControls() {
                   max="100" 
                   value={activeLayer.maxIterations}
                   onChange={(e) => updateLayer(activeLayer.id, { maxIterations: parseInt(e.target.value) })}
-                  className="flex-1 h-2 bg-strala-border rounded-sm outline-none appearance-none"
+                  className="flex-1 h-2 bg-strala-border rounded-sm outline-none appearance-none
+                            [&::-webkit-slider-thumb]:appearance-none 
+                            [&::-webkit-slider-thumb]:w-[18px] 
+                            [&::-webkit-slider-thumb]:h-[18px] 
+                            [&::-webkit-slider-thumb]:bg-strala-accent 
+                            [&::-webkit-slider-thumb]:rounded-full 
+                            [&::-webkit-slider-thumb]:border-2 
+                            [&::-webkit-slider-thumb]:border-white 
+                            [&::-webkit-slider-thumb]:shadow-md 
+                            [&::-webkit-slider-thumb]:cursor-pointer
+                            [&::-webkit-slider-thumb]:transition-all
+                            [&::-webkit-slider-thumb]:hover:bg-blue-600
+                            [&::-webkit-slider-thumb]:hover:scale-110
+                            [&::-moz-range-thumb]:appearance-none
+                            [&::-moz-range-thumb]:w-[18px]
+                            [&::-moz-range-thumb]:h-[18px]
+                            [&::-moz-range-thumb]:bg-strala-accent
+                            [&::-moz-range-thumb]:rounded-full
+                            [&::-moz-range-thumb]:border-2
+                            [&::-moz-range-thumb]:border-white
+                            [&::-moz-range-thumb]:shadow-md
+                            [&::-moz-range-thumb]:cursor-pointer"
                 />
                 <input 
                   type="number" 
@@ -264,14 +412,28 @@ export function ActiveLayerControls() {
               onChange={(e) => updateLayer(activeLayer.id, { 
                 color: { ...activeLayer.color, alpha: parseInt(e.target.value) / 100 }
               })}
-              className="flex-1"
-              style={{
-                appearance: 'none',
-                height: '6px',
-                background: '#2a3f5f',
-                borderRadius: '3px',
-                outline: 'none'
-              }}
+              className="flex-1 h-2 bg-strala-border rounded-sm outline-none appearance-none
+                        [&::-webkit-slider-thumb]:appearance-none 
+                        [&::-webkit-slider-thumb]:w-[18px] 
+                        [&::-webkit-slider-thumb]:h-[18px] 
+                        [&::-webkit-slider-thumb]:bg-strala-accent 
+                        [&::-webkit-slider-thumb]:rounded-full 
+                        [&::-webkit-slider-thumb]:border-2 
+                        [&::-webkit-slider-thumb]:border-white 
+                        [&::-webkit-slider-thumb]:shadow-md 
+                        [&::-webkit-slider-thumb]:cursor-pointer
+                        [&::-webkit-slider-thumb]:transition-all
+                        [&::-webkit-slider-thumb]:hover:bg-blue-600
+                        [&::-webkit-slider-thumb]:hover:scale-110
+                        [&::-moz-range-thumb]:appearance-none
+                        [&::-moz-range-thumb]:w-[18px]
+                        [&::-moz-range-thumb]:h-[18px]
+                        [&::-moz-range-thumb]:bg-strala-accent
+                        [&::-moz-range-thumb]:rounded-full
+                        [&::-moz-range-thumb]:border-2
+                        [&::-moz-range-thumb]:border-white
+                        [&::-moz-range-thumb]:shadow-md
+                        [&::-moz-range-thumb]:cursor-pointer"
             />
             <input 
               type="number" 
@@ -281,7 +443,7 @@ export function ActiveLayerControls() {
               onChange={(e) => updateLayer(activeLayer.id, { 
                 color: { ...activeLayer.color, alpha: parseInt(e.target.value) / 100 }
               })}
-              className="w-12 h-7 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary"
+              className="w-12 h-8 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary"
             />
           </div>
         </div>
@@ -298,14 +460,28 @@ export function ActiveLayerControls() {
               max="10" 
               value={activeLayer.lineWidth}
               onChange={(e) => updateLayer(activeLayer.id, { lineWidth: parseInt(e.target.value) })}
-              className="flex-1"
-              style={{
-                appearance: 'none',
-                height: '6px',
-                background: '#2a3f5f',
-                borderRadius: '3px',
-                outline: 'none'
-              }}
+              className="flex-1 h-2 bg-strala-border rounded-sm outline-none appearance-none
+                        [&::-webkit-slider-thumb]:appearance-none 
+                        [&::-webkit-slider-thumb]:w-[18px] 
+                        [&::-webkit-slider-thumb]:h-[18px] 
+                        [&::-webkit-slider-thumb]:bg-strala-accent 
+                        [&::-webkit-slider-thumb]:rounded-full 
+                        [&::-webkit-slider-thumb]:border-2 
+                        [&::-webkit-slider-thumb]:border-white 
+                        [&::-webkit-slider-thumb]:shadow-md 
+                        [&::-webkit-slider-thumb]:cursor-pointer
+                        [&::-webkit-slider-thumb]:transition-all
+                        [&::-webkit-slider-thumb]:hover:bg-blue-600
+                        [&::-webkit-slider-thumb]:hover:scale-110
+                        [&::-moz-range-thumb]:appearance-none
+                        [&::-moz-range-thumb]:w-[18px]
+                        [&::-moz-range-thumb]:h-[18px]
+                        [&::-moz-range-thumb]:bg-strala-accent
+                        [&::-moz-range-thumb]:rounded-full
+                        [&::-moz-range-thumb]:border-2
+                        [&::-moz-range-thumb]:border-white
+                        [&::-moz-range-thumb]:shadow-md
+                        [&::-moz-range-thumb]:cursor-pointer"
             />
             <input 
               type="number" 
@@ -313,7 +489,7 @@ export function ActiveLayerControls() {
               max="10" 
               value={activeLayer.lineWidth}
               onChange={(e) => updateLayer(activeLayer.id, { lineWidth: parseInt(e.target.value) })}
-              className="w-12 h-7 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary"
+              className="w-12 h-8 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary"
             />
           </div>
         </div>
@@ -347,7 +523,8 @@ export function ActiveLayerControls() {
               onChange={(e) => updateLayer(activeLayer.id, { 
                 color: { ...activeLayer.color, primary: e.target.value }
               })}
-              className="w-8 h-7 rounded border-0 cursor-pointer"
+              className="w-8 h-8 rounded border border-gray-400 cursor-pointer"
+              style={{ padding: 0, outline: 'none', appearance: 'none', WebkitAppearance: 'none' }}
             />
             <input 
               type="text" 
@@ -355,7 +532,7 @@ export function ActiveLayerControls() {
               onChange={(e) => updateLayer(activeLayer.id, { 
                 color: { ...activeLayer.color, primary: e.target.value }
               })}
-              className="flex-1 h-8 px-2 text-xs rounded border font-mono bg-strala-border border-strala-accent text-strala-text-primary"
+              className="w-20 h-8 px-2 text-xs rounded border font-mono bg-strala-border border-strala-accent text-strala-text-primary"
               placeholder="#000000"
             />
             <button 
@@ -377,13 +554,11 @@ export function ActiveLayerControls() {
               Color 2
             </label>
             <div className="flex items-center gap-2 flex-1">
-              <input 
-                type="color" 
+              <SimpleColorPicker
                 value={activeLayer.color.secondary || '#f39c12'}
-                onChange={(e) => updateLayer(activeLayer.id, { 
-                  color: { ...activeLayer.color, secondary: e.target.value }
+                onChange={(value) => updateLayer(activeLayer.id, { 
+                  color: { ...activeLayer.color, secondary: value }
                 })}
-                className="w-8 h-8 rounded border-0 cursor-pointer"
               />
               <input 
                 type="text" 
@@ -391,7 +566,7 @@ export function ActiveLayerControls() {
                 onChange={(e) => updateLayer(activeLayer.id, { 
                   color: { ...activeLayer.color, secondary: e.target.value }
                 })}
-                className="flex-1 h-8 px-2 text-xs rounded border font-mono bg-strala-border border-strala-accent text-strala-text-primary"
+                className="w-20 h-8 px-2 text-xs rounded border font-mono bg-strala-border border-strala-accent text-strala-text-primary"
                 placeholder="#000000"
               />
             </div>

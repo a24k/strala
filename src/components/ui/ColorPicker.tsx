@@ -1,5 +1,38 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 
+// Simple color picker component for inline use
+interface SimpleColorPickerProps {
+  value: string;
+  onChange: (value: string) => void;
+  className?: string;
+  size?: 'sm' | 'md';
+}
+
+export const SimpleColorPicker = forwardRef<HTMLInputElement, SimpleColorPickerProps>(
+  ({ value, onChange, className = '', size = 'md' }, ref) => {
+    const sizeClasses = size === 'sm' ? 'w-7 h-7' : 'w-8 h-8';
+    
+    return (
+      <input
+        ref={ref}
+        type="color"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className={`${sizeClasses} rounded border border-gray-400 cursor-pointer ${className}`}
+        style={{
+          padding: 0,
+          outline: 'none',
+          appearance: 'none',
+          WebkitAppearance: 'none',
+        }}
+      />
+    );
+  }
+);
+
+SimpleColorPicker.displayName = 'SimpleColorPicker';
+
+// Full color picker component with label and text input
 interface ColorPickerProps {
   label: string;
   value: string;
@@ -30,11 +63,10 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({
           {label}
         </label>
         <div className="flex-1 flex items-center gap-3">
-          <input
-            type="color"
+          <SimpleColorPicker
             value={value}
-            onChange={handleColorChange}
-            className="w-10 h-10 rounded-lg border-2 border-slate-600/50 cursor-pointer bg-transparent hover:ring-2 hover:ring-blue-500/50 hover:border-blue-500/50 transition-all duration-200 shadow-sm"
+            onChange={onChange}
+            className="w-10 h-10"
           />
           <input
             type="text"

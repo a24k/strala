@@ -22,40 +22,22 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
-/* Range Slider Custom Styling - Required for cross-browser compatibility */
-input[type="range"]::-webkit-slider-thumb {
-  appearance: none;
-  width: 18px;
-  height: 18px;
-  background: #3498db;
-  border-radius: 50%;
-  border: 2px solid white;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  cursor: pointer;
-  transition: all 0.2s;
-  margin-top: -6px;
-}
 
-input[type="range"]::-webkit-slider-thumb:hover {
-  background: #2980b9;
-  transform: scale(1.1);
-}
-
-input[type="range"]::-moz-range-thumb {
-  width: 18px;
-  height: 18px;
-  background: #3498db;
-  border-radius: 50%;
-  border: 2px solid white;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  cursor: pointer;
-  transition: all 0.2s;
+/* Color Picker - Remove browser default white border/padding */
+input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
   border: none;
+  overflow: hidden;
 }
 
-input[type="range"]::-moz-range-thumb:hover {
-  background: #2980b9;
-  transform: scale(1.1);
+input[type="color"]::-webkit-color-swatch {
+  border: none;
+  border-radius: inherit;
+}
+
+input[type="color"]::-moz-color-swatch {
+  border: none;
+  border-radius: inherit;
 }
 
 /* Custom canvas shadow with all-around dark visibility and wider blur */
