@@ -117,7 +117,7 @@ export function SelectedLayerSettings() {
             {/* Point A Position */}
             <div className="flex items-center gap-2">
               <label className="text-sm font-medium text-gray-100 w-20">
-                A: Position
+                A: Start
               </label>
               <div className="flex items-center gap-2 flex-1">
                 <input 

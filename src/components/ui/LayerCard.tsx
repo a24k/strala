@@ -4,8 +4,18 @@ interface LayerCardProps {
   name: string;
   visible: boolean;
   isActive: boolean;
+  connectionType?: 'single-point' | 'two-point';
   startPoint: number;
   stepSize: number;
+  // Two-point specific props
+  pointA?: {
+    initialPosition: number;
+    stepSize: number;
+  };
+  pointB?: {
+    relativeOffset: number;
+    stepSize: number;
+  };
   alpha: number;
   lineWidth: number;
   color: {
@@ -25,8 +35,11 @@ export const LayerCard: React.FC<LayerCardProps> = ({
   name,
   visible,
   isActive,
+  connectionType,
   startPoint,
   stepSize,
+  pointA,
+  pointB,
   alpha,
   lineWidth,
   color,
@@ -75,9 +88,17 @@ export const LayerCard: React.FC<LayerCardProps> = ({
               />
             </div>
             <div className="flex items-center gap-3 text-xs text-slate-400 mt-1">
-              <span>Start: {startPoint}</span>
-              <span>Step: {stepSize}</span>
-              <span>α: {Math.round(alpha * 100)}%</span>
+              {connectionType === 'two-point' && pointA && pointB ? (
+                <>
+                  <span>Start: {pointA.initialPosition}, {pointB.relativeOffset}</span>
+                  <span>Step: {pointA.stepSize}, {pointB.stepSize}</span>
+                </>
+              ) : (
+                <>
+                  <span>Start: {startPoint}</span>
+                  <span>Step: {stepSize}</span>
+                </>
+              )}
             </div>
           </div>
         </div>

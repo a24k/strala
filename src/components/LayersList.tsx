@@ -56,8 +56,11 @@ export function LayersList() {
             name={layer.name}
             visible={layer.visible}
             isActive={layer.id === activeLayerId}
+            connectionType={layer.connectionType}
             startPoint={layer.startPoint}
             stepSize={layer.stepSize}
+            pointA={layer.pointA}
+            pointB={layer.pointB}
             alpha={layer.color.alpha}
             lineWidth={layer.lineWidth}
             color={layer.color}
