@@ -2,6 +2,7 @@ import { useCanvasStoreSimple } from '../stores/canvasStoreSimple';
 import { useLayersStoreSimple, useActiveLayerSimple } from '../stores/layersStoreSimple';
 import { SimpleColorPicker } from './ui/ColorPicker';
 import { SLIDER_CLASSES } from './ui/sliderStyles';
+import { NumberInputWithSpinner } from './ui/NumberInputWithSpinner';
 
 export function SelectedLayerSettings() {
   const { config } = useCanvasStoreSimple();
@@ -74,12 +75,11 @@ export function SelectedLayerSettings() {
                   onChange={(e) => updateLayer(activeLayer.id, { startPoint: parseInt(e.target.value) })}
                   className={SLIDER_CLASSES}
                 />
-                <input 
-                  type="number" 
-                  min="0" 
-                  max={config.circlePoints - 1} 
+                <NumberInputWithSpinner
                   value={activeLayer.startPoint}
-                  onChange={(e) => updateLayer(activeLayer.id, { startPoint: parseInt(e.target.value) })}
+                  onChange={(value) => updateLayer(activeLayer.id, { startPoint: value })}
+                  min={0}
+                  max={config.circlePoints - 1}
                   className="w-12 h-8 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary focus:outline-none focus:ring-2 focus:ring-blue-500/50"
                 />
               </div>
@@ -99,12 +99,11 @@ export function SelectedLayerSettings() {
                   onChange={(e) => updateLayer(activeLayer.id, { stepSize: parseInt(e.target.value) })}
                   className={SLIDER_CLASSES}
                 />
-                <input 
-                  type="number" 
-                  min="1" 
-                  max="50" 
+                <NumberInputWithSpinner
                   value={activeLayer.stepSize}
-                  onChange={(e) => updateLayer(activeLayer.id, { stepSize: parseInt(e.target.value) })}
+                  onChange={(value) => updateLayer(activeLayer.id, { stepSize: value })}
+                  min={1}
+                  max={50}
                   className="w-12 h-8 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary focus:outline-none focus:ring-2 focus:ring-blue-500/50"
                 />
               </div>
@@ -131,14 +130,13 @@ export function SelectedLayerSettings() {
                   })}
                   className={SLIDER_CLASSES}
                 />
-                <input 
-                  type="number" 
-                  min="0" 
-                  max={config.circlePoints - 1} 
+                <NumberInputWithSpinner
                   value={activeLayer.pointA.initialPosition}
-                  onChange={(e) => updateLayer(activeLayer.id, { 
-                    pointA: { ...activeLayer.pointA, initialPosition: parseInt(e.target.value) }
+                  onChange={(value) => updateLayer(activeLayer.id, { 
+                    pointA: { ...activeLayer.pointA, initialPosition: value }
                   })}
+                  min={0}
+                  max={config.circlePoints - 1}
                   className="w-12 h-8 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary focus:outline-none focus:ring-2 focus:ring-blue-500/50"
                 />
               </div>
@@ -160,14 +158,13 @@ export function SelectedLayerSettings() {
                   })}
                   className={SLIDER_CLASSES}
                 />
-                <input 
-                  type="number" 
-                  min="1" 
-                  max="50" 
+                <NumberInputWithSpinner
                   value={activeLayer.pointA.stepSize}
-                  onChange={(e) => updateLayer(activeLayer.id, { 
-                    pointA: { ...activeLayer.pointA, stepSize: parseInt(e.target.value) }
+                  onChange={(value) => updateLayer(activeLayer.id, { 
+                    pointA: { ...activeLayer.pointA, stepSize: value }
                   })}
+                  min={1}
+                  max={50}
                   className="w-12 h-8 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary focus:outline-none focus:ring-2 focus:ring-blue-500/50"
                 />
               </div>
@@ -189,14 +186,13 @@ export function SelectedLayerSettings() {
                   })}
                   className={SLIDER_CLASSES}
                 />
-                <input 
-                  type="number" 
-                  min="0" 
-                  max={config.circlePoints - 1} 
+                <NumberInputWithSpinner
                   value={activeLayer.pointB.relativeOffset}
-                  onChange={(e) => updateLayer(activeLayer.id, { 
-                    pointB: { ...activeLayer.pointB, relativeOffset: parseInt(e.target.value) }
+                  onChange={(value) => updateLayer(activeLayer.id, { 
+                    pointB: { ...activeLayer.pointB, relativeOffset: value }
                   })}
+                  min={0}
+                  max={config.circlePoints - 1}
                   className="w-12 h-8 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary focus:outline-none focus:ring-2 focus:ring-blue-500/50"
                 />
               </div>
@@ -218,14 +214,13 @@ export function SelectedLayerSettings() {
                   })}
                   className={SLIDER_CLASSES}
                 />
-                <input 
-                  type="number" 
-                  min="1" 
-                  max="50" 
+                <NumberInputWithSpinner
                   value={activeLayer.pointB.stepSize}
-                  onChange={(e) => updateLayer(activeLayer.id, { 
-                    pointB: { ...activeLayer.pointB, stepSize: parseInt(e.target.value) }
+                  onChange={(value) => updateLayer(activeLayer.id, { 
+                    pointB: { ...activeLayer.pointB, stepSize: value }
                   })}
+                  min={1}
+                  max={50}
                   className="w-12 h-8 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary focus:outline-none focus:ring-2 focus:ring-blue-500/50"
                 />
               </div>
@@ -245,12 +240,11 @@ export function SelectedLayerSettings() {
                   onChange={(e) => updateLayer(activeLayer.id, { maxIterations: parseInt(e.target.value) })}
                   className={SLIDER_CLASSES}
                 />
-                <input 
-                  type="number" 
-                  min="1" 
-                  max="100" 
+                <NumberInputWithSpinner
                   value={activeLayer.maxIterations}
-                  onChange={(e) => updateLayer(activeLayer.id, { maxIterations: parseInt(e.target.value) })}
+                  onChange={(value) => updateLayer(activeLayer.id, { maxIterations: value })}
+                  min={1}
+                  max={100}
                   className="w-12 h-8 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary focus:outline-none focus:ring-2 focus:ring-blue-500/50"
                 />
               </div>
@@ -274,14 +268,13 @@ export function SelectedLayerSettings() {
               })}
               className={SLIDER_CLASSES}
             />
-            <input 
-              type="number" 
-              min="0" 
-              max="100" 
+            <NumberInputWithSpinner
               value={Math.round(activeLayer.color.alpha * 100)}
-              onChange={(e) => updateLayer(activeLayer.id, { 
-                color: { ...activeLayer.color, alpha: parseInt(e.target.value) / 100 }
+              onChange={(value) => updateLayer(activeLayer.id, { 
+                color: { ...activeLayer.color, alpha: value / 100 }
               })}
+              min={0}
+              max={100}
               className="w-12 h-8 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary focus:outline-none focus:ring-2 focus:ring-blue-500/50"
             />
           </div>
@@ -301,12 +294,11 @@ export function SelectedLayerSettings() {
               onChange={(e) => updateLayer(activeLayer.id, { lineWidth: parseInt(e.target.value) })}
               className={SLIDER_CLASSES}
             />
-            <input 
-              type="number" 
-              min="1" 
-              max="10" 
+            <NumberInputWithSpinner
               value={activeLayer.lineWidth}
-              onChange={(e) => updateLayer(activeLayer.id, { lineWidth: parseInt(e.target.value) })}
+              onChange={(value) => updateLayer(activeLayer.id, { lineWidth: value })}
+              min={1}
+              max={10}
               className="w-12 h-8 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary focus:outline-none focus:ring-2 focus:ring-blue-500/50"
             />
           </div>

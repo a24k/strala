@@ -1,5 +1,6 @@
 import React from 'react';
 import { SLIDER_CLASSES } from './sliderStyles';
+import { NumberInputWithSpinner } from './NumberInputWithSpinner';
 
 interface RangeSliderProps {
   label: string;
@@ -45,13 +46,12 @@ export const RangeSlider: React.FC<RangeSliderProps> = ({
             onChange={handleSliderChange}
             className={SLIDER_CLASSES}
           />
-          <input
-            type="number"
+          <NumberInputWithSpinner
+            value={value}
+            onChange={onChange}
             min={min}
             max={max}
             step={step}
-            value={value}
-            onChange={handleInputChange}
             className="w-16 px-2 py-1 bg-slate-800 border border-slate-600 rounded text-slate-100 text-center text-sm"
           />
         </div>

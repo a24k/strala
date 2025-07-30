@@ -1,6 +1,7 @@
 import { useCanvasStoreSimple } from '../stores/canvasStoreSimple';
 import { SimpleColorPicker } from './ui/ColorPicker';
 import { SLIDER_CLASSES } from './ui/sliderStyles';
+import { NumberInputWithSpinner } from './ui/NumberInputWithSpinner';
 
 export function GlobalSettings() {
   const { config, updateConfig } = useCanvasStoreSimple();
@@ -37,12 +38,11 @@ export function GlobalSettings() {
               onChange={(e) => updateConfig({ circlePoints: parseInt(e.target.value) })}
               className={SLIDER_CLASSES}
             />
-            <input 
-              type="number" 
-              min="8" 
-              max="100" 
+            <NumberInputWithSpinner
               value={config.circlePoints}
-              onChange={(e) => updateConfig({ circlePoints: parseInt(e.target.value) })}
+              onChange={(value) => updateConfig({ circlePoints: value })}
+              min={8}
+              max={100}
               className="w-12 h-8 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary focus:outline-none focus:ring-2 focus:ring-blue-500/50"
             />
           </div>
