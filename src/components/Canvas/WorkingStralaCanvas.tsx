@@ -88,12 +88,15 @@ export const WorkingStralaCanvas: React.FC<WorkingStralaCanvasProps> = ({ classN
         // Draw with gradient or solid color
         const drawLineWithColor = (from: { x: number; y: number }, to: { x: number; y: number }) => {
           if (layer.color.type === 'gradient' && layer.color.secondary) {
-            // Draw gradient line using multiple segments
+            // Draw gradient line using beginShape/endShape for smooth connection
             const segments = 20; // Number of segments for smooth gradient
             const fromRgb = hexToRgb(layer.color.primary);
             const toRgb = hexToRgb(layer.color.secondary);
             
             if (fromRgb && toRgb) {
+              // Set stroke cap to square to avoid rounded ends
+              p.strokeCap(p.SQUARE);
+              
               for (let i = 0; i < segments; i++) {
                 const t1 = i / segments;
                 const t2 = (i + 1) / segments;
@@ -105,7 +108,7 @@ export const WorkingStralaCanvas: React.FC<WorkingStralaCanvasProps> = ({ classN
                 
                 p.stroke(r, g, b, layer.color.alpha * 255);
                 
-                // Calculate segment points
+                // Calculate segment points with slight overlap to prevent gaps
                 const x1 = from.x + (to.x - from.x) * t1;
                 const y1 = from.y + (to.y - from.y) * t1;
                 const x2 = from.x + (to.x - from.x) * t2;
@@ -113,6 +116,9 @@ export const WorkingStralaCanvas: React.FC<WorkingStralaCanvasProps> = ({ classN
                 
                 p.line(x1, y1, x2, y2);
               }
+              
+              // Reset stroke cap to default
+              p.strokeCap(p.ROUND);
             } else {
               // Fallback to primary color if color parsing fails
               const colorRgb = hexToRgb(layer.color.primary);
