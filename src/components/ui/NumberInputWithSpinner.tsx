@@ -49,7 +49,7 @@ export const NumberInputWithSpinner: React.FC<NumberInputWithSpinnerProps> = ({
         value={value}
         onChange={handleInputChange}
         disabled={disabled}
-        className={`pr-4 ${className}`}
+        className={`pr-5 pl-1 text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${className}`}
       />
       <div className="absolute right-0 top-0 h-full flex flex-col">
         <button
