@@ -38,16 +38,23 @@ export function SelectedLayerSettings() {
           <label className="text-sm font-medium text-gray-100 w-20">
             Connection
           </label>
-          <select 
-            value={activeLayer.connectionType}
-            onChange={(e) => updateLayer(activeLayer.id, { 
-              connectionType: e.target.value as 'single-point' | 'two-point' 
-            })}
-            className="flex-1 h-8 px-2 text-sm rounded border bg-strala-border border-strala-accent text-strala-text-primary appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500/50"
-          >
-            <option value="single-point">Single Point</option>
-            <option value="two-point">Two Point</option>
-          </select>
+          <div className="flex-1 relative">
+            <select 
+              value={activeLayer.connectionType}
+              onChange={(e) => updateLayer(activeLayer.id, { 
+                connectionType: e.target.value as 'single-point' | 'two-point' 
+              })}
+              className="w-full h-8 px-2 pr-8 text-sm rounded border bg-strala-border border-strala-accent text-strala-text-primary appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+            >
+              <option value="single-point">Single Point</option>
+              <option value="two-point">Two Point</option>
+            </select>
+            <div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+              <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </div>
+          </div>
         </div>
 
         {/* Single-point controls */}
@@ -310,16 +317,23 @@ export function SelectedLayerSettings() {
           <label className="text-sm font-medium text-gray-100 w-20">
             Type
           </label>
-          <select 
-            value={activeLayer.color.type}
-            onChange={(e) => updateLayer(activeLayer.id, { 
-              color: { ...activeLayer.color, type: e.target.value as 'solid' | 'gradient' }
-            })}
-            className="flex-1 h-8 px-2 text-sm rounded border bg-strala-border border-strala-accent text-strala-text-primary appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500/50"
-          >
-            <option value="solid">Solid</option>
-            <option value="gradient">Gradient</option>
-          </select>
+          <div className="flex-1 relative">
+            <select 
+              value={activeLayer.color.type}
+              onChange={(e) => updateLayer(activeLayer.id, { 
+                color: { ...activeLayer.color, type: e.target.value as 'solid' | 'gradient' }
+              })}
+              className="w-full h-8 px-2 pr-8 text-sm rounded border bg-strala-border border-strala-accent text-strala-text-primary appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+            >
+              <option value="solid">Solid</option>
+              <option value="gradient">Gradient</option>
+            </select>
+            <div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+              <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </div>
+          </div>
         </div>
 
         {/* Primary Color */}
