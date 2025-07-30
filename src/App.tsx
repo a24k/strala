@@ -1,7 +1,7 @@
 import { WorkingStralaCanvas } from './components/Canvas/WorkingStralaCanvas';
 import { GlobalSettings } from './components/GlobalSettings';
 import { LayersList } from './components/LayersList';
-import { ActiveLayerControls } from './components/ActiveLayerControls';
+import { SelectedLayerSettings } from './components/SelectedLayerSettings';
 import './index.css';
 
 function App() {
@@ -19,7 +19,7 @@ function App() {
       <div className="w-80 flex flex-col bg-strala-dark-blue border-l border-strala-border">
         <GlobalSettings />
         <LayersList />
-        <ActiveLayerControls />
+        <SelectedLayerSettings />
       </div>
     </div>
   );

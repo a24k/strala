@@ -1,4 +1,5 @@
 import React from 'react';
+import { SLIDER_CLASSES } from './sliderStyles';
 
 interface RangeSliderProps {
   label: string;
@@ -42,28 +43,7 @@ export const RangeSlider: React.FC<RangeSliderProps> = ({
             step={step}
             value={value}
             onChange={handleSliderChange}
-            className="flex-1 h-2 bg-strala-border rounded-sm outline-none appearance-none
-                      [&::-webkit-slider-thumb]:appearance-none 
-                      [&::-webkit-slider-thumb]:w-[18px] 
-                      [&::-webkit-slider-thumb]:h-[18px] 
-                      [&::-webkit-slider-thumb]:bg-strala-accent 
-                      [&::-webkit-slider-thumb]:rounded-full 
-                      [&::-webkit-slider-thumb]:border-2 
-                      [&::-webkit-slider-thumb]:border-white 
-                      [&::-webkit-slider-thumb]:shadow-md 
-                      [&::-webkit-slider-thumb]:cursor-pointer
-                      [&::-webkit-slider-thumb]:transition-all
-                      [&::-webkit-slider-thumb]:hover:bg-blue-600
-                      [&::-webkit-slider-thumb]:hover:scale-110
-                      [&::-moz-range-thumb]:appearance-none
-                      [&::-moz-range-thumb]:w-[18px]
-                      [&::-moz-range-thumb]:h-[18px]
-                      [&::-moz-range-thumb]:bg-strala-accent
-                      [&::-moz-range-thumb]:rounded-full
-                      [&::-moz-range-thumb]:border-2
-                      [&::-moz-range-thumb]:border-white
-                      [&::-moz-range-thumb]:shadow-md
-                      [&::-moz-range-thumb]:cursor-pointer"
+            className={SLIDER_CLASSES}
           />
           <input
             type="number"

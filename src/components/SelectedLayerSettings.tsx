@@ -1,8 +1,9 @@
 import { useCanvasStoreSimple } from '../stores/canvasStoreSimple';
 import { useLayersStoreSimple, useActiveLayerSimple } from '../stores/layersStoreSimple';
 import { SimpleColorPicker } from './ui/ColorPicker';
+import { SLIDER_CLASSES } from './ui/sliderStyles';
 
-export function ActiveLayerControls() {
+export function SelectedLayerSettings() {
   const { config } = useCanvasStoreSimple();
   const { updateLayer } = useLayersStoreSimple();
   const activeLayer = useActiveLayerSimple();
@@ -65,28 +66,7 @@ export function ActiveLayerControls() {
                   max={config.circlePoints - 1} 
                   value={activeLayer.startPoint}
                   onChange={(e) => updateLayer(activeLayer.id, { startPoint: parseInt(e.target.value) })}
-                  className="flex-1 h-2 bg-strala-border rounded-sm outline-none appearance-none
-                            [&::-webkit-slider-thumb]:appearance-none 
-                            [&::-webkit-slider-thumb]:w-[18px] 
-                            [&::-webkit-slider-thumb]:h-[18px] 
-                            [&::-webkit-slider-thumb]:bg-strala-accent 
-                            [&::-webkit-slider-thumb]:rounded-full 
-                            [&::-webkit-slider-thumb]:border-2 
-                            [&::-webkit-slider-thumb]:border-white 
-                            [&::-webkit-slider-thumb]:shadow-md 
-                            [&::-webkit-slider-thumb]:cursor-pointer
-                            [&::-webkit-slider-thumb]:transition-all
-                            [&::-webkit-slider-thumb]:hover:bg-blue-600
-                            [&::-webkit-slider-thumb]:hover:scale-110
-                            [&::-moz-range-thumb]:appearance-none
-                            [&::-moz-range-thumb]:w-[18px]
-                            [&::-moz-range-thumb]:h-[18px]
-                            [&::-moz-range-thumb]:bg-strala-accent
-                            [&::-moz-range-thumb]:rounded-full
-                            [&::-moz-range-thumb]:border-2
-                            [&::-moz-range-thumb]:border-white
-                            [&::-moz-range-thumb]:shadow-md
-                            [&::-moz-range-thumb]:cursor-pointer"
+                  className={SLIDER_CLASSES}
                 />
                 <input 
                   type="number" 
@@ -111,28 +91,7 @@ export function ActiveLayerControls() {
                   max="50" 
                   value={activeLayer.stepSize}
                   onChange={(e) => updateLayer(activeLayer.id, { stepSize: parseInt(e.target.value) })}
-                  className="flex-1 h-2 bg-strala-border rounded-sm outline-none appearance-none
-                            [&::-webkit-slider-thumb]:appearance-none 
-                            [&::-webkit-slider-thumb]:w-[18px] 
-                            [&::-webkit-slider-thumb]:h-[18px] 
-                            [&::-webkit-slider-thumb]:bg-strala-accent 
-                            [&::-webkit-slider-thumb]:rounded-full 
-                            [&::-webkit-slider-thumb]:border-2 
-                            [&::-webkit-slider-thumb]:border-white 
-                            [&::-webkit-slider-thumb]:shadow-md 
-                            [&::-webkit-slider-thumb]:cursor-pointer
-                            [&::-webkit-slider-thumb]:transition-all
-                            [&::-webkit-slider-thumb]:hover:bg-blue-600
-                            [&::-webkit-slider-thumb]:hover:scale-110
-                            [&::-moz-range-thumb]:appearance-none
-                            [&::-moz-range-thumb]:w-[18px]
-                            [&::-moz-range-thumb]:h-[18px]
-                            [&::-moz-range-thumb]:bg-strala-accent
-                            [&::-moz-range-thumb]:rounded-full
-                            [&::-moz-range-thumb]:border-2
-                            [&::-moz-range-thumb]:border-white
-                            [&::-moz-range-thumb]:shadow-md
-                            [&::-moz-range-thumb]:cursor-pointer"
+                  className={SLIDER_CLASSES}
                 />
                 <input 
                   type="number" 
@@ -164,28 +123,7 @@ export function ActiveLayerControls() {
                   onChange={(e) => updateLayer(activeLayer.id, { 
                     pointA: { ...activeLayer.pointA, initialPosition: parseInt(e.target.value) }
                   })}
-                  className="flex-1 h-2 bg-strala-border rounded-sm outline-none appearance-none
-                            [&::-webkit-slider-thumb]:appearance-none 
-                            [&::-webkit-slider-thumb]:w-[18px] 
-                            [&::-webkit-slider-thumb]:h-[18px] 
-                            [&::-webkit-slider-thumb]:bg-strala-accent 
-                            [&::-webkit-slider-thumb]:rounded-full 
-                            [&::-webkit-slider-thumb]:border-2 
-                            [&::-webkit-slider-thumb]:border-white 
-                            [&::-webkit-slider-thumb]:shadow-md 
-                            [&::-webkit-slider-thumb]:cursor-pointer
-                            [&::-webkit-slider-thumb]:transition-all
-                            [&::-webkit-slider-thumb]:hover:bg-blue-600
-                            [&::-webkit-slider-thumb]:hover:scale-110
-                            [&::-moz-range-thumb]:appearance-none
-                            [&::-moz-range-thumb]:w-[18px]
-                            [&::-moz-range-thumb]:h-[18px]
-                            [&::-moz-range-thumb]:bg-strala-accent
-                            [&::-moz-range-thumb]:rounded-full
-                            [&::-moz-range-thumb]:border-2
-                            [&::-moz-range-thumb]:border-white
-                            [&::-moz-range-thumb]:shadow-md
-                            [&::-moz-range-thumb]:cursor-pointer"
+                  className={SLIDER_CLASSES}
                 />
                 <input 
                   type="number" 
@@ -214,28 +152,7 @@ export function ActiveLayerControls() {
                   onChange={(e) => updateLayer(activeLayer.id, { 
                     pointA: { ...activeLayer.pointA, stepSize: parseInt(e.target.value) }
                   })}
-                  className="flex-1 h-2 bg-strala-border rounded-sm outline-none appearance-none
-                            [&::-webkit-slider-thumb]:appearance-none 
-                            [&::-webkit-slider-thumb]:w-[18px] 
-                            [&::-webkit-slider-thumb]:h-[18px] 
-                            [&::-webkit-slider-thumb]:bg-strala-accent 
-                            [&::-webkit-slider-thumb]:rounded-full 
-                            [&::-webkit-slider-thumb]:border-2 
-                            [&::-webkit-slider-thumb]:border-white 
-                            [&::-webkit-slider-thumb]:shadow-md 
-                            [&::-webkit-slider-thumb]:cursor-pointer
-                            [&::-webkit-slider-thumb]:transition-all
-                            [&::-webkit-slider-thumb]:hover:bg-blue-600
-                            [&::-webkit-slider-thumb]:hover:scale-110
-                            [&::-moz-range-thumb]:appearance-none
-                            [&::-moz-range-thumb]:w-[18px]
-                            [&::-moz-range-thumb]:h-[18px]
-                            [&::-moz-range-thumb]:bg-strala-accent
-                            [&::-moz-range-thumb]:rounded-full
-                            [&::-moz-range-thumb]:border-2
-                            [&::-moz-range-thumb]:border-white
-                            [&::-moz-range-thumb]:shadow-md
-                            [&::-moz-range-thumb]:cursor-pointer"
+                  className={SLIDER_CLASSES}
                 />
                 <input 
                   type="number" 
@@ -264,28 +181,7 @@ export function ActiveLayerControls() {
                   onChange={(e) => updateLayer(activeLayer.id, { 
                     pointB: { ...activeLayer.pointB, relativeOffset: parseInt(e.target.value) }
                   })}
-                  className="flex-1 h-2 bg-strala-border rounded-sm outline-none appearance-none
-                            [&::-webkit-slider-thumb]:appearance-none 
-                            [&::-webkit-slider-thumb]:w-[18px] 
-                            [&::-webkit-slider-thumb]:h-[18px] 
-                            [&::-webkit-slider-thumb]:bg-strala-accent 
-                            [&::-webkit-slider-thumb]:rounded-full 
-                            [&::-webkit-slider-thumb]:border-2 
-                            [&::-webkit-slider-thumb]:border-white 
-                            [&::-webkit-slider-thumb]:shadow-md 
-                            [&::-webkit-slider-thumb]:cursor-pointer
-                            [&::-webkit-slider-thumb]:transition-all
-                            [&::-webkit-slider-thumb]:hover:bg-blue-600
-                            [&::-webkit-slider-thumb]:hover:scale-110
-                            [&::-moz-range-thumb]:appearance-none
-                            [&::-moz-range-thumb]:w-[18px]
-                            [&::-moz-range-thumb]:h-[18px]
-                            [&::-moz-range-thumb]:bg-strala-accent
-                            [&::-moz-range-thumb]:rounded-full
-                            [&::-moz-range-thumb]:border-2
-                            [&::-moz-range-thumb]:border-white
-                            [&::-moz-range-thumb]:shadow-md
-                            [&::-moz-range-thumb]:cursor-pointer"
+                  className={SLIDER_CLASSES}
                 />
                 <input 
                   type="number" 
@@ -314,28 +210,7 @@ export function ActiveLayerControls() {
                   onChange={(e) => updateLayer(activeLayer.id, { 
                     pointB: { ...activeLayer.pointB, stepSize: parseInt(e.target.value) }
                   })}
-                  className="flex-1 h-2 bg-strala-border rounded-sm outline-none appearance-none
-                            [&::-webkit-slider-thumb]:appearance-none 
-                            [&::-webkit-slider-thumb]:w-[18px] 
-                            [&::-webkit-slider-thumb]:h-[18px] 
-                            [&::-webkit-slider-thumb]:bg-strala-accent 
-                            [&::-webkit-slider-thumb]:rounded-full 
-                            [&::-webkit-slider-thumb]:border-2 
-                            [&::-webkit-slider-thumb]:border-white 
-                            [&::-webkit-slider-thumb]:shadow-md 
-                            [&::-webkit-slider-thumb]:cursor-pointer
-                            [&::-webkit-slider-thumb]:transition-all
-                            [&::-webkit-slider-thumb]:hover:bg-blue-600
-                            [&::-webkit-slider-thumb]:hover:scale-110
-                            [&::-moz-range-thumb]:appearance-none
-                            [&::-moz-range-thumb]:w-[18px]
-                            [&::-moz-range-thumb]:h-[18px]
-                            [&::-moz-range-thumb]:bg-strala-accent
-                            [&::-moz-range-thumb]:rounded-full
-                            [&::-moz-range-thumb]:border-2
-                            [&::-moz-range-thumb]:border-white
-                            [&::-moz-range-thumb]:shadow-md
-                            [&::-moz-range-thumb]:cursor-pointer"
+                  className={SLIDER_CLASSES}
                 />
                 <input 
                   type="number" 
@@ -362,28 +237,7 @@ export function ActiveLayerControls() {
                   max="100" 
                   value={activeLayer.maxIterations}
                   onChange={(e) => updateLayer(activeLayer.id, { maxIterations: parseInt(e.target.value) })}
-                  className="flex-1 h-2 bg-strala-border rounded-sm outline-none appearance-none
-                            [&::-webkit-slider-thumb]:appearance-none 
-                            [&::-webkit-slider-thumb]:w-[18px] 
-                            [&::-webkit-slider-thumb]:h-[18px] 
-                            [&::-webkit-slider-thumb]:bg-strala-accent 
-                            [&::-webkit-slider-thumb]:rounded-full 
-                            [&::-webkit-slider-thumb]:border-2 
-                            [&::-webkit-slider-thumb]:border-white 
-                            [&::-webkit-slider-thumb]:shadow-md 
-                            [&::-webkit-slider-thumb]:cursor-pointer
-                            [&::-webkit-slider-thumb]:transition-all
-                            [&::-webkit-slider-thumb]:hover:bg-blue-600
-                            [&::-webkit-slider-thumb]:hover:scale-110
-                            [&::-moz-range-thumb]:appearance-none
-                            [&::-moz-range-thumb]:w-[18px]
-                            [&::-moz-range-thumb]:h-[18px]
-                            [&::-moz-range-thumb]:bg-strala-accent
-                            [&::-moz-range-thumb]:rounded-full
-                            [&::-moz-range-thumb]:border-2
-                            [&::-moz-range-thumb]:border-white
-                            [&::-moz-range-thumb]:shadow-md
-                            [&::-moz-range-thumb]:cursor-pointer"
+                  className={SLIDER_CLASSES}
                 />
                 <input 
                   type="number" 
@@ -412,28 +266,7 @@ export function ActiveLayerControls() {
               onChange={(e) => updateLayer(activeLayer.id, { 
                 color: { ...activeLayer.color, alpha: parseInt(e.target.value) / 100 }
               })}
-              className="flex-1 h-2 bg-strala-border rounded-sm outline-none appearance-none
-                        [&::-webkit-slider-thumb]:appearance-none 
-                        [&::-webkit-slider-thumb]:w-[18px] 
-                        [&::-webkit-slider-thumb]:h-[18px] 
-                        [&::-webkit-slider-thumb]:bg-strala-accent 
-                        [&::-webkit-slider-thumb]:rounded-full 
-                        [&::-webkit-slider-thumb]:border-2 
-                        [&::-webkit-slider-thumb]:border-white 
-                        [&::-webkit-slider-thumb]:shadow-md 
-                        [&::-webkit-slider-thumb]:cursor-pointer
-                        [&::-webkit-slider-thumb]:transition-all
-                        [&::-webkit-slider-thumb]:hover:bg-blue-600
-                        [&::-webkit-slider-thumb]:hover:scale-110
-                        [&::-moz-range-thumb]:appearance-none
-                        [&::-moz-range-thumb]:w-[18px]
-                        [&::-moz-range-thumb]:h-[18px]
-                        [&::-moz-range-thumb]:bg-strala-accent
-                        [&::-moz-range-thumb]:rounded-full
-                        [&::-moz-range-thumb]:border-2
-                        [&::-moz-range-thumb]:border-white
-                        [&::-moz-range-thumb]:shadow-md
-                        [&::-moz-range-thumb]:cursor-pointer"
+              className={SLIDER_CLASSES}
             />
             <input 
               type="number" 
@@ -460,28 +293,7 @@ export function ActiveLayerControls() {
               max="10" 
               value={activeLayer.lineWidth}
               onChange={(e) => updateLayer(activeLayer.id, { lineWidth: parseInt(e.target.value) })}
-              className="flex-1 h-2 bg-strala-border rounded-sm outline-none appearance-none
-                        [&::-webkit-slider-thumb]:appearance-none 
-                        [&::-webkit-slider-thumb]:w-[18px] 
-                        [&::-webkit-slider-thumb]:h-[18px] 
-                        [&::-webkit-slider-thumb]:bg-strala-accent 
-                        [&::-webkit-slider-thumb]:rounded-full 
-                        [&::-webkit-slider-thumb]:border-2 
-                        [&::-webkit-slider-thumb]:border-white 
-                        [&::-webkit-slider-thumb]:shadow-md 
-                        [&::-webkit-slider-thumb]:cursor-pointer
-                        [&::-webkit-slider-thumb]:transition-all
-                        [&::-webkit-slider-thumb]:hover:bg-blue-600
-                        [&::-webkit-slider-thumb]:hover:scale-110
-                        [&::-moz-range-thumb]:appearance-none
-                        [&::-moz-range-thumb]:w-[18px]
-                        [&::-moz-range-thumb]:h-[18px]
-                        [&::-moz-range-thumb]:bg-strala-accent
-                        [&::-moz-range-thumb]:rounded-full
-                        [&::-moz-range-thumb]:border-2
-                        [&::-moz-range-thumb]:border-white
-                        [&::-moz-range-thumb]:shadow-md
-                        [&::-moz-range-thumb]:cursor-pointer"
+              className={SLIDER_CLASSES}
             />
             <input 
               type="number" 
