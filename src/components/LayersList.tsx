@@ -59,7 +59,8 @@ export function LayersList() {
             startPoint={layer.startPoint}
             stepSize={layer.stepSize}
             alpha={layer.color.alpha}
-            primaryColor={layer.color.primary}
+            lineWidth={layer.lineWidth}
+            color={layer.color}
             canMoveUp={index > 0}
             canMoveDown={index < layers.length - 1}
             onClick={() => setActiveLayer(layer.id)}
