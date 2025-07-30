@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useCallback } from 'react';
 import p5 from 'p5';
 import { useCanvasStoreSimple } from '../../stores/canvasStoreSimple';
 import { useLayersStoreSimple } from '../../stores/layersStoreSimple';
+import type { Layer } from '../../types';
 
 interface WorkingStralaCanvasProps {
   className?: string;
@@ -82,23 +83,93 @@ export const WorkingStralaCanvas: React.FC<WorkingStralaCanvasProps> = ({ classN
           return;
         }
 
-        const colorRgb = hexToRgb(layer.color.primary);
-        p.stroke(colorRgb.r, colorRgb.g, colorRgb.b, layer.color.alpha * 255);
         p.strokeWeight(layer.lineWidth);
 
-        // Simple string art pattern
-        let currentIndex = layer.startPoint % pointsRef.current.length;
-        const visited = new Set<number>();
-        
-        while (!visited.has(currentIndex) && visited.size < pointsRef.current.length) {
-          visited.add(currentIndex);
-          const nextIndex = (currentIndex + layer.stepSize) % pointsRef.current.length;
+        // Draw with gradient or solid color
+        const drawLineWithColor = (from: { x: number; y: number }, to: { x: number; y: number }) => {
+          if (layer.color.type === 'gradient' && layer.color.secondary) {
+            // Draw gradient line using multiple segments
+            const segments = 20; // Number of segments for smooth gradient
+            const fromRgb = hexToRgb(layer.color.primary);
+            const toRgb = hexToRgb(layer.color.secondary);
+            
+            if (fromRgb && toRgb) {
+              for (let i = 0; i < segments; i++) {
+                const t1 = i / segments;
+                const t2 = (i + 1) / segments;
+                
+                // Interpolate color
+                const r = Math.round(fromRgb.r + (toRgb.r - fromRgb.r) * t1);
+                const g = Math.round(fromRgb.g + (toRgb.g - fromRgb.g) * t1);
+                const b = Math.round(fromRgb.b + (toRgb.b - fromRgb.b) * t1);
+                
+                p.stroke(r, g, b, layer.color.alpha * 255);
+                
+                // Calculate segment points
+                const x1 = from.x + (to.x - from.x) * t1;
+                const y1 = from.y + (to.y - from.y) * t1;
+                const x2 = from.x + (to.x - from.x) * t2;
+                const y2 = from.y + (to.y - from.y) * t2;
+                
+                p.line(x1, y1, x2, y2);
+              }
+            } else {
+              // Fallback to primary color if color parsing fails
+              const colorRgb = hexToRgb(layer.color.primary);
+              p.stroke(colorRgb.r, colorRgb.g, colorRgb.b, layer.color.alpha * 255);
+              p.line(from.x, from.y, to.x, to.y);
+            }
+          } else {
+            // Solid color
+            const colorRgb = hexToRgb(layer.color.primary);
+            p.stroke(colorRgb.r, colorRgb.g, colorRgb.b, layer.color.alpha * 255);
+            p.line(from.x, from.y, to.x, to.y);
+          }
+        };
+
+        // Draw string art pattern based on connection type
+        if (layer.connectionType === 'two-point' && layer.pointA && layer.pointB) {
+          // Two-point connection pattern
+          const maxIterations = layer.maxIterations || 200;
+          let currentPointA = layer.pointA.initialPosition % pointsRef.current.length;
+          let currentPointB = ((layer.pointA.initialPosition + layer.pointB.relativeOffset) % pointsRef.current.length + pointsRef.current.length) % pointsRef.current.length;
           
-          const from = pointsRef.current[currentIndex];
-          const to = pointsRef.current[nextIndex];
+          // Keep track of visited point pairs to prevent infinite loops
+          const visitedPairs = new Set<string>();
+          let iterationCount = 0;
           
-          p.line(from.x, from.y, to.x, to.y);
-          currentIndex = nextIndex;
+          while (iterationCount < maxIterations && iterationCount < pointsRef.current.length * 10) {
+            const pairKey = `${currentPointA}-${currentPointB}`;
+            if (visitedPairs.has(pairKey)) {
+              break; // Pattern completed, avoid infinite loop
+            }
+            visitedPairs.add(pairKey);
+            
+            const from = pointsRef.current[currentPointA];
+            const to = pointsRef.current[currentPointB];
+            
+            drawLineWithColor(from, to);
+            
+            // Move both points according to their step sizes
+            currentPointA = (currentPointA + layer.pointA.stepSize) % pointsRef.current.length;
+            currentPointB = (currentPointB + layer.pointB.stepSize) % pointsRef.current.length;
+            iterationCount++;
+          }
+        } else {
+          // Single-point connection pattern (original behavior)
+          let currentIndex = layer.startPoint % pointsRef.current.length;
+          const visited = new Set<number>();
+          
+          while (!visited.has(currentIndex) && visited.size < pointsRef.current.length) {
+            visited.add(currentIndex);
+            const nextIndex = (currentIndex + layer.stepSize) % pointsRef.current.length;
+            
+            const from = pointsRef.current[currentIndex];
+            const to = pointsRef.current[nextIndex];
+            
+            drawLineWithColor(from, to);
+            currentIndex = nextIndex;
+          }
         }
       });
 

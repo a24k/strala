@@ -31,8 +31,8 @@ export function SelectedLayerSettings() {
         </div>
       </div>
       
-      {/* Controls Container - Scrollable */}
-      <div className="max-h-80 overflow-y-auto space-y-2">
+      {/* Controls Container */}
+      <div className="space-y-2">
         
         {/* Connection Type */}
         <div className="flex items-center gap-2">
@@ -44,7 +44,7 @@ export function SelectedLayerSettings() {
             onChange={(e) => updateLayer(activeLayer.id, { 
               connectionType: e.target.value as 'single-point' | 'two-point' 
             })}
-            className="flex-1 h-8 px-2 text-sm rounded border bg-strala-border border-strala-accent text-strala-text-primary"
+            className="flex-1 h-8 px-2 text-sm rounded border bg-strala-border border-strala-accent text-strala-text-primary appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500/50"
           >
             <option value="single-point">Single Point</option>
             <option value="two-point">Two Point</option>
@@ -74,7 +74,7 @@ export function SelectedLayerSettings() {
                   max={config.circlePoints - 1} 
                   value={activeLayer.startPoint}
                   onChange={(e) => updateLayer(activeLayer.id, { startPoint: parseInt(e.target.value) })}
-                  className="w-12 h-8 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary"
+                  className="w-12 h-8 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary focus:outline-none focus:ring-2 focus:ring-blue-500/50"
                 />
               </div>
             </div>
@@ -99,7 +99,7 @@ export function SelectedLayerSettings() {
                   max="50" 
                   value={activeLayer.stepSize}
                   onChange={(e) => updateLayer(activeLayer.id, { stepSize: parseInt(e.target.value) })}
-                  className="w-12 h-8 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary"
+                  className="w-12 h-8 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary focus:outline-none focus:ring-2 focus:ring-blue-500/50"
                 />
               </div>
             </div>
@@ -133,7 +133,7 @@ export function SelectedLayerSettings() {
                   onChange={(e) => updateLayer(activeLayer.id, { 
                     pointA: { ...activeLayer.pointA, initialPosition: parseInt(e.target.value) }
                   })}
-                  className="w-12 h-8 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary"
+                  className="w-12 h-8 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary focus:outline-none focus:ring-2 focus:ring-blue-500/50"
                 />
               </div>
             </div>
@@ -162,7 +162,7 @@ export function SelectedLayerSettings() {
                   onChange={(e) => updateLayer(activeLayer.id, { 
                     pointA: { ...activeLayer.pointA, stepSize: parseInt(e.target.value) }
                   })}
-                  className="w-12 h-8 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary"
+                  className="w-12 h-8 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary focus:outline-none focus:ring-2 focus:ring-blue-500/50"
                 />
               </div>
             </div>
@@ -191,7 +191,7 @@ export function SelectedLayerSettings() {
                   onChange={(e) => updateLayer(activeLayer.id, { 
                     pointB: { ...activeLayer.pointB, relativeOffset: parseInt(e.target.value) }
                   })}
-                  className="w-12 h-8 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary"
+                  className="w-12 h-8 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary focus:outline-none focus:ring-2 focus:ring-blue-500/50"
                 />
               </div>
             </div>
@@ -220,7 +220,7 @@ export function SelectedLayerSettings() {
                   onChange={(e) => updateLayer(activeLayer.id, { 
                     pointB: { ...activeLayer.pointB, stepSize: parseInt(e.target.value) }
                   })}
-                  className="w-12 h-8 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary"
+                  className="w-12 h-8 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary focus:outline-none focus:ring-2 focus:ring-blue-500/50"
                 />
               </div>
             </div>
@@ -245,7 +245,7 @@ export function SelectedLayerSettings() {
                   max="100" 
                   value={activeLayer.maxIterations}
                   onChange={(e) => updateLayer(activeLayer.id, { maxIterations: parseInt(e.target.value) })}
-                  className="w-12 h-8 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary"
+                  className="w-12 h-8 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary focus:outline-none focus:ring-2 focus:ring-blue-500/50"
                 />
               </div>
             </div>
@@ -276,7 +276,7 @@ export function SelectedLayerSettings() {
               onChange={(e) => updateLayer(activeLayer.id, { 
                 color: { ...activeLayer.color, alpha: parseInt(e.target.value) / 100 }
               })}
-              className="w-12 h-8 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary"
+              className="w-12 h-8 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary focus:outline-none focus:ring-2 focus:ring-blue-500/50"
             />
           </div>
         </div>
@@ -301,7 +301,7 @@ export function SelectedLayerSettings() {
               max="10" 
               value={activeLayer.lineWidth}
               onChange={(e) => updateLayer(activeLayer.id, { lineWidth: parseInt(e.target.value) })}
-              className="w-12 h-8 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary"
+              className="w-12 h-8 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary focus:outline-none focus:ring-2 focus:ring-blue-500/50"
             />
           </div>
         </div>
@@ -316,7 +316,7 @@ export function SelectedLayerSettings() {
             onChange={(e) => updateLayer(activeLayer.id, { 
               color: { ...activeLayer.color, type: e.target.value as 'solid' | 'gradient' }
             })}
-            className="flex-1 h-8 px-2 text-sm rounded border bg-strala-border border-strala-accent text-strala-text-primary"
+            className="flex-1 h-8 px-2 text-sm rounded border bg-strala-border border-strala-accent text-strala-text-primary appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500/50"
           >
             <option value="solid">Solid</option>
             <option value="gradient">Gradient</option>
@@ -344,7 +344,7 @@ export function SelectedLayerSettings() {
               onChange={(e) => updateLayer(activeLayer.id, { 
                 color: { ...activeLayer.color, primary: e.target.value }
               })}
-              className="w-20 h-8 px-2 text-xs rounded border font-mono bg-strala-border border-strala-accent text-strala-text-primary"
+              className="w-20 h-8 px-2 text-xs rounded border font-mono bg-strala-border border-strala-accent text-strala-text-primary focus:outline-none focus:ring-2 focus:ring-blue-500/50"
               placeholder="#000000"
             />
             <button 
@@ -378,7 +378,7 @@ export function SelectedLayerSettings() {
                 onChange={(e) => updateLayer(activeLayer.id, { 
                   color: { ...activeLayer.color, secondary: e.target.value }
                 })}
-                className="w-20 h-8 px-2 text-xs rounded border font-mono bg-strala-border border-strala-accent text-strala-text-primary"
+                className="w-20 h-8 px-2 text-xs rounded border font-mono bg-strala-border border-strala-accent text-strala-text-primary focus:outline-none focus:ring-2 focus:ring-blue-500/50"
                 placeholder="#000000"
               />
             </div>
