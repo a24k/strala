@@ -6,6 +6,7 @@ const defaultConfig: AppConfig = {
   circlePoints: 24,
   backgroundColor: '#1a1a2e',
   showPointNumbers: true,
+  rotation: 0,
   canvasSize: {
     width: 800,
     height: 800

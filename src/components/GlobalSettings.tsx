@@ -27,9 +27,15 @@ export function GlobalSettings() {
         
         {/* Points Control */}
         <div className="flex items-center gap-2 mb-2">
-          <label className="text-sm font-medium text-gray-100 w-20">
-            Points
-          </label>
+          <div className="w-20 flex items-center justify-between">
+            <label className="text-sm font-medium text-gray-100">
+              Points
+            </label>
+            <CustomCheckbox
+              checked={config.showPointNumbers}
+              onChange={(checked) => updateConfig({ showPointNumbers: checked })}
+            />
+          </div>
           <div className="flex items-center gap-2 flex-1">
             <input 
               type="range" 
@@ -49,8 +55,32 @@ export function GlobalSettings() {
           </div>
         </div>
         
-        {/* Background Control */}
+        {/* Rotation Control */}
         <div className="flex items-center gap-2 mb-2">
+          <label className="text-sm font-medium text-gray-100 w-20">
+            Rotate
+          </label>
+          <div className="flex items-center gap-2 flex-1">
+            <input 
+              type="range" 
+              min="0" 
+              max="360" 
+              value={config.rotation}
+              onChange={(e) => updateConfig({ rotation: parseInt(e.target.value) })}
+              className={SLIDER_CLASSES}
+            />
+            <NumberInputWithSpinner
+              value={config.rotation}
+              onChange={(value) => updateConfig({ rotation: value })}
+              min={0}
+              max={360}
+              className="w-12 h-8 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+            />
+          </div>
+        </div>
+        
+        {/* Background Control */}
+        <div className="flex items-center gap-2">
           <label className="text-sm font-medium text-gray-100 w-20">
             Background
           </label>
@@ -65,19 +95,6 @@ export function GlobalSettings() {
               onChange={(e) => updateConfig({ backgroundColor: e.target.value })}
               className="w-20 h-8 px-2 text-xs rounded border font-mono bg-strala-border border-strala-accent text-strala-text-primary focus:outline-none focus:ring-2 focus:ring-blue-500/50"
               placeholder="#000000"
-            />
-          </div>
-        </div>
-        
-        {/* Point Numbers Control */}
-        <div className="flex items-center gap-2">
-          <label className="text-sm font-medium text-gray-100 w-20">
-            Show Num.
-          </label>
-          <div className="flex items-center gap-2 flex-1">
-            <CustomCheckbox
-              checked={config.showPointNumbers}
-              onChange={(checked) => updateConfig({ showPointNumbers: checked })}
             />
           </div>
         </div>

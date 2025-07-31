@@ -22,15 +22,15 @@ export const WorkingStralaCanvas: React.FC<WorkingStralaCanvasProps> = ({ classN
   // Shared points array and calculation function
   const pointsRef = useRef<Array<{ x: number; y: number }>>([]);
   
-  const calculatePoints = useCallback((circlePoints: number, canvasWidth: number, canvasHeight: number) => {
+  const calculatePoints = useCallback((circlePoints: number, canvasWidth: number, canvasHeight: number, rotation: number) => {
     pointsRef.current = [];
     const centerX = canvasWidth / 2;
     const centerY = canvasHeight / 2;
     const radius = Math.min(canvasWidth, canvasHeight) * 0.45;
 
     for (let i = 0; i < circlePoints; i++) {
-      // Start from top (12 o'clock position) by subtracting PI/2
-      const angle = (Math.PI * 2 / circlePoints) * i - Math.PI / 2;
+      // Start from top (12 o'clock position) by subtracting PI/2, then add rotation
+      const angle = (Math.PI * 2 / circlePoints) * i - Math.PI / 2 + (rotation * Math.PI) / 180;
       const x = centerX + Math.cos(angle) * radius;
       const y = centerY + Math.sin(angle) * radius;
       pointsRef.current.push({ x, y });
@@ -62,15 +62,16 @@ export const WorkingStralaCanvas: React.FC<WorkingStralaCanvasProps> = ({ classN
       } else {
         p.createCanvas(500, 500);
       }
-      calculatePoints(config.circlePoints, p.width, p.height);
+      calculatePoints(config.circlePoints, p.width, p.height, config.rotation);
       lastConfigRef.current = { ...config };
       lastLayersRef.current = [...visibleLayers];
     };
 
     p.draw = () => {
       // Check if we need to recalculate points
-      if (lastConfigRef.current?.circlePoints !== config.circlePoints) {
-        calculatePoints(config.circlePoints, p.width, p.height);
+      if (lastConfigRef.current?.circlePoints !== config.circlePoints || 
+          lastConfigRef.current?.rotation !== config.rotation) {
+        calculatePoints(config.circlePoints, p.width, p.height, config.rotation);
         lastConfigRef.current = { ...config };
       }
 
@@ -255,7 +256,7 @@ export const WorkingStralaCanvas: React.FC<WorkingStralaCanvasProps> = ({ classN
         p5InstanceRef.current.resizeCanvas(size, size);
         
         // Recalculate points after canvas resize
-        calculatePoints(config.circlePoints, size, size);
+        calculatePoints(config.circlePoints, size, size, config.rotation);
       }
     };
 

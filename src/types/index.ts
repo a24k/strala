@@ -238,6 +238,7 @@ export interface AppConfig {
   circlePoints: number;
   backgroundColor: string;
   showPointNumbers: boolean;
+  rotation: number; // Rotation in degrees (0 = point #1 at 12 o'clock)
   canvasSize: {
     width: number;
     height: number;
