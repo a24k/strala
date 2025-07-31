@@ -29,7 +29,8 @@ export const WorkingStralaCanvas: React.FC<WorkingStralaCanvasProps> = ({ classN
     const radius = Math.min(canvasWidth, canvasHeight) * 0.45;
 
     for (let i = 0; i < circlePoints; i++) {
-      const angle = (Math.PI * 2 / circlePoints) * i;
+      // Start from top (12 o'clock position) by subtracting PI/2
+      const angle = (Math.PI * 2 / circlePoints) * i - Math.PI / 2;
       const x = centerX + Math.cos(angle) * radius;
       const y = centerY + Math.sin(angle) * radius;
       pointsRef.current.push({ x, y });
