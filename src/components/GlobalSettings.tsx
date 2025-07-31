@@ -2,6 +2,7 @@ import { useCanvasStoreSimple } from '../stores/canvasStoreSimple';
 import { SimpleColorPicker } from './ui/ColorPicker';
 import { SLIDER_CLASSES } from './ui/sliderStyles';
 import { NumberInputWithSpinner } from './ui/NumberInputWithSpinner';
+import { CustomCheckbox } from './ui/CustomCheckbox';
 
 export function GlobalSettings() {
   const { config, updateConfig } = useCanvasStoreSimple();
@@ -49,7 +50,7 @@ export function GlobalSettings() {
         </div>
         
         {/* Background Control */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 mb-2">
           <label className="text-sm font-medium text-gray-100 w-20">
             Background
           </label>
@@ -64,6 +65,19 @@ export function GlobalSettings() {
               onChange={(e) => updateConfig({ backgroundColor: e.target.value })}
               className="w-20 h-8 px-2 text-xs rounded border font-mono bg-strala-border border-strala-accent text-strala-text-primary focus:outline-none focus:ring-2 focus:ring-blue-500/50"
               placeholder="#000000"
+            />
+          </div>
+        </div>
+        
+        {/* Point Numbers Control */}
+        <div className="flex items-center gap-2">
+          <label className="text-sm font-medium text-gray-100 w-20">
+            Show Num.
+          </label>
+          <div className="flex items-center gap-2 flex-1">
+            <CustomCheckbox
+              checked={config.showPointNumbers}
+              onChange={(checked) => updateConfig({ showPointNumbers: checked })}
             />
           </div>
         </div>

@@ -5,6 +5,7 @@ import type { AppConfig } from '../types';
 const defaultConfig: AppConfig = {
   circlePoints: 24,
   backgroundColor: '#1a1a2e',
+  showPointNumbers: true,
   canvasSize: {
     width: 800,
     height: 800

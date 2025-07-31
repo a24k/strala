@@ -180,7 +180,7 @@ export const WorkingStralaCanvas: React.FC<WorkingStralaCanvasProps> = ({ classN
       });
 
       // Draw circle points (nails) - ON TOP of strings
-      pointsRef.current.forEach(point => {
+      pointsRef.current.forEach((point, index) => {
         // Outer ring (nail head shadow)
         p.fill(0, 0, 0, 80);
         p.noStroke();
@@ -196,6 +196,24 @@ export const WorkingStralaCanvas: React.FC<WorkingStralaCanvasProps> = ({ classN
         p.fill(255, 255, 255, 150);
         p.noStroke();
         p.circle(point.x - 0.5, point.y - 0.5, 3);
+        
+        // Show point numbers if enabled
+        if (config.showPointNumbers) {
+          // Calculate position outside the nail (radial offset)
+          const centerX = p.width / 2;
+          const centerY = p.height / 2;
+          const angle = Math.atan2(point.y - centerY, point.x - centerX);
+          const offset = 20; // Distance from nail center
+          const textX = point.x + Math.cos(angle) * offset;
+          const textY = point.y + Math.sin(angle) * offset;
+          
+          // Point number text (1-based numbering)
+          p.fill(255, 255, 255, 255);
+          p.noStroke();
+          p.textAlign(p.CENTER, p.CENTER);
+          p.textSize(10);
+          p.text((index + 1).toString(), textX, textY);
+        }
       });
 
       // Update layer reference

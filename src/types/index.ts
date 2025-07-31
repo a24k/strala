@@ -237,6 +237,7 @@ export class Layer implements LayerData {
 export interface AppConfig {
   circlePoints: number;
   backgroundColor: string;
+  showPointNumbers: boolean;
   canvasSize: {
     width: number;
     height: number;
