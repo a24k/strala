@@ -1,5 +1,8 @@
 # Strala - String Art Mandala Simulation Tool
 
+## Version
+**Current Version**: 1.0.0
+
 ## Project Overview
 Strala is a web-based tool for creating and simulating string art mandalas (糸掛曼荼羅). The tool allows users to create beautiful mathematical art patterns by connecting points on a circle with strings, using a layered approach for complex compositions.
 
@@ -273,6 +276,23 @@ StralaDebug.importState(data)    // Import state data
   - `StralaDebug.inspectStorage()`: Examine localStorage contents
 - **Console Integration**: Automatic initialization in development mode
 - **Schema Versioning**: Automatic data migration between versions
+
+## Versioning Strategy
+
+### Release Process
+1. **Development**: Feature branches with conventional commits
+2. **Version Update**: Update `package.json` version
+3. **Tagging**: Create git tags (`git tag v1.0.0`)
+4. **Documentation**: Update CLAUDE.md with changes
+5. **Release Notes**: Document changes and migration notes
+
+### Version History
+- **v1.0.0** (2025-08-01): Initial stable release
+  - Complete React + Tailwind migration
+  - Layer management system
+  - Auto-save with schema versioning
+  - JSON export/import functionality
+  - Error boundary and debug utilities
 
 ## Future Extensions
 - **Export Functionality**: PNG, SVG, PDF export with high resolution
