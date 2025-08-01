@@ -4,7 +4,7 @@ import { SimpleColorPicker } from './ui/ColorPicker';
 import { RangeSlider } from './ui/RangeSlider';
 import { NumberInputWithSpinner } from './ui/NumberInputWithSpinner';
 import { CustomCheckbox } from './ui/CustomCheckbox';
-import { RotateCcw, Copy, Clipboard } from 'lucide-react';
+import { RotateCcw, ClipboardCopy, ClipboardPaste } from 'lucide-react';
 
 export function GlobalSettings() {
   const { config, updateConfig } = useCanvasStoreSimple();
@@ -212,14 +212,14 @@ export function GlobalSettings() {
               className="w-8 h-8 rounded-md flex items-center justify-center text-white font-bold transition-all bg-blue-500/80 hover:bg-blue-500 border border-blue-400/50 hover:border-blue-400"
               title="設定をJSONでコピー"
             >
-              <Copy size={16} />
+              <ClipboardCopy size={16} />
             </button>
             <button
               onClick={handleImportSettings}
               className="w-8 h-8 rounded-md flex items-center justify-center text-white font-bold transition-all bg-green-500/80 hover:bg-green-500 border border-green-400/50 hover:border-green-400"
               title="設定をJSONから読み込み"
             >
-              <Clipboard size={16} />
+              <ClipboardPaste size={16} />
             </button>
             <button
               onClick={handleResetToDefaults}

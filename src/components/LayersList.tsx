@@ -1,5 +1,6 @@
 import { useLayersStoreSimple } from '../stores/layersStoreSimple';
 import { LayerCard } from './ui/LayerCard';
+import { Plus, Copy, X } from 'lucide-react';
 
 export function LayersList() {
   const { 
@@ -27,7 +28,7 @@ export function LayersList() {
             className="w-8 h-8 rounded-md flex items-center justify-center text-white font-bold transition-all bg-blue-500/80 hover:bg-blue-500 border border-blue-400/50 hover:border-blue-400"
             title="Add new layer"
           >
-            +
+            <Plus size={16} />
           </button>
           <button 
             onClick={() => activeLayerId && duplicateLayer(activeLayerId)}
@@ -35,7 +36,7 @@ export function LayersList() {
             className="w-8 h-8 rounded-md flex items-center justify-center text-white font-bold transition-all bg-purple-500/80 hover:bg-purple-500 border border-purple-400/50 hover:border-purple-400 disabled:opacity-50 disabled:cursor-not-allowed"
             title="Duplicate selected layer"
           >
-            ⧉
+            <Copy size={16} />
           </button>
           <button 
             onClick={() => activeLayerId && removeLayer(activeLayerId)}
@@ -43,7 +44,7 @@ export function LayersList() {
             className="w-8 h-8 rounded-md flex items-center justify-center text-white font-bold transition-all bg-red-500/80 hover:bg-red-500 border border-red-400/50 hover:border-red-400 disabled:opacity-50 disabled:cursor-not-allowed"
             title="Delete selected layer"
           >
-            ×
+            <X size={16} />
           </button>
         </div>
       </div>
