@@ -428,6 +428,16 @@ export class ColorUtils {
     
     return colors;
   }
+
+  static generateRandomColor(): string {
+    // Generate aesthetically pleasing colors suitable for string art
+    // Use HSL for better control over color quality
+    const hue = Math.floor(Math.random() * 360); // Full hue range
+    const saturation = 60 + Math.floor(Math.random() * 40); // 60-100% for vibrant colors
+    const lightness = 45 + Math.floor(Math.random() * 25); // 45-70% for good visibility
+    
+    return this.hslToHex({ h: hue, s: saturation, l: lightness });
+  }
 }
 
 // Palette categories

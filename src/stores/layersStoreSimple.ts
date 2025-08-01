@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { ColorUtils } from '../types';
 
 // Complete layer interface matching original implementation
 interface SimpleLayer {
@@ -86,7 +87,7 @@ export const useLayersStoreSimple = create<LayersState>((set, get) => ({
       stepSize: 5,
       color: {
         type: 'solid',
-        primary: '#ffffff',
+        primary: ColorUtils.generateRandomColor(),
         alpha: 0.7
       },
       lineWidth: 1,
