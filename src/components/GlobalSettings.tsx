@@ -11,7 +11,7 @@ export function GlobalSettings() {
   const { layers, activeLayerId } = useLayersStoreSimple();
 
   const handleResetToDefaults = () => {
-    if (confirm('すべての設定を"Luminous Mandala"デフォルトに戻しますか？\n現在の作業内容は失われます。')) {
+    if (confirm('Reset all settings to "Luminous Mandala" defaults?\nCurrent work will be lost.')) {
       try {
         // Clear all Strala persistent storage
         const keysToRemove: string[] = [];
@@ -29,7 +29,7 @@ export function GlobalSettings() {
         window.location.reload();
       } catch (error) {
         console.error('❌ Failed to reset to defaults:', error);
-        alert('リセットに失敗しました。ページをリロードしてください。');
+        alert('Reset failed. Please reload the page.');
       }
     }
   };
@@ -48,7 +48,7 @@ export function GlobalSettings() {
       
       if (navigator.clipboard) {
         await navigator.clipboard.writeText(jsonString);
-        alert('設定をクリップボードにコピーしました！');
+        alert('Settings copied to clipboard!');
       } else {
         // Fallback for older browsers
         const textArea = document.createElement('textarea');
@@ -57,44 +57,44 @@ export function GlobalSettings() {
         textArea.select();
         document.execCommand('copy');
         document.body.removeChild(textArea);
-        alert('設定をクリップボードにコピーしました！');
+        alert('Settings copied to clipboard!');
       }
     } catch (error) {
       console.error('❌ Failed to export settings:', error);
-      alert('設定のエクスポートに失敗しました。');
+      alert('Failed to export settings.');
     }
   };
 
   const validateImportData = (data: any): { valid: boolean; message: string } => {
     // Basic structure validation
     if (!data || typeof data !== 'object') {
-      return { valid: false, message: '無効なJSONオブジェクトです。' };
+      return { valid: false, message: 'Invalid JSON object.' };
     }
     
     if (!data.version || typeof data.version !== 'number') {
-      return { valid: false, message: 'バージョン情報が不正です。' };
+      return { valid: false, message: 'Invalid version information.' };
     }
     
     if (!data.config || typeof data.config !== 'object') {
-      return { valid: false, message: 'Canvas設定が不正です。' };
+      return { valid: false, message: 'Invalid canvas settings.' };
     }
     
     if (!Array.isArray(data.layers) || data.layers.length === 0) {
-      return { valid: false, message: 'レイヤー情報が不正です。' };
+      return { valid: false, message: 'Invalid layer information.' };
     }
     
     // Config validation
     const { config } = data;
     if (typeof config.circlePoints !== 'number' || config.circlePoints < 8 || config.circlePoints > 100) {
-      return { valid: false, message: 'ポイント数が不正です（8-100の範囲で指定してください）。' };
+      return { valid: false, message: 'Invalid point count (must be between 8-100).' };
     }
     
     if (typeof config.backgroundColor !== 'string' || !config.backgroundColor.startsWith('#')) {
-      return { valid: false, message: '背景色が不正です。' };
+      return { valid: false, message: 'Invalid background color.' };
     }
     
     if (typeof config.rotation !== 'number' || config.rotation < 0 || config.rotation > 360) {
-      return { valid: false, message: '回転角度が不正です（0-360の範囲で指定してください）。' };
+      return { valid: false, message: 'Invalid rotation angle (must be between 0-360).' };
     }
     
     // Layers validation
@@ -102,31 +102,31 @@ export function GlobalSettings() {
       const layer = data.layers[i];
       
       if (!layer.id || typeof layer.id !== 'string') {
-        return { valid: false, message: `レイヤー${i + 1}のIDが不正です。` };
+        return { valid: false, message: `Layer ${i + 1} has invalid ID.` };
       }
       
       if (!layer.name || typeof layer.name !== 'string') {
-        return { valid: false, message: `レイヤー${i + 1}の名前が不正です。` };
+        return { valid: false, message: `Layer ${i + 1} has invalid name.` };
       }
       
       if (typeof layer.visible !== 'boolean') {
-        return { valid: false, message: `レイヤー${i + 1}の表示設定が不正です。` };
+        return { valid: false, message: `Layer ${i + 1} has invalid visibility setting.` };
       }
       
       if (!['single-point', 'two-point'].includes(layer.connectionType)) {
-        return { valid: false, message: `レイヤー${i + 1}の接続タイプが不正です。` };
+        return { valid: false, message: `Layer ${i + 1} has invalid connection type.` };
       }
       
       if (!layer.color || typeof layer.color !== 'object') {
-        return { valid: false, message: `レイヤー${i + 1}の色設定が不正です。` };
+        return { valid: false, message: `Layer ${i + 1} has invalid color settings.` };
       }
       
       if (!['solid', 'gradient'].includes(layer.color.type)) {
-        return { valid: false, message: `レイヤー${i + 1}の色タイプが不正です。` };
+        return { valid: false, message: `Layer ${i + 1} has invalid color type.` };
       }
       
       if (typeof layer.color.alpha !== 'number' || layer.color.alpha < 0 || layer.color.alpha > 1) {
-        return { valid: false, message: `レイヤー${i + 1}の透明度が不正です（0-1の範囲で指定してください）。` };
+        return { valid: false, message: `Layer ${i + 1} has invalid opacity (must be between 0-1).` };
       }
     }
     
@@ -140,11 +140,11 @@ export function GlobalSettings() {
       if (navigator.clipboard) {
         jsonString = await navigator.clipboard.readText();
       } else {
-        jsonString = prompt('JSONデータを貼り付けてください:') || '';
+        jsonString = prompt('Please paste JSON data:') || '';
       }
       
       if (!jsonString.trim()) {
-        alert('データが空です。');
+        alert('Data is empty.');
         return;
       }
       
@@ -153,11 +153,11 @@ export function GlobalSettings() {
       // Comprehensive validation
       const validation = validateImportData(importData);
       if (!validation.valid) {
-        alert(`データ検証エラー: ${validation.message}`);
+        alert(`Data validation error: ${validation.message}`);
         return;
       }
       
-      if (confirm('現在の設定を上書きしますか？\n現在の作業内容は失われます。')) {
+      if (confirm('Overwrite current settings?\nCurrent work will be lost.')) {
         // Clear existing data
         const keysToRemove: string[] = [];
         
@@ -183,7 +183,7 @@ export function GlobalSettings() {
       }
     } catch (error) {
       console.error('❌ Failed to import settings:', error);
-      alert('設定のインポートに失敗しました。データ形式を確認してください。');
+      alert('Failed to import settings. Please check data format.');
     }
   };
 
@@ -210,21 +210,21 @@ export function GlobalSettings() {
             <button
               onClick={handleExportSettings}
               className="w-8 h-8 rounded-md flex items-center justify-center text-white font-bold transition-all bg-blue-500/80 hover:bg-blue-500 border border-blue-400/50 hover:border-blue-400"
-              title="設定をJSONでコピー"
+              title="Copy settings as JSON"
             >
               <ClipboardCopy size={16} />
             </button>
             <button
               onClick={handleImportSettings}
               className="w-8 h-8 rounded-md flex items-center justify-center text-white font-bold transition-all bg-green-500/80 hover:bg-green-500 border border-green-400/50 hover:border-green-400"
-              title="設定をJSONから読み込み"
+              title="Import settings from JSON"
             >
               <ClipboardPaste size={16} />
             </button>
             <button
               onClick={handleResetToDefaults}
               className="w-8 h-8 rounded-md flex items-center justify-center text-white font-bold transition-all bg-red-500/80 hover:bg-red-500 border border-red-400/50 hover:border-red-400"
-              title="すべてをデフォルトに戻す"
+              title="Reset all to defaults"
             >
               <RotateCcw size={16} />
             </button>
