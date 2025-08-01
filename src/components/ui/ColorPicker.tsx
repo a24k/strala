@@ -48,10 +48,6 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({
   showHarmonyButton = false,
   onHarmonyClick
 }) => {
-  const handleColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onChange(e.target.value);
-  };
-
   const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange(e.target.value);
   };

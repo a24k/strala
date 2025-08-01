@@ -75,7 +75,7 @@ export class Layer {
 ### Default Preset - "Luminous Mandala"
 ```
 Initial Settings:
-- Circle Points: 56 (high resolution for complex patterns)
+- Circle Points: 54 (mathematically rich for complex patterns)
 - Background: Deep Cosmic Black (#0a0a18)
 
 Layer 1 "Radiance" (Top Layer):
@@ -85,9 +85,9 @@ Layer 1 "Radiance" (Top Layer):
 
 Layer 2 "Harmony" (Middle Layer):
 - Type: Two-point connection
-- Point A: Position 14, Step 1 (quarter position for optimal flow)
+- Point A: Position 26, Step 1 (optimized for 54-point harmony)
 - Point B: Offset 22, Step 2 (creates dynamic spiral motion)
-- Max Iterations: 84
+- Max Iterations: 108 (mathematical maximum for complete pattern)
 - Color: Amber→Coral Gradient (#f59e0b→#ef4444, 70% opacity)
 
 Layer 3 "Mystique" (Foundation Layer):
@@ -183,10 +183,13 @@ StralaDebug.importState(data)    // Import state data
 - [x] Two-point connection system (Issues #13, #14 completed)
 - [x] React + Tailwind migration (Issue #19 completed)
 - [x] Responsive design implementation
-- [x] Component library (RangeSlider, ColorPicker, etc.)
+- [x] Component library (ColorPicker, LayerCard, NumberInputWithSpinner, etc.)
+- [x] Component modularization and refactoring (Issue #19 completed)
+- [x] Split-complementary color harmony system
+- [x] Random color generation for new layers
+- [x] Code cleanup and unused file removal
 - [ ] Export functionality
-- [ ] Color harmony generation
-- [ ] Advanced pattern presets
+- [ ] Advanced pattern presets beyond "Luminous Mandala"
 
 ## UI Features
 ### Connection Modes
@@ -207,17 +210,21 @@ StralaDebug.importState(data)    // Import state data
 - Advanced color picker with live preview
 - Solid colors and gradient support
 - Advanced color input with hex code editing
-- Color harmony generation button (UI ready)
+- Split-complementary color harmony (automatic when switching to gradient)
+- Random color generation for new layers (mathematically pleasing)
 - Opacity and line width controls with live sliders
 - Glass morphism design with backdrop blur effects
 
 ## UI Architecture
 
 ### UI Components
-- **RangeSlider**: Range slider with live input and gradient styling
-- **ColorPicker**: Advanced color picker with harmony generation
-- **StyledSelect**: Styled dropdown with gradient indicators
+- **ColorPicker**: Advanced color picker with split-complementary harmony
 - **LayerCard**: Interactive layer cards with hover animations
+- **NumberInputWithSpinner**: Precise numeric input with validation
+- **CustomCheckbox**: Styled checkbox components
+- **SinglePointSettings**: Dedicated single-point connection controls
+- **TwoPointSettings**: Advanced two-point connection controls
+- **LayerAppearanceSettings**: Color, gradient, and visual property controls
 - **WorkingStralaCanvas**: p5.js integration within React
 
 ### Design System
@@ -240,7 +247,7 @@ StralaDebug.importState(data)    // Import state data
 
 ## Future Extensions
 - **Export Functionality**: PNG, SVG, PDF export with high resolution
-- **Color Harmony**: Automatic color palette generation (UI ready)
+- **Advanced Color Harmonies**: Triadic, analogous, tetradic generation modes
 - **Advanced Patterns**: More preset configurations beyond "Luminous Mandala"
 - **Animation System**: Timeline-based parameter animations
 - **3D Visualization**: WebGL-based 3D string art rendering
