@@ -4,6 +4,33 @@ import { SimpleColorPicker } from './ui/ColorPicker';
 import { SLIDER_CLASSES } from './ui/sliderStyles';
 import { NumberInputWithSpinner } from './ui/NumberInputWithSpinner';
 
+// Helper functions for calculating maximum iterations
+function gcd(a: number, b: number): number {
+  while (b !== 0) {
+    [a, b] = [b, a % b];
+  }
+  return a;
+}
+
+function lcm(a: number, b: number): number {
+  return Math.abs(a * b) / gcd(a, b);
+}
+
+function calculateMaxIterations(circlePoints: number, stepA: number, stepB: number): number {
+  // Calculate how many steps each point needs to return to its starting position
+  const periodA = circlePoints / gcd(circlePoints, stepA);
+  const periodB = circlePoints / gcd(circlePoints, stepB);
+  
+  // The theoretical maximum is when both points return to their starting positions
+  const theoreticalMax = lcm(periodA, periodB);
+  
+  // However, due to the alternating nature of two-point connections (A->B, B->A),
+  // the actual pattern period can be much longer. Use a practical upper bound.
+  const practicalMax = Math.min(theoreticalMax * 2, circlePoints * 4);
+  
+  return Math.max(1, practicalMax);
+}
+
 export function SelectedLayerSettings() {
   const { config } = useCanvasStoreSimple();
   const { updateLayer } = useLayersStoreSimple();
@@ -94,7 +121,7 @@ export function SelectedLayerSettings() {
                 <input 
                   type="range" 
                   min="1" 
-                  max="50" 
+                  max={config.circlePoints - 1} 
                   value={activeLayer.stepSize}
                   onChange={(e) => updateLayer(activeLayer.id, { stepSize: parseInt(e.target.value) })}
                   className={SLIDER_CLASSES}
@@ -103,7 +130,7 @@ export function SelectedLayerSettings() {
                   value={activeLayer.stepSize}
                   onChange={(value) => updateLayer(activeLayer.id, { stepSize: value })}
                   min={1}
-                  max={50}
+                  max={config.circlePoints - 1}
                   className="w-12 h-8 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary focus:outline-none focus:ring-2 focus:ring-blue-500/50"
                 />
               </div>
@@ -151,7 +178,7 @@ export function SelectedLayerSettings() {
                 <input 
                   type="range" 
                   min="1" 
-                  max="50" 
+                  max={config.circlePoints - 1} 
                   value={activeLayer.pointA.stepSize}
                   onChange={(e) => updateLayer(activeLayer.id, { 
                     pointA: { ...activeLayer.pointA, stepSize: parseInt(e.target.value) }
@@ -164,7 +191,7 @@ export function SelectedLayerSettings() {
                     pointA: { ...activeLayer.pointA, stepSize: value }
                   })}
                   min={1}
-                  max={50}
+                  max={config.circlePoints - 1}
                   className="w-12 h-8 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary focus:outline-none focus:ring-2 focus:ring-blue-500/50"
                 />
               </div>
@@ -207,7 +234,7 @@ export function SelectedLayerSettings() {
                 <input 
                   type="range" 
                   min="1" 
-                  max="50" 
+                  max={config.circlePoints - 1} 
                   value={activeLayer.pointB.stepSize}
                   onChange={(e) => updateLayer(activeLayer.id, { 
                     pointB: { ...activeLayer.pointB, stepSize: parseInt(e.target.value) }
@@ -220,7 +247,7 @@ export function SelectedLayerSettings() {
                     pointB: { ...activeLayer.pointB, stepSize: value }
                   })}
                   min={1}
-                  max={50}
+                  max={config.circlePoints - 1}
                   className="w-12 h-8 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary focus:outline-none focus:ring-2 focus:ring-blue-500/50"
                 />
               </div>
@@ -229,22 +256,26 @@ export function SelectedLayerSettings() {
             {/* Max Iterations */}
             <div className="flex items-center gap-2">
               <label className="text-sm font-medium text-gray-100 w-20">
-                Max Iter
+                Iterations
               </label>
               <div className="flex items-center gap-2 flex-1">
                 <input 
                   type="range" 
                   min="1" 
-                  max="100" 
-                  value={activeLayer.maxIterations}
-                  onChange={(e) => updateLayer(activeLayer.id, { maxIterations: parseInt(e.target.value) })}
+                  max={activeLayer.connectionType === 'two-point' && activeLayer.pointA && activeLayer.pointB 
+                    ? calculateMaxIterations(config.circlePoints, activeLayer.pointA.stepSize, activeLayer.pointB.stepSize)
+                    : Math.floor(config.circlePoints * 2)} 
+                  value={activeLayer.iterations}
+                  onChange={(e) => updateLayer(activeLayer.id, { iterations: parseInt(e.target.value) })}
                   className={SLIDER_CLASSES}
                 />
                 <NumberInputWithSpinner
-                  value={activeLayer.maxIterations}
-                  onChange={(value) => updateLayer(activeLayer.id, { maxIterations: value })}
+                  value={activeLayer.iterations}
+                  onChange={(value) => updateLayer(activeLayer.id, { iterations: value })}
                   min={1}
-                  max={100}
+                  max={activeLayer.connectionType === 'two-point' && activeLayer.pointA && activeLayer.pointB 
+                    ? calculateMaxIterations(config.circlePoints, activeLayer.pointA.stepSize, activeLayer.pointB.stepSize)
+                    : Math.floor(config.circlePoints * 2)}
                   className="w-12 h-8 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary focus:outline-none focus:ring-2 focus:ring-blue-500/50"
                 />
               </div>

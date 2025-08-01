@@ -28,7 +28,7 @@ export interface TwoPointLayerData extends Omit<LayerData, 'startPoint' | 'stepS
     relativeOffset: number;  // Relative offset from pointA (-circlePoints+1 to circlePoints-1)
     stepSize: number;        // 1 to 50
   };
-  maxIterations?: number;    // Optional: limit pattern iterations for partial designs
+  iterations?: number;    // Optional: limit pattern iterations for partial designs
 }
 
 // Extended layer data union type
@@ -79,7 +79,7 @@ export class Layer implements LayerData {
     relativeOffset: number;
     stepSize: number;
   };
-  public maxIterations?: number;  // Optional: limit pattern iterations for partial designs
+  public iterations?: number;  // Optional: limit pattern iterations for partial designs
   public color: {
     type: 'solid' | 'gradient';
     primary: string;
@@ -98,7 +98,7 @@ export class Layer implements LayerData {
       const twoPointData = data as TwoPointLayerData;
       this.pointA = { ...twoPointData.pointA };
       this.pointB = { ...twoPointData.pointB };
-      this.maxIterations = twoPointData.maxIterations;
+      this.iterations = twoPointData.iterations;
       // Set default single-point values for backward compatibility
       this.startPoint = twoPointData.pointA.initialPosition;
       this.stepSize = twoPointData.pointA.stepSize;
@@ -137,7 +137,7 @@ export class Layer implements LayerData {
         connectionType: 'two-point',
         pointA: this.pointA ? { ...this.pointA } : { initialPosition: 0, stepSize: 1 },
         pointB: this.pointB ? { ...this.pointB } : { relativeOffset: 1, stepSize: 2 },
-        maxIterations: this.maxIterations,
+        iterations: this.iterations,
         color: { ...this.color },
         lineWidth: this.lineWidth
       } as TwoPointLayerData);
@@ -195,7 +195,7 @@ export class Layer implements LayerData {
         connectionType: 'two-point',
         pointA: twoPointUpdates.pointA ? { ...defaultPointA, ...twoPointUpdates.pointA } : defaultPointA,
         pointB: twoPointUpdates.pointB ? { ...defaultPointB, ...twoPointUpdates.pointB } : defaultPointB,
-        maxIterations: twoPointUpdates.maxIterations !== undefined ? twoPointUpdates.maxIterations : this.maxIterations,
+        iterations: twoPointUpdates.iterations !== undefined ? twoPointUpdates.iterations : this.iterations,
         color: updates.color ? { ...this.color, ...updates.color } : { ...this.color },
         lineWidth: updates.lineWidth ?? this.lineWidth
       } as TwoPointLayerData);

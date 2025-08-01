@@ -138,7 +138,7 @@ export const WorkingStralaCanvas: React.FC<WorkingStralaCanvasProps> = ({ classN
         // Draw string art pattern based on connection type
         if (layer.connectionType === 'two-point' && layer.pointA && layer.pointB) {
           // Two-point connection pattern with alternating sequence: A1-B1, B1-A2, A2-B2, B2-A3...
-          const maxIterations = layer.maxIterations || 200;
+          const iterations = layer.iterations || 200;
           const numPoints = pointsRef.current.length;
           
           // Calculate initial positions correctly
@@ -154,7 +154,7 @@ export const WorkingStralaCanvas: React.FC<WorkingStralaCanvasProps> = ({ classN
           const visitedPairs = new Set<string>();
           let iterationCount = 0;
           
-          while (iterationCount < maxIterations) {
+          while (iterationCount < iterations) {
             // First line: A -> B
             const pairKey1 = `${currentPointA}-${currentPointB}`;
             if (visitedPairs.has(pairKey1)) {
@@ -171,7 +171,7 @@ export const WorkingStralaCanvas: React.FC<WorkingStralaCanvasProps> = ({ classN
             currentPointA = (currentPointA + layer.pointA.stepSize) % numPoints;
             iterationCount++;
             
-            if (iterationCount >= maxIterations) break;
+            if (iterationCount >= iterations) break;
             
             // Second line: B -> A (new position)
             const pairKey2 = `${currentPointB}-${currentPointA}`;

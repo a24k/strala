@@ -24,7 +24,7 @@ interface SimpleLayer {
     relativeOffset: number;
     stepSize: number;
   };
-  maxIterations: number;
+  iterations: number;
 }
 
 // Simplified default for testing two-point logic
@@ -45,7 +45,7 @@ function createDefaultLayers(): SimpleLayer[] {
         relativeOffset: 10,
         stepSize: 5
       },
-      maxIterations: 20,
+      iterations: 20,
       color: {
         type: 'solid',
         primary: '#3b82f6',
@@ -98,7 +98,7 @@ export const useLayersStoreSimple = create<LayersState>((set, get) => ({
         relativeOffset: 12,
         stepSize: 7
       },
-      maxIterations: 24
+      iterations: 24
     };
     
     set((state) => ({
