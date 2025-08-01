@@ -1,7 +1,5 @@
 # Strala - String Art Mandala Simulator
 
-**Version**: 1.0.0
-
 A web-based tool for creating and simulating string art mandalas (糸掛曼荼羅). Create beautiful mathematical art patterns by connecting points on a circle with strings using a powerful layered system.
 
 ## ✨ Features
