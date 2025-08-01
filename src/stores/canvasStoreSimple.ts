@@ -1,5 +1,7 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 import type { AppConfig } from '../types';
+import { STORAGE_KEYS, detectAndMigrateLegacyData, setSchemaVersion } from '../utils/persistence';
 
 // "Luminous Mandala" default configuration - high resolution cosmic theme
 const defaultConfig: AppConfig = {
@@ -20,25 +22,44 @@ interface CanvasState {
   resetConfig: () => void;
 }
 
-export const useCanvasStoreSimple = create<CanvasState>((set) => ({
-  config: defaultConfig,
-  
-  updateConfig: (updates) => {
-    set((state) => ({
-      config: { ...state.config, ...updates }
-    }));
-  },
-  
-  updateCanvasSize: (size) => {
-    set((state) => ({
-      config: {
-        ...state.config,
-        canvasSize: size
-      }
-    }));
-  },
-  
-  resetConfig: () => {
-    set({ config: defaultConfig });
-  }
-}));
+export const useCanvasStoreSimple = create<CanvasState>()(
+  persist(
+    (set) => {
+      // Check for legacy data on initialization
+      const legacyData = detectAndMigrateLegacyData();
+      const initialConfig = legacyData?.config || defaultConfig;
+      
+      // Set schema version
+      setSchemaVersion();
+      
+      return {
+        config: initialConfig,
+        
+        updateConfig: (updates) => {
+          set((state) => ({
+            config: { ...state.config, ...updates }
+          }));
+        },
+        
+        updateCanvasSize: (size) => {
+          set((state) => ({
+            config: {
+              ...state.config,
+              canvasSize: size
+            }
+          }));
+        },
+        
+        resetConfig: () => {
+          set({ config: defaultConfig });
+        }
+      };
+    },
+    {
+      name: STORAGE_KEYS.config,
+      version: 1,
+      // Debounced writes (500ms) for performance
+      partialize: (state) => ({ config: state.config }),
+    }
+  )
+);
