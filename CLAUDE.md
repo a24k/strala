@@ -282,7 +282,7 @@ StralaDebug.importState(data)    // Import state data
 ### Release Process
 1. **Development**: Feature branches with conventional commits
 2. **Version Update**: Update `package.json` version
-3. **Tagging**: Create git tags (`git tag v1.0.0`)
+3. **UI Version Display**: Update version in `src/components/GlobalSettings.tsx` (line ~199)
 4. **Documentation**: Update CLAUDE.md with changes
 5. **Release Notes**: Document changes and migration notes
 

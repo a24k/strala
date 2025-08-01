@@ -191,9 +191,14 @@ export function GlobalSettings() {
     <div className="flex-shrink-0 px-4 py-3 border-b border-strala-border bg-strala-dark-blue">
       {/* Header */}
       <div className="mb-4">
-        <h1 className="text-3xl font-bold mb-0 mt-0 text-strala-text-primary">
-          Strala
-        </h1>
+        <div className="flex items-baseline justify-between">
+          <h1 className="text-3xl font-bold mb-0 mt-0 text-strala-text-primary">
+            Strala
+          </h1>
+          <span className="text-sm font-medium text-gray-400">
+            v1.0.0
+          </span>
+        </div>
         <p className="text-sm text-gray-300 mt-0 mb-0">
           String Art Mandala Simulator
         </p>
