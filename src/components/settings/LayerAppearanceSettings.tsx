@@ -87,8 +87,8 @@ export function LayerAppearanceSettings({
             onChange={(e) => {
               const newType = e.target.value as 'solid' | 'gradient';
               if (newType === 'gradient' && color.type === 'solid') {
-                // Generate harmony color when switching to gradient
-                const harmonies = ColorUtils.generateColorHarmony(color.primary, 'complementary');
+                // Generate harmony color when switching to gradient using split-complementary
+                const harmonies = ColorUtils.generateColorHarmony(color.primary, 'split-complementary');
                 onUpdateColor({ 
                   type: newType,
                   secondary: harmonies[1] || '#f39c12'
