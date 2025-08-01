@@ -1,4 +1,4 @@
-import { SLIDER_CLASSES } from '../ui/sliderStyles';
+import { RangeSlider } from '../ui/RangeSlider';
 import { NumberInputWithSpinner } from '../ui/NumberInputWithSpinner';
 import { SimpleColorPicker } from '../ui/ColorPicker';
 import { ColorUtils } from '../../types';
@@ -34,13 +34,11 @@ export function LayerAppearanceSettings({
           Opacity (%)
         </label>
         <div className="flex items-center gap-2 flex-1">
-          <input 
-            type="range" 
-            min="0" 
-            max="100" 
+          <RangeSlider
+            min={0}
+            max={100}
             value={Math.round(color.alpha * 100)}
-            onChange={(e) => onUpdateColor({ alpha: parseInt(e.target.value) / 100 })}
-            className={SLIDER_CLASSES}
+            onChange={(value) => onUpdateColor({ alpha: value / 100 })}
           />
           <NumberInputWithSpinner
             value={Math.round(color.alpha * 100)}
@@ -58,13 +56,11 @@ export function LayerAppearanceSettings({
           Width (px)
         </label>
         <div className="flex items-center gap-2 flex-1">
-          <input 
-            type="range" 
-            min="1" 
-            max="10" 
+          <RangeSlider
+            min={1}
+            max={10}
             value={lineWidth}
-            onChange={(e) => onUpdateLineWidth(parseInt(e.target.value))}
-            className={SLIDER_CLASSES}
+            onChange={onUpdateLineWidth}
           />
           <NumberInputWithSpinner
             value={lineWidth}
@@ -116,12 +112,9 @@ export function LayerAppearanceSettings({
           Color
         </label>
         <div className="flex items-center gap-2 flex-1">
-          <input 
-            type="color" 
+          <SimpleColorPicker
             value={color.primary}
-            onChange={(e) => onUpdateColor({ primary: e.target.value })}
-            className="w-8 h-8 rounded border border-gray-400 cursor-pointer"
-            style={{ padding: 0, outline: 'none', appearance: 'none', WebkitAppearance: 'none' }}
+            onChange={(value) => onUpdateColor({ primary: value })}
           />
           <input 
             type="text" 

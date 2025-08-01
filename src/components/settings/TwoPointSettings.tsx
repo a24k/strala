@@ -1,4 +1,4 @@
-import { SLIDER_CLASSES } from '../ui/sliderStyles';
+import { RangeSlider } from '../ui/RangeSlider';
 import { NumberInputWithSpinner } from '../ui/NumberInputWithSpinner';
 import { calculateMaxIterations } from '../../utils/math';
 
@@ -37,13 +37,11 @@ export function TwoPointSettings({
           A: Start
         </label>
         <div className="flex items-center gap-2 flex-1">
-          <input 
-            type="range" 
-            min="0" 
-            max={maxPoints - 1} 
+          <RangeSlider
+            min={0}
+            max={maxPoints - 1}
             value={pointA.initialPosition}
-            onChange={(e) => onUpdatePointA({ initialPosition: parseInt(e.target.value) })}
-            className={SLIDER_CLASSES}
+            onChange={(value) => onUpdatePointA({ initialPosition: value })}
           />
           <NumberInputWithSpinner
             value={pointA.initialPosition}
@@ -61,13 +59,11 @@ export function TwoPointSettings({
           A: Step
         </label>
         <div className="flex items-center gap-2 flex-1">
-          <input 
-            type="range" 
-            min="1" 
-            max={maxPoints - 1} 
+          <RangeSlider
+            min={1}
+            max={maxPoints - 1}
             value={pointA.stepSize}
-            onChange={(e) => onUpdatePointA({ stepSize: parseInt(e.target.value) })}
-            className={SLIDER_CLASSES}
+            onChange={(value) => onUpdatePointA({ stepSize: value })}
           />
           <NumberInputWithSpinner
             value={pointA.stepSize}
@@ -85,13 +81,11 @@ export function TwoPointSettings({
           B: Offset
         </label>
         <div className="flex items-center gap-2 flex-1">
-          <input 
-            type="range" 
-            min="0" 
-            max={maxPoints - 1} 
+          <RangeSlider
+            min={0}
+            max={maxPoints - 1}
             value={pointB.relativeOffset}
-            onChange={(e) => onUpdatePointB({ relativeOffset: parseInt(e.target.value) })}
-            className={SLIDER_CLASSES}
+            onChange={(value) => onUpdatePointB({ relativeOffset: value })}
           />
           <NumberInputWithSpinner
             value={pointB.relativeOffset}
@@ -109,13 +103,11 @@ export function TwoPointSettings({
           B: Step
         </label>
         <div className="flex items-center gap-2 flex-1">
-          <input 
-            type="range" 
-            min="1" 
-            max={maxPoints - 1} 
+          <RangeSlider
+            min={1}
+            max={maxPoints - 1}
             value={pointB.stepSize}
-            onChange={(e) => onUpdatePointB({ stepSize: parseInt(e.target.value) })}
-            className={SLIDER_CLASSES}
+            onChange={(value) => onUpdatePointB({ stepSize: value })}
           />
           <NumberInputWithSpinner
             value={pointB.stepSize}
@@ -133,13 +125,11 @@ export function TwoPointSettings({
           Iterations
         </label>
         <div className="flex items-center gap-2 flex-1">
-          <input 
-            type="range" 
-            min="1" 
+          <RangeSlider
+            min={1}
             max={maxIterations}
             value={iterations}
-            onChange={(e) => onUpdateIterations(parseInt(e.target.value))}
-            className={SLIDER_CLASSES}
+            onChange={onUpdateIterations}
           />
           <NumberInputWithSpinner
             value={iterations}

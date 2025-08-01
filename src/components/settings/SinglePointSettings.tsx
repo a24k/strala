@@ -1,4 +1,4 @@
-import { SLIDER_CLASSES } from '../ui/sliderStyles';
+import { RangeSlider } from '../ui/RangeSlider';
 import { NumberInputWithSpinner } from '../ui/NumberInputWithSpinner';
 
 interface SinglePointSettingsProps {
@@ -24,13 +24,11 @@ export function SinglePointSettings({
           Start
         </label>
         <div className="flex items-center gap-2 flex-1">
-          <input 
-            type="range" 
-            min="0" 
-            max={maxPoints - 1} 
+          <RangeSlider
+            min={0}
+            max={maxPoints - 1}
             value={startPoint}
-            onChange={(e) => onUpdateStartPoint(parseInt(e.target.value))}
-            className={SLIDER_CLASSES}
+            onChange={onUpdateStartPoint}
           />
           <NumberInputWithSpinner
             value={startPoint}
@@ -48,13 +46,11 @@ export function SinglePointSettings({
           Step
         </label>
         <div className="flex items-center gap-2 flex-1">
-          <input 
-            type="range" 
-            min="1" 
-            max={maxPoints - 1} 
+          <RangeSlider
+            min={1}
+            max={maxPoints - 1}
             value={stepSize}
-            onChange={(e) => onUpdateStepSize(parseInt(e.target.value))}
-            className={SLIDER_CLASSES}
+            onChange={onUpdateStepSize}
           />
           <NumberInputWithSpinner
             value={stepSize}

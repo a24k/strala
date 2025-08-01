@@ -1,6 +1,6 @@
 import { useCanvasStoreSimple } from '../stores/canvasStoreSimple';
 import { SimpleColorPicker } from './ui/ColorPicker';
-import { SLIDER_CLASSES } from './ui/sliderStyles';
+import { RangeSlider } from './ui/RangeSlider';
 import { NumberInputWithSpinner } from './ui/NumberInputWithSpinner';
 import { CustomCheckbox } from './ui/CustomCheckbox';
 
@@ -37,13 +37,11 @@ export function GlobalSettings() {
             />
           </div>
           <div className="flex items-center gap-2 flex-1">
-            <input 
-              type="range" 
-              min="8" 
-              max="100" 
+            <RangeSlider
+              min={8}
+              max={100}
               value={config.circlePoints}
-              onChange={(e) => updateConfig({ circlePoints: parseInt(e.target.value) })}
-              className={SLIDER_CLASSES}
+              onChange={(value) => updateConfig({ circlePoints: value })}
             />
             <NumberInputWithSpinner
               value={config.circlePoints}
@@ -61,13 +59,11 @@ export function GlobalSettings() {
             Rotate
           </label>
           <div className="flex items-center gap-2 flex-1">
-            <input 
-              type="range" 
-              min="0" 
-              max="360" 
+            <RangeSlider
+              min={0}
+              max={360}
               value={config.rotation}
-              onChange={(e) => updateConfig({ rotation: parseInt(e.target.value) })}
-              className={SLIDER_CLASSES}
+              onChange={(value) => updateConfig({ rotation: value })}
             />
             <NumberInputWithSpinner
               value={config.rotation}
