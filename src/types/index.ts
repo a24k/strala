@@ -28,7 +28,7 @@ export interface TwoPointLayerData extends Omit<LayerData, 'startPoint' | 'stepS
     relativeOffset: number;  // Relative offset from pointA (-circlePoints+1 to circlePoints-1)
     stepSize: number;        // 1 to 50
   };
-  maxIterations?: number;    // Optional: limit pattern iterations for partial designs
+  iterations?: number;    // Optional: limit pattern iterations for partial designs
 }
 
 // Extended layer data union type
@@ -79,7 +79,7 @@ export class Layer implements LayerData {
     relativeOffset: number;
     stepSize: number;
   };
-  public maxIterations?: number;  // Optional: limit pattern iterations for partial designs
+  public iterations?: number;  // Optional: limit pattern iterations for partial designs
   public color: {
     type: 'solid' | 'gradient';
     primary: string;
@@ -98,7 +98,7 @@ export class Layer implements LayerData {
       const twoPointData = data as TwoPointLayerData;
       this.pointA = { ...twoPointData.pointA };
       this.pointB = { ...twoPointData.pointB };
-      this.maxIterations = twoPointData.maxIterations;
+      this.iterations = twoPointData.iterations;
       // Set default single-point values for backward compatibility
       this.startPoint = twoPointData.pointA.initialPosition;
       this.stepSize = twoPointData.pointA.stepSize;
@@ -137,7 +137,7 @@ export class Layer implements LayerData {
         connectionType: 'two-point',
         pointA: this.pointA ? { ...this.pointA } : { initialPosition: 0, stepSize: 1 },
         pointB: this.pointB ? { ...this.pointB } : { relativeOffset: 1, stepSize: 2 },
-        maxIterations: this.maxIterations,
+        iterations: this.iterations,
         color: { ...this.color },
         lineWidth: this.lineWidth
       } as TwoPointLayerData);
@@ -195,7 +195,7 @@ export class Layer implements LayerData {
         connectionType: 'two-point',
         pointA: twoPointUpdates.pointA ? { ...defaultPointA, ...twoPointUpdates.pointA } : defaultPointA,
         pointB: twoPointUpdates.pointB ? { ...defaultPointB, ...twoPointUpdates.pointB } : defaultPointB,
-        maxIterations: twoPointUpdates.maxIterations !== undefined ? twoPointUpdates.maxIterations : this.maxIterations,
+        iterations: twoPointUpdates.iterations !== undefined ? twoPointUpdates.iterations : this.iterations,
         color: updates.color ? { ...this.color, ...updates.color } : { ...this.color },
         lineWidth: updates.lineWidth ?? this.lineWidth
       } as TwoPointLayerData);
@@ -237,6 +237,8 @@ export class Layer implements LayerData {
 export interface AppConfig {
   circlePoints: number;
   backgroundColor: string;
+  showPointNumbers: boolean;
+  rotation: number; // Rotation in degrees (0 = point #1 at 12 o'clock)
   canvasSize: {
     width: number;
     height: number;
@@ -426,6 +428,16 @@ export class ColorUtils {
     
     return colors;
   }
+
+  static generateRandomColor(): string {
+    // Generate aesthetically pleasing colors suitable for string art
+    // Use HSL for better control over color quality
+    const hue = Math.floor(Math.random() * 360); // Full hue range
+    const saturation = 60 + Math.floor(Math.random() * 40); // 60-100% for vibrant colors
+    const lightness = 45 + Math.floor(Math.random() * 25); // 45-70% for good visibility
+    
+    return this.hslToHex({ h: hue, s: saturation, l: lightness });
+  }
 }
 
 // Palette categories
@@ -594,8 +606,8 @@ export const PALETTE_CATEGORIES: PaletteCategory[] = [
     ]
   },
   {
-    id: 'modern',
-    name: 'Modern',
+    id: 'contemporary',
+    name: 'Contemporary',
     palettes: [
       {
         id: 'neon-nights',
