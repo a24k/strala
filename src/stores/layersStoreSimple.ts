@@ -27,80 +27,31 @@ interface SimpleLayer {
   maxIterations: number;
 }
 
-// Default layers matching original implementation
+// Simplified default for testing two-point logic
 function createDefaultLayers(): SimpleLayer[] {
   return [
     {
       id: 'layer-1',
-      name: 'Radiance',
-      visible: true,
-      connectionType: 'single-point',
-      startPoint: 3,
-      stepSize: 13,
-      color: {
-        type: 'gradient',
-        primary: '#3b82f6',
-        secondary: '#06b6d4',
-        alpha: 0.8
-      },
-      lineWidth: 1,
-      pointA: {
-        initialPosition: 0,
-        stepSize: 7
-      },
-      pointB: {
-        relativeOffset: 12,
-        stepSize: 7
-      },
-      maxIterations: 24
-    },
-    {
-      id: 'layer-2',
-      name: 'Harmony',
+      name: 'Two-Point Test',
       visible: true,
       connectionType: 'two-point',
-      startPoint: 14, // For compatibility
-      stepSize: 1,    // For compatibility
-      pointA: {
-        initialPosition: 14,
-        stepSize: 1
-      },
-      pointB: {
-        relativeOffset: 22,
-        stepSize: 2
-      },
-      maxIterations: 84,
-      color: {
-        type: 'gradient',
-        primary: '#f59e0b',
-        secondary: '#ef4444',
-        alpha: 0.7
-      },
-      lineWidth: 1
-    },
-    {
-      id: 'layer-3',
-      name: 'Mystique',
-      visible: true,
-      connectionType: 'single-point',
-      startPoint: 7,
-      stepSize: 17,
-      color: {
-        type: 'gradient',
-        primary: '#8b5cf6',
-        secondary: '#ec4899',
-        alpha: 0.6
-      },
-      lineWidth: 1,
+      startPoint: 0, // For compatibility
+      stepSize: 1,   // For compatibility
       pointA: {
         initialPosition: 0,
-        stepSize: 7
+        stepSize: 3
       },
       pointB: {
-        relativeOffset: 12,
-        stepSize: 7
+        relativeOffset: 10,
+        stepSize: 5
       },
-      maxIterations: 24
+      maxIterations: 20,
+      color: {
+        type: 'solid',
+        primary: '#3b82f6',
+        alpha: 0.8
+      },
+      lineWidth: 1
     }
   ];
 }

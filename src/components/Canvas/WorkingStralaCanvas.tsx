@@ -137,30 +137,56 @@ export const WorkingStralaCanvas: React.FC<WorkingStralaCanvasProps> = ({ classN
 
         // Draw string art pattern based on connection type
         if (layer.connectionType === 'two-point' && layer.pointA && layer.pointB) {
-          // Two-point connection pattern
+          // Two-point connection pattern with alternating sequence: A1-B1, B1-A2, A2-B2, B2-A3...
           const maxIterations = layer.maxIterations || 200;
-          let currentPointA = layer.pointA.initialPosition % pointsRef.current.length;
-          let currentPointB = ((layer.pointA.initialPosition + layer.pointB.relativeOffset) % pointsRef.current.length + pointsRef.current.length) % pointsRef.current.length;
+          const numPoints = pointsRef.current.length;
+          
+          // Calculate initial positions correctly
+          let currentPointA = layer.pointA.initialPosition % numPoints;
+          let currentPointB = (layer.pointA.initialPosition + layer.pointB.relativeOffset) % numPoints;
+          
+          // Ensure Point B is within valid range
+          if (currentPointB < 0) {
+            currentPointB += numPoints;
+          }
           
           // Keep track of visited point pairs to prevent infinite loops
           const visitedPairs = new Set<string>();
           let iterationCount = 0;
           
-          while (iterationCount < maxIterations && iterationCount < pointsRef.current.length * 10) {
-            const pairKey = `${currentPointA}-${currentPointB}`;
-            if (visitedPairs.has(pairKey)) {
+          while (iterationCount < maxIterations) {
+            // First line: A -> B
+            const pairKey1 = `${currentPointA}-${currentPointB}`;
+            if (visitedPairs.has(pairKey1)) {
               break; // Pattern completed, avoid infinite loop
             }
-            visitedPairs.add(pairKey);
+            visitedPairs.add(pairKey1);
             
-            const from = pointsRef.current[currentPointA];
-            const to = pointsRef.current[currentPointB];
+            const fromA = pointsRef.current[currentPointA];
+            const toB = pointsRef.current[currentPointB];
             
-            drawLineWithColor(from, to);
+            drawLineWithColor(fromA, toB);
             
-            // Move both points according to their step sizes
-            currentPointA = (currentPointA + layer.pointA.stepSize) % pointsRef.current.length;
-            currentPointB = (currentPointB + layer.pointB.stepSize) % pointsRef.current.length;
+            // Move A to next position
+            currentPointA = (currentPointA + layer.pointA.stepSize) % numPoints;
+            iterationCount++;
+            
+            if (iterationCount >= maxIterations) break;
+            
+            // Second line: B -> A (new position)
+            const pairKey2 = `${currentPointB}-${currentPointA}`;
+            if (visitedPairs.has(pairKey2)) {
+              break; // Pattern completed, avoid infinite loop
+            }
+            visitedPairs.add(pairKey2);
+            
+            const fromB = pointsRef.current[currentPointB];
+            const toA = pointsRef.current[currentPointA];
+            
+            drawLineWithColor(fromB, toA);
+            
+            // Move B to next position
+            currentPointB = (currentPointB + layer.pointB.stepSize) % numPoints;
             iterationCount++;
           }
         } else {
@@ -209,12 +235,12 @@ export const WorkingStralaCanvas: React.FC<WorkingStralaCanvasProps> = ({ classN
           const textX = point.x + Math.cos(angle) * offset;
           const textY = point.y + Math.sin(angle) * offset;
           
-          // Point number text (1-based numbering)
+          // Point number text (0-based numbering to match settings)
           p.fill(255, 255, 255, 255);
           p.noStroke();
           p.textAlign(p.CENTER, p.CENTER);
           p.textSize(10);
-          p.text((index + 1).toString(), textX, textY);
+          p.text(index.toString(), textX, textY);
         }
       });
 
