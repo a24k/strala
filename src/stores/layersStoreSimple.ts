@@ -28,29 +28,78 @@ interface SimpleLayer {
   iterations: number;
 }
 
-// Simplified default for testing two-point logic
+// "Luminous Mandala" default preset - elegant three-layer composition
 function createDefaultLayers(): SimpleLayer[] {
   return [
     {
       id: 'layer-1',
-      name: 'Two-Point Test',
+      name: 'Radiance',
       visible: true,
-      connectionType: 'two-point',
-      startPoint: 0, // For compatibility
-      stepSize: 1,   // For compatibility
+      connectionType: 'single-point',
+      startPoint: 3,
+      stepSize: 13,
       pointA: {
         initialPosition: 0,
-        stepSize: 3
+        stepSize: 7
       },
       pointB: {
-        relativeOffset: 10,
-        stepSize: 5
+        relativeOffset: 12,
+        stepSize: 7
       },
-      iterations: 20,
+      iterations: 24,
       color: {
-        type: 'solid',
+        type: 'gradient',
         primary: '#3b82f6',
+        secondary: '#06b6d4',
         alpha: 0.8
+      },
+      lineWidth: 1
+    },
+    {
+      id: 'layer-2',
+      name: 'Harmony',
+      visible: true,
+      connectionType: 'two-point',
+      startPoint: 26, // For compatibility
+      stepSize: 1,    // For compatibility
+      pointA: {
+        initialPosition: 26,
+        stepSize: 1
+      },
+      pointB: {
+        relativeOffset: 22,
+        stepSize: 2
+      },
+      iterations: 108,
+      color: {
+        type: 'gradient',
+        primary: '#f59e0b',
+        secondary: '#ef4444',
+        alpha: 0.7
+      },
+      lineWidth: 1
+    },
+    {
+      id: 'layer-3',
+      name: 'Mystique',
+      visible: true,
+      connectionType: 'single-point',
+      startPoint: 7,
+      stepSize: 17,
+      pointA: {
+        initialPosition: 0,
+        stepSize: 7
+      },
+      pointB: {
+        relativeOffset: 12,
+        stepSize: 7
+      },
+      iterations: 24,
+      color: {
+        type: 'gradient',
+        primary: '#8b5cf6',
+        secondary: '#ec4899',
+        alpha: 0.6
       },
       lineWidth: 1
     }

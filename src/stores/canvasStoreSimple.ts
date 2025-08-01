@@ -1,10 +1,10 @@
 import { create } from 'zustand';
 import type { AppConfig } from '../types';
 
-// Default configuration - matching main branch values
+// "Luminous Mandala" default configuration - high resolution cosmic theme
 const defaultConfig: AppConfig = {
-  circlePoints: 24,
-  backgroundColor: '#1a1a2e',
+  circlePoints: 54,
+  backgroundColor: '#0a0a18',
   showPointNumbers: true,
   rotation: 0,
   canvasSize: {
