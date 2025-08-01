@@ -2,7 +2,6 @@ import React, { useRef, useEffect, useCallback } from 'react';
 import p5 from 'p5';
 import { useCanvasStoreSimple } from '../../stores/canvasStoreSimple';
 import { useLayersStoreSimple } from '../../stores/layersStoreSimple';
-import type { Layer } from '../../types';
 
 interface WorkingStralaCanvasProps {
   className?: string;

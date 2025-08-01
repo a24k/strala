@@ -1,35 +1,8 @@
 import { useCanvasStoreSimple } from '../stores/canvasStoreSimple';
 import { useLayersStoreSimple, useActiveLayerSimple } from '../stores/layersStoreSimple';
-import { SimpleColorPicker } from './ui/ColorPicker';
-import { SLIDER_CLASSES } from './ui/sliderStyles';
-import { NumberInputWithSpinner } from './ui/NumberInputWithSpinner';
-
-// Helper functions for calculating maximum iterations
-function gcd(a: number, b: number): number {
-  while (b !== 0) {
-    [a, b] = [b, a % b];
-  }
-  return a;
-}
-
-function lcm(a: number, b: number): number {
-  return Math.abs(a * b) / gcd(a, b);
-}
-
-function calculateMaxIterations(circlePoints: number, stepA: number, stepB: number): number {
-  // Calculate how many steps each point needs to return to its starting position
-  const periodA = circlePoints / gcd(circlePoints, stepA);
-  const periodB = circlePoints / gcd(circlePoints, stepB);
-  
-  // The theoretical maximum is when both points return to their starting positions
-  const theoreticalMax = lcm(periodA, periodB);
-  
-  // However, due to the alternating nature of two-point connections (A->B, B->A),
-  // the actual pattern period can be much longer. Use a practical upper bound.
-  const practicalMax = Math.min(theoreticalMax * 2, circlePoints * 4);
-  
-  return Math.max(1, practicalMax);
-}
+import { SinglePointSettings } from './settings/SinglePointSettings';
+import { TwoPointSettings } from './settings/TwoPointSettings';
+import { LayerAppearanceSettings } from './settings/LayerAppearanceSettings';
 
 export function SelectedLayerSettings() {
   const { config } = useCanvasStoreSimple();
@@ -87,339 +60,41 @@ export function SelectedLayerSettings() {
 
         {/* Single-point controls */}
         {activeLayer.connectionType === 'single-point' && (
-          <>
-            {/* Start Point */}
-            <div className="flex items-center gap-2">
-              <label className="text-sm font-medium text-gray-100 w-20">
-                Start
-              </label>
-              <div className="flex items-center gap-2 flex-1">
-                <input 
-                  type="range" 
-                  min="0" 
-                  max={config.circlePoints - 1} 
-                  value={activeLayer.startPoint}
-                  onChange={(e) => updateLayer(activeLayer.id, { startPoint: parseInt(e.target.value) })}
-                  className={SLIDER_CLASSES}
-                />
-                <NumberInputWithSpinner
-                  value={activeLayer.startPoint}
-                  onChange={(value) => updateLayer(activeLayer.id, { startPoint: value })}
-                  min={0}
-                  max={config.circlePoints - 1}
-                  className="w-12 h-8 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary focus:outline-none focus:ring-2 focus:ring-blue-500/50"
-                />
-              </div>
-            </div>
-
-            {/* Step Size */}
-            <div className="flex items-center gap-2">
-              <label className="text-sm font-medium text-gray-100 w-20">
-                Step
-              </label>
-              <div className="flex items-center gap-2 flex-1">
-                <input 
-                  type="range" 
-                  min="1" 
-                  max={config.circlePoints - 1} 
-                  value={activeLayer.stepSize}
-                  onChange={(e) => updateLayer(activeLayer.id, { stepSize: parseInt(e.target.value) })}
-                  className={SLIDER_CLASSES}
-                />
-                <NumberInputWithSpinner
-                  value={activeLayer.stepSize}
-                  onChange={(value) => updateLayer(activeLayer.id, { stepSize: value })}
-                  min={1}
-                  max={config.circlePoints - 1}
-                  className="w-12 h-8 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary focus:outline-none focus:ring-2 focus:ring-blue-500/50"
-                />
-              </div>
-            </div>
-          </>
+          <SinglePointSettings
+            startPoint={activeLayer.startPoint}
+            stepSize={activeLayer.stepSize}
+            maxPoints={config.circlePoints}
+            onUpdateStartPoint={(value) => updateLayer(activeLayer.id, { startPoint: value })}
+            onUpdateStepSize={(value) => updateLayer(activeLayer.id, { stepSize: value })}
+          />
         )}
 
         {/* Two-point controls */}
         {activeLayer.connectionType === 'two-point' && (
-          <>
-            {/* Point A Position */}
-            <div className="flex items-center gap-2">
-              <label className="text-sm font-medium text-gray-100 w-20">
-                A: Start
-              </label>
-              <div className="flex items-center gap-2 flex-1">
-                <input 
-                  type="range" 
-                  min="0" 
-                  max={config.circlePoints - 1} 
-                  value={activeLayer.pointA.initialPosition}
-                  onChange={(e) => updateLayer(activeLayer.id, { 
-                    pointA: { ...activeLayer.pointA, initialPosition: parseInt(e.target.value) }
-                  })}
-                  className={SLIDER_CLASSES}
-                />
-                <NumberInputWithSpinner
-                  value={activeLayer.pointA.initialPosition}
-                  onChange={(value) => updateLayer(activeLayer.id, { 
-                    pointA: { ...activeLayer.pointA, initialPosition: value }
-                  })}
-                  min={0}
-                  max={config.circlePoints - 1}
-                  className="w-12 h-8 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary focus:outline-none focus:ring-2 focus:ring-blue-500/50"
-                />
-              </div>
-            </div>
-
-            {/* Point A Step */}
-            <div className="flex items-center gap-2">
-              <label className="text-sm font-medium text-gray-100 w-20">
-                A: Step
-              </label>
-              <div className="flex items-center gap-2 flex-1">
-                <input 
-                  type="range" 
-                  min="1" 
-                  max={config.circlePoints - 1} 
-                  value={activeLayer.pointA.stepSize}
-                  onChange={(e) => updateLayer(activeLayer.id, { 
-                    pointA: { ...activeLayer.pointA, stepSize: parseInt(e.target.value) }
-                  })}
-                  className={SLIDER_CLASSES}
-                />
-                <NumberInputWithSpinner
-                  value={activeLayer.pointA.stepSize}
-                  onChange={(value) => updateLayer(activeLayer.id, { 
-                    pointA: { ...activeLayer.pointA, stepSize: value }
-                  })}
-                  min={1}
-                  max={config.circlePoints - 1}
-                  className="w-12 h-8 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary focus:outline-none focus:ring-2 focus:ring-blue-500/50"
-                />
-              </div>
-            </div>
-
-            {/* Point B Offset */}
-            <div className="flex items-center gap-2">
-              <label className="text-sm font-medium text-gray-100 w-20">
-                B: Offset
-              </label>
-              <div className="flex items-center gap-2 flex-1">
-                <input 
-                  type="range" 
-                  min="0" 
-                  max={config.circlePoints - 1} 
-                  value={activeLayer.pointB.relativeOffset}
-                  onChange={(e) => updateLayer(activeLayer.id, { 
-                    pointB: { ...activeLayer.pointB, relativeOffset: parseInt(e.target.value) }
-                  })}
-                  className={SLIDER_CLASSES}
-                />
-                <NumberInputWithSpinner
-                  value={activeLayer.pointB.relativeOffset}
-                  onChange={(value) => updateLayer(activeLayer.id, { 
-                    pointB: { ...activeLayer.pointB, relativeOffset: value }
-                  })}
-                  min={0}
-                  max={config.circlePoints - 1}
-                  className="w-12 h-8 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary focus:outline-none focus:ring-2 focus:ring-blue-500/50"
-                />
-              </div>
-            </div>
-
-            {/* Point B Step */}
-            <div className="flex items-center gap-2">
-              <label className="text-sm font-medium text-gray-100 w-20">
-                B: Step
-              </label>
-              <div className="flex items-center gap-2 flex-1">
-                <input 
-                  type="range" 
-                  min="1" 
-                  max={config.circlePoints - 1} 
-                  value={activeLayer.pointB.stepSize}
-                  onChange={(e) => updateLayer(activeLayer.id, { 
-                    pointB: { ...activeLayer.pointB, stepSize: parseInt(e.target.value) }
-                  })}
-                  className={SLIDER_CLASSES}
-                />
-                <NumberInputWithSpinner
-                  value={activeLayer.pointB.stepSize}
-                  onChange={(value) => updateLayer(activeLayer.id, { 
-                    pointB: { ...activeLayer.pointB, stepSize: value }
-                  })}
-                  min={1}
-                  max={config.circlePoints - 1}
-                  className="w-12 h-8 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary focus:outline-none focus:ring-2 focus:ring-blue-500/50"
-                />
-              </div>
-            </div>
-
-            {/* Max Iterations */}
-            <div className="flex items-center gap-2">
-              <label className="text-sm font-medium text-gray-100 w-20">
-                Iterations
-              </label>
-              <div className="flex items-center gap-2 flex-1">
-                <input 
-                  type="range" 
-                  min="1" 
-                  max={activeLayer.connectionType === 'two-point' && activeLayer.pointA && activeLayer.pointB 
-                    ? calculateMaxIterations(config.circlePoints, activeLayer.pointA.stepSize, activeLayer.pointB.stepSize)
-                    : Math.floor(config.circlePoints * 2)} 
-                  value={activeLayer.iterations}
-                  onChange={(e) => updateLayer(activeLayer.id, { iterations: parseInt(e.target.value) })}
-                  className={SLIDER_CLASSES}
-                />
-                <NumberInputWithSpinner
-                  value={activeLayer.iterations}
-                  onChange={(value) => updateLayer(activeLayer.id, { iterations: value })}
-                  min={1}
-                  max={activeLayer.connectionType === 'two-point' && activeLayer.pointA && activeLayer.pointB 
-                    ? calculateMaxIterations(config.circlePoints, activeLayer.pointA.stepSize, activeLayer.pointB.stepSize)
-                    : Math.floor(config.circlePoints * 2)}
-                  className="w-12 h-8 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary focus:outline-none focus:ring-2 focus:ring-blue-500/50"
-                />
-              </div>
-            </div>
-          </>
+          <TwoPointSettings
+            pointA={activeLayer.pointA}
+            pointB={activeLayer.pointB}
+            iterations={activeLayer.iterations}
+            maxPoints={config.circlePoints}
+            onUpdatePointA={(updates) => updateLayer(activeLayer.id, { 
+              pointA: { ...activeLayer.pointA, ...updates }
+            })}
+            onUpdatePointB={(updates) => updateLayer(activeLayer.id, { 
+              pointB: { ...activeLayer.pointB, ...updates }
+            })}
+            onUpdateIterations={(value) => updateLayer(activeLayer.id, { iterations: value })}
+          />
         )}
 
-        {/* Opacity */}
-        <div className="flex items-center gap-2">
-          <label className="text-sm font-medium text-gray-100 w-20">
-            Opacity (%)
-          </label>
-          <div className="flex items-center gap-2 flex-1">
-            <input 
-              type="range" 
-              min="0" 
-              max="100" 
-              value={Math.round(activeLayer.color.alpha * 100)}
-              onChange={(e) => updateLayer(activeLayer.id, { 
-                color: { ...activeLayer.color, alpha: parseInt(e.target.value) / 100 }
-              })}
-              className={SLIDER_CLASSES}
-            />
-            <NumberInputWithSpinner
-              value={Math.round(activeLayer.color.alpha * 100)}
-              onChange={(value) => updateLayer(activeLayer.id, { 
-                color: { ...activeLayer.color, alpha: value / 100 }
-              })}
-              min={0}
-              max={100}
-              className="w-12 h-8 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary focus:outline-none focus:ring-2 focus:ring-blue-500/50"
-            />
-          </div>
-        </div>
-
-        {/* Line Width */}
-        <div className="flex items-center gap-2">
-          <label className="text-sm font-medium text-gray-100 w-20">
-            Width (px)
-          </label>
-          <div className="flex items-center gap-2 flex-1">
-            <input 
-              type="range" 
-              min="1" 
-              max="10" 
-              value={activeLayer.lineWidth}
-              onChange={(e) => updateLayer(activeLayer.id, { lineWidth: parseInt(e.target.value) })}
-              className={SLIDER_CLASSES}
-            />
-            <NumberInputWithSpinner
-              value={activeLayer.lineWidth}
-              onChange={(value) => updateLayer(activeLayer.id, { lineWidth: value })}
-              min={1}
-              max={10}
-              className="w-12 h-8 text-xs text-center rounded border bg-strala-border border-strala-accent text-strala-text-primary focus:outline-none focus:ring-2 focus:ring-blue-500/50"
-            />
-          </div>
-        </div>
-
-        {/* Color Type */}
-        <div className="flex items-center gap-2">
-          <label className="text-sm font-medium text-gray-100 w-20">
-            Type
-          </label>
-          <div className="flex-1 relative">
-            <select 
-              value={activeLayer.color.type}
-              onChange={(e) => updateLayer(activeLayer.id, { 
-                color: { ...activeLayer.color, type: e.target.value as 'solid' | 'gradient' }
-              })}
-              className="w-full h-8 px-2 pr-8 text-sm rounded border bg-strala-border border-strala-accent text-strala-text-primary appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500/50"
-            >
-              <option value="solid">Solid</option>
-              <option value="gradient">Gradient</option>
-            </select>
-            <div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-              <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
-            </div>
-          </div>
-        </div>
-
-        {/* Primary Color */}
-        <div className="flex items-center gap-2">
-          <label className="text-sm font-medium text-gray-100 w-20">
-            Color
-          </label>
-          <div className="flex items-center gap-2 flex-1">
-            <input 
-              type="color" 
-              value={activeLayer.color.primary}
-              onChange={(e) => updateLayer(activeLayer.id, { 
-                color: { ...activeLayer.color, primary: e.target.value }
-              })}
-              className="w-8 h-8 rounded border border-gray-400 cursor-pointer"
-              style={{ padding: 0, outline: 'none', appearance: 'none', WebkitAppearance: 'none' }}
-            />
-            <input 
-              type="text" 
-              value={activeLayer.color.primary}
-              onChange={(e) => updateLayer(activeLayer.id, { 
-                color: { ...activeLayer.color, primary: e.target.value }
-              })}
-              className="w-20 h-8 px-2 text-xs rounded border font-mono bg-strala-border border-strala-accent text-strala-text-primary focus:outline-none focus:ring-2 focus:ring-blue-500/50"
-              placeholder="#000000"
-            />
-            <button 
-              className="w-8 h-8 rounded text-sm font-bold transition-all bg-blue-500 text-white hover:bg-blue-600"
-              onClick={() => {
-                console.log('Color harmony generation');
-              }}
-              title="Generate color harmony"
-            >
-              ⚸
-            </button>
-          </div>
-        </div>
-
-        {/* Secondary Color (for gradients) */}
-        {activeLayer.color.type === 'gradient' && (
-          <div className="flex items-center gap-2">
-            <label className="text-sm font-medium text-gray-100 w-20">
-              Color 2
-            </label>
-            <div className="flex items-center gap-2 flex-1">
-              <SimpleColorPicker
-                value={activeLayer.color.secondary || '#f39c12'}
-                onChange={(value) => updateLayer(activeLayer.id, { 
-                  color: { ...activeLayer.color, secondary: value }
-                })}
-              />
-              <input 
-                type="text" 
-                value={activeLayer.color.secondary || '#f39c12'}
-                onChange={(e) => updateLayer(activeLayer.id, { 
-                  color: { ...activeLayer.color, secondary: e.target.value }
-                })}
-                className="w-20 h-8 px-2 text-xs rounded border font-mono bg-strala-border border-strala-accent text-strala-text-primary focus:outline-none focus:ring-2 focus:ring-blue-500/50"
-                placeholder="#000000"
-              />
-            </div>
-          </div>
-        )}
+        {/* Appearance Settings */}
+        <LayerAppearanceSettings
+          color={activeLayer.color}
+          lineWidth={activeLayer.lineWidth}
+          onUpdateColor={(updates) => updateLayer(activeLayer.id, { 
+            color: { ...activeLayer.color, ...updates }
+          })}
+          onUpdateLineWidth={(value) => updateLayer(activeLayer.id, { lineWidth: value })}
+        />
       </div>
     </div>
   );
